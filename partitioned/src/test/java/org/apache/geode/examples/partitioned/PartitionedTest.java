@@ -12,7 +12,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.apache.geode.examples.replicated;
+package org.apache.geode.examples.partitioned;
 
 import static org.hamcrest.core.Is.*;
 import static org.junit.Assert.*;
@@ -37,9 +37,9 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 /**
- * Tests for the shell scripts of the replicated example
+ * Tests for the shell scripts of the partitioned example
  */
-public class ReplicatedTest {
+public class PartitionedTest {
 
   // TODO: parameterize
   public static final String GEODE_LOCATOR_PORT = "GEODE_LOCATOR_PORT=";
