@@ -1,18 +1,16 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work for additional information regarding
+ * copyright ownership. The ASF licenses this file to You under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance with the License. You may obtain a
+ * copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 package org.apache.geode.examples.replicated;
 
@@ -43,7 +41,7 @@ import org.junit.rules.TemporaryFolder;
  */
 public class ReplicatedTest {
 
-  //TODO: parameterize
+  // TODO: parameterize
   public static final String GEODE_LOCATOR_PORT = "GEODE_LOCATOR_PORT=";
   private static final String startScriptFileName = "startAll.sh";
   private static final String stopScriptFileName = "stopAll.sh";
@@ -72,7 +70,8 @@ public class ReplicatedTest {
 
   @Test
   public void checkIfScriptsExistsAndAreExecutable() throws IOException {
-    assertTrue(shell.getFileFromClassLoader(startScriptFileName).map(x -> x.isFile()).orElse(false));
+    assertTrue(
+        shell.getFileFromClassLoader(startScriptFileName).map(x -> x.isFile()).orElse(false));
     assertTrue(shell.getFileFromClassLoader(stopScriptFileName).map(x -> x.isFile()).orElse(false));
   }
 
@@ -95,23 +94,24 @@ public class ReplicatedTest {
 
   /**
    * Execute the kill script that looks for pid files
+   * 
    * @throws IOException
    * @throws InterruptedException
    */
   private void runKillScript() throws IOException, InterruptedException {
     CommandLine cmdLine = CommandLine.parse(shell.getFileFromClassLoader(pidkillerScriptFileName)
-                                                 .map(x -> x.getAbsolutePath())
-                                                 .orElseThrow(IllegalArgumentException::new));
+        .map(x -> x.getAbsolutePath()).orElseThrow(IllegalArgumentException::new));
     cmdLine.addArgument(testFolder.getRoot().getAbsolutePath());
 
-    DefaultExecuteResultHandler resultHandler = shell.execute(cmdLine, scriptTimeout, environment, testFolder
-      .getRoot());
+    DefaultExecuteResultHandler resultHandler =
+        shell.execute(cmdLine, scriptTimeout, environment, testFolder.getRoot());
     resultHandler.waitFor(scriptTimeout);
   }
 
   /**
-   * Given a script file name, runs the script and return the exit code.
-   * If exitCode != 0 extract and prints exception.
+   * Given a script file name, runs the script and return the exit code. If exitCode != 0 extract
+   * and prints exception.
+   * 
    * @param scriptName
    * @return <code>int</code> with exitCode
    * @throws IOException
@@ -119,8 +119,8 @@ public class ReplicatedTest {
    */
   private int executeScript(String scriptName) throws IOException, InterruptedException {
     final int exitCode;
-    DefaultExecuteResultHandler resultHandler = shell.execute(scriptName, scriptTimeout, environment, testFolder
-      .getRoot());
+    DefaultExecuteResultHandler resultHandler =
+        shell.execute(scriptName, scriptTimeout, environment, testFolder.getRoot());
     processRunning = true;
     resultHandler.waitFor();
 
@@ -148,7 +148,8 @@ public class ReplicatedTest {
 
   /**
    * Get a random available port
-   * @return <code>int</code>  port number
+   * 
+   * @return <code>int</code> port number
    */
   private static int getAvailablePort() {
     try (ServerSocket socket = new ServerSocket(0)) {

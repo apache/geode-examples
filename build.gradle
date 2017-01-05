@@ -15,6 +15,21 @@
  * limitations under the License.
  */
 
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "com.diffplug.gradle.spotless:spotless:2.4.1"
+  }
+}
+
+plugins {
+  id "org.nosphere.apache.rat" version "0.3.0"
+}
+
 subprojects {
 
     apply plugin:'java'
@@ -34,6 +49,7 @@ subprojects {
         testCompile "org.mockito:mockito-core:$mockitocoreVersion"
         compile "org.apache.commons:commons-exec:$commonsExecVersion"
         compile "com.jayway.awaitility:awaitility:$awaitilityVersion"
+        runtime "org.slf4j:slf4j-log4j12:$slf4jVersion"
     }
 
     task run(type: JavaExec) {
@@ -49,11 +65,24 @@ subprojects {
     }
 
     test {
-      def geodeHome = System.getenv('GEODE_HOME');
-      geodeHome = geodeHome != null ? geodeHome : file('../../geode-assembly/build/install/apache-geode/').absolutePath
-      environment 'GEODE_HOME': geodeHome
+	def geodeHome = System.getenv('GEODE_HOME');
+	geodeHome = geodeHome != null ? geodeHome : file('../../geode-assembly/build/install/apache-geode/').absolutePath
+	environment 'GEODE_HOME': geodeHome
     }
 
+    apply plugin: "com.diffplug.gradle.spotless"
+    spotless {
+	lineEndings = 'unix';
+	java {
+	    target project.fileTree(project.projectDir) {
+		include '**/*.java'
+	    }
+	    eclipseFormatFile "${rootProject.projectDir}/etc/eclipse-java-google-style.xml"
+	}
+    }
 
 }
+
+apply from: "gradle/rat.gradle"
+
 
