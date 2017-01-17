@@ -15,41 +15,64 @@
  * limitations under the License.
  */
 
-buildscript {
-  repositories {
-    maven {
-      url "https://plugins.gradle.org/m2/"
+plugins {
+  id "org.nosphere.apache.rat" version "0.3.0"
+  id "com.diffplug.gradle.spotless" version "3.0.0"
+  id "de.undercouch.download" version "3.1.2"
+}
+
+def downloadFile = "apache-geode-${geodeVersion}.tar.gz"
+def installFile = "$buildDir/$downloadFile"
+def installDir = "$buildDir/apache-geode-${geodeVersion}"
+
+task downloadGeode {
+  inputs.property 'geodeVersion', geodeVersion
+  outputs.file installFile
+  outputs.file "${installFile}.sha256"
+
+  doLast {
+    download {
+      src([
+        "https://www.apache.org/dyn/closer.cgi?action=download&filename=geode/$geodeVersion/$downloadFile",
+        "https://www.apache.org/dist/geode/$geodeVersion/${downloadFile}.sha256"
+      ])
+      dest buildDir
     }
-  }
-  dependencies {
-    classpath "com.diffplug.gradle.spotless:spotless:2.4.1"
   }
 }
 
-plugins {
-  id "org.nosphere.apache.rat" version "0.3.0"
+task verifyGeode(type: de.undercouch.gradle.tasks.download.Verify, dependsOn: downloadGeode) {
+  src installFile
+  algorithm "SHA-256"
+  doFirst { 
+    checksum file("${installFile}.sha256").text.split(' ')[0]
+  }
+}
+
+task installGeode(type: Copy, dependsOn: verifyGeode) {
+  inputs.file installFile
+  outputs.dir installDir
+
+  from tarTree(resources.gzip(installFile))
+  into buildDir
 }
 
 subprojects {
-
     apply plugin:'java'
 
     repositories {
-        mavenLocal()
-        maven {
-            url "https://repository.apache.org/content/repositories/snapshots/"
-        }
         mavenCentral()
     }
 
     dependencies {
-        testCompile project(":utils")
         compile "org.apache.geode:geode-core:$geodeVersion"
+        compile "org.apache.commons:commons-exec:$commonsExecVersion"
+        runtime "org.slf4j:slf4j-log4j12:$slf4jVersion"
+
+        testCompile "com.jayway.awaitility:awaitility:$awaitilityVersion"
+        testCompile project(":utils")
         testCompile "junit:junit:$junitVersion"
         testCompile "org.mockito:mockito-core:$mockitocoreVersion"
-        compile "org.apache.commons:commons-exec:$commonsExecVersion"
-        compile "com.jayway.awaitility:awaitility:$awaitilityVersion"
-        runtime "org.slf4j:slf4j-log4j12:$slf4jVersion"
     }
 
     task run(type: JavaExec) {
@@ -64,10 +87,9 @@ subprojects {
         }
     }
 
+    test.dependsOn installGeode
     test {
-	def geodeHome = System.getenv('GEODE_HOME');
-	geodeHome = geodeHome != null ? geodeHome : file('../../geode-assembly/build/install/apache-geode/').absolutePath
-	environment 'GEODE_HOME': geodeHome
+	environment 'GEODE_HOME': "$rootProject.buildDir/apache-geode-$geodeVersion"
     }
 
     apply plugin: "com.diffplug.gradle.spotless"
@@ -80,9 +102,7 @@ subprojects {
 	    eclipseFormatFile "${rootProject.projectDir}/etc/eclipse-java-google-style.xml"
 	}
     }
-
 }
 
 apply from: "gradle/rat.gradle"
-
-
+apply from: "gradle/release.gradle"

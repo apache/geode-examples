@@ -1,0 +1,85 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+apply plugin:'distribution'
+apply plugin: 'signing'
+
+gradle.taskGraph.whenReady( { graph ->
+  tasks.withType(Tar).each { tar ->
+    tar.compression = Compression.GZIP
+    tar.extension = 'tar.gz'
+  }
+})
+
+gradle.taskGraph.whenReady( { graph ->
+  tasks.withType(AbstractArchiveTask).findAll {
+    it.name.toLowerCase().contains("dist")
+  }.each { archive ->
+    archive.doLast {
+      ant.checksum file:"${archive.archivePath}", algorithm:"md5"
+      ant.checksum file:"${archive.archivePath}", algorithm:"sha-256", fileext:".sha256"
+      signing {
+        required { !version.endsWith("SNAPSHOT") }
+        sign archive.archivePath
+      }
+    }
+  }
+})
+
+gradle.taskGraph.whenReady { taskGraph ->
+  if (!version.endsWith('SNAPSHOT')) {
+    if(!project.hasProperty('signing.keyId') || !project.hasProperty('signing.secretKeyRingFile')) {
+      println "You must configure your signing.keyId and signing.secretKeyRingFile"
+      println "in ~/.gradle/gradle.properties in order to sign jars\n"
+      println "See https://cwiki.apache.org/confluence/display/GEODE/Release+Steps"
+      throw new GradleException("Signing key/keyring is missing")
+    }
+
+    if(!project.hasProperty('signing.password')) {
+      def password = PasswordDialog.askPassword("Please enter your password to unlock your gpg keyring for signing artifacts")
+      ext.'signing.password' = password
+    }
+  }
+}
+
+distributions {
+  main {
+    contents {
+      from (rootDir) {
+        exclude 'KEYS'
+        exclude '**/.gradle'
+        exclude '**/build/**'
+        exclude '**/.project'
+        exclude '**/.classpath'
+        exclude '**/.settings/**'
+        exclude '**/build-eclipse/**'
+        exclude '**/.idea/**'
+        exclude '**/*.iml'
+        exclude '**/*.ipr'
+        exclude '**/*.iws'
+        exclude '**/.travis.yml'
+        exclude '**/tags'
+        
+        //These directories are generated on the jenkins server by gradle
+        exclude 'caches'
+        exclude 'daemon'
+        exclude 'native'
+        exclude 'wrapper'
+      }
+    }
+  }
+}
