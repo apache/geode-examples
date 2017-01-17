@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+apply plugin: "org.nosphere.apache.rat"
 
 rat {
   xmlOutput = false
@@ -53,36 +54,11 @@ rat {
     '**/tags',
 
     // text files
-    '**/*.fig',
-    // '**/*.txt',
-    // '**/*.md',
-    '**/*.json',
-    '**/*.tx0',
-    '**/*.txo',
     '**/*.log',
     '**/*.patch',
     '**/*.diff',
     '**/*.rej',
-    '**/*.orig',
-    '**/*.MF',
-
-    // binary files
-    '**/*.cer',
-    '**/*.dia',
-    '**/*.gfs',
-    '**/*.gif',
-    '**/*.ico',
-    '**/*.jpg',
-    '**/*.keystore',
-    '**/*.pdf',
-    '**/*.png',
-    '**/*.ser',
-    '**/*.svg',
-    '**/*.truststore',
-    '**/*.xls',
-    '**/publickeyfile',
-    '**/*.dat'
-
+    '**/*.orig'
   ]
 }
 
