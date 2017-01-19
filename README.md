@@ -15,6 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+[![Build Status](https://travis-ci.org/apache/geode-examples.svg?branch=develop)](https://travis-ci.org/apache/geode-examples)
+
 # Apache Geode examples
 
 This is the home of Apache Geode examples that are bundled with the project. Contributions<sup>[2]</sup> and corrections are welcome. Please talk to us about your suggestions at [dev@geode.apache.org](mailto:dev@geode.apache.org) or submit a [pull request](https://github.com/apache/geode/pull/new/develop).
