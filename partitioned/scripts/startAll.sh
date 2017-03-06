@@ -17,13 +17,9 @@
 #
 
 set -e
-
 current=`pwd`
-
 cd `dirname $0`
-
 . ./setEnv.sh
-
 cd $current
 
 #export GEODE_LOCATOR_PORT="${GEODE_LOCATOR_PORT:-10334}"
@@ -33,14 +29,12 @@ gfsh start locator --name=locator1 --mcast-port=0 --port=${GEODE_LOCATOR_PORT}
 # start 2 servers on a random available port
 for N in {1..2}
 do
- gfsh start server --locators=localhost[${GEODE_LOCATOR_PORT}] --name=server$N  --server-port=0 --mcast-port=0 --classpath=${PWD}/build/libs/partitioned-0.1.0-SNAPSHOT.jar
+ gfsh start server --locators=localhost[${GEODE_LOCATOR_PORT}] --name=server$N  --server-port=0 --mcast-port=0 --classpath=${PWD}/build/libs/partitioned-1.2.0-SNAPSHOT.jar
 done
 
 # create 2 regions with the same data using GFSH, one that works well,
 #  good keys, and the other that implements a bad hashCode on the key
 gfsh -e "connect --locator=localhost[${GEODE_LOCATOR_PORT}]" -e "create region --name=EmployeeRegion --type=PARTITION"
-
-gfsh -e "connect --locator=localhost[${GEODE_LOCATOR_PORT}]" -e "create region --name=BadEmployeeRegion --type=PARTITION"
 
 gfsh -e "connect --locator=localhost[${GEODE_LOCATOR_PORT}]" -e "list members"
 

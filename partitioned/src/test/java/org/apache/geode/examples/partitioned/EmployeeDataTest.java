@@ -21,9 +21,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-/**
- * Created by kmiller on 1/31/17.
- */
+
 public class EmployeeDataTest {
   private EmployeeData d;
 

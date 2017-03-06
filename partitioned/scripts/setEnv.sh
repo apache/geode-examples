@@ -29,5 +29,4 @@ echo "Geode version: `$GEODE_HOME/bin/gfsh version`"
 ## prefer GEODE_HOME for finding gfsh
 export PATH=$GEODE_HOME/bin:$PATH
 
-
 : ${GEODE_LOCATOR_PORT?}

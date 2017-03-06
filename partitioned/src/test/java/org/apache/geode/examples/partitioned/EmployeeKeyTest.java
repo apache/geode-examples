@@ -21,9 +21,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-/**
- * Created by kmiller on 1/30/17.
- */
+
 public class EmployeeKeyTest {
 
   private EmployeeKey k;

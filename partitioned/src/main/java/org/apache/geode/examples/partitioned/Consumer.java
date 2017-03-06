@@ -15,67 +15,55 @@
 package org.apache.geode.examples.partitioned;
 
 import java.util.*;
+import java.util.logging.Logger;
+
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.Region;
+import org.apache.geode.cache.client.ClientCacheFactory;
+import org.apache.geode.cache.client.ClientRegionShortcut;
 
-public class Consumer extends BaseClient {
+public class Consumer {
+
+  static final Logger logger = Logger.getAnonymousLogger();
+  private Region region1;
+  private final String locatorHost = System.getProperty("GEODE_LOCATOR_HOST", "localhost");
+  private final int locatorPort = Integer.getInteger("GEODE_LOCATOR_PORT", 10334);
+  protected static final String REGION1_NAME = "EmployeeRegion";
 
   public static void main(String[] args) {
     Consumer c = new Consumer();
-    c.checkAndPrint(args);
+    c.setUpRegion();
+    c.printRegionContents();
   }
 
-  public void checkAndPrint(String[] args) {
-    if (0 == args.length) {
-      throw new RuntimeException("Expected argument specifying region name.");
-    } else {
-      if (args.length > 1) {
-        throw new RuntimeException("Expected only 1 argument, and received more than 1.");
-      } else {
-        if (args[0].equals("EmployeeRegion")) {
-          this.printRegionContents();
-        } else {
-          if (args[0].equals("BadEmployeeRegion")) {
-            this.printBadRegionContents();
-          } else {
-            throw new RuntimeException("Unrecognized region name in argument specification.");
-          }
-        }
-      }
-    }
-  }
 
   public Consumer() {}
 
-  public Consumer(ClientCache clientCache) {
-    this.clientCache = clientCache;
+  public Consumer(Region r) {
+    region1 = r;
+  }
+
+
+  public void setUpRegion() {
+    ClientCache clientCache = new ClientCacheFactory().addPoolLocator(locatorHost, locatorPort)
+        .set("log-level", "WARN").create();
+    region1 =
+        clientCache.<EmployeeKey, EmployeeData>createClientRegionFactory(ClientRegionShortcut.PROXY)
+            .create(REGION1_NAME);
   }
 
 
   public void printRegionContents() {
     /* Print EmployeeRegion size and contents */
-    Region r1 = this.getRegion1();
-    Set<EmployeeKey> setOfKeys1 = r1.keySetOnServer();
+    Set<EmployeeKey> setOfKeys1 = region1.keySetOnServer();
     logger.info(setOfKeys1.size() + " entries in EmployeeRegion on the server(s).");
     if (setOfKeys1.size() > 0) {
       logger.info("Contents of EmployeeRegion:");
       for (EmployeeKey key : setOfKeys1) {
-        logger.info(r1.get(key).toString());
+        logger.info(region1.get(key).toString());
       }
     }
   }
 
-  public void printBadRegionContents() {
-    /* Print BadEmployeeRegion size and contents */
-    Region r2 = this.getRegion2();
-    Set<EmployeeKey> setOfKeys2 = r2.keySetOnServer();
-    logger.info(setOfKeys2.size() + " entries in BadEmployeeRegion on the server(s).");
-    if (setOfKeys2.size() > 0) {
-      logger.info("Contents of BadEmployeeRegion:");
-      for (EmployeeKey key : setOfKeys2) {
-        logger.info(r2.get(key).toString());
-      }
-    }
-  }
 
 }
