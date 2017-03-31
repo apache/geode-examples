@@ -21,8 +21,7 @@ This example demonstrates the basic property of partitioning.
 The basic property of partitioning is that data entries are distributed 
 across all servers that host a region.
 The distribution is like database sharding, except that the distribution
-occurs automatically. It is also similar to data striping on disks,
-except that the distribution is not based on hardware.
+occurs automatically. 
 
 In this example,
 two servers host a single partitioned region. 
@@ -34,7 +33,8 @@ Because the region is partitioned,
 its entries are distributed among the two servers hosting the region.
 Since there is no redundancy of the data within the region,
 when one of the servers goes away,
-the entries hosted within that server are also gone.
+the entries hosted within that server are also gone;
+the example demonstrates this.
 
 ## Demonstration of Partitioning
 1. Set directory ```geode-examples/partitioned``` to be the
@@ -112,6 +112,9 @@ Run the consumer to get and print all 10 entries in the `EmployeeRegion`.
     Within the output, the result for `totalBucketSize` identifies
     the number of entries hosted on the specified server.
     Vary the command to see statistics for both `server1` and `server2`.
+    Note that approximately half the entries will be on each server.
+    And, the quantity on each server may vary if the example is started
+    over and run again.
 
 1. The region entries are distributed across both servers.
 Kill one of the servers:
@@ -143,7 +146,7 @@ Those hosted by the server that was stopped were lost.
     $ scripts/stopAll.sh
     ```
 
-## Things to get Right (TM) for Partitioned Regions
+## Things to Get Right for Partitioned Regions
 
 - Hashing distributes entries among buckets that reside on servers.
 A good hash code is important in order to spread the entries among buckets
@@ -151,6 +154,6 @@ A good hash code is important in order to spread the entries among buckets
 
 - Besides the hash code, equals() needs to be defined.
 
-- A robust system will use redundancy in conjunction with partitioning
-in production systems,
-so that data is not lost if a server goes down.
+- A system that ought to not lose data if a system member goes down
+will use redundancy in conjunction with partitioning
+in production systems.

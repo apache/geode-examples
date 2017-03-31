@@ -41,7 +41,6 @@ import org.junit.rules.TemporaryFolder;
  */
 public class PartitionedTest {
 
-  // TODO: parameterize
   public static final String GEODE_LOCATOR_PORT = "GEODE_LOCATOR_PORT=";
   private static final String startScriptFileName = "startAll.sh";
   private static final String stopScriptFileName = "stopAll.sh";

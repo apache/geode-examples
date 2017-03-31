@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 public class Producer {
 
   static final Logger logger = Logger.getAnonymousLogger();
-  // protected ClientCache clientCache;
   private Region region1;
   private final String locatorHost = System.getProperty("GEODE_LOCATOR_HOST", "localhost");
   private final int locatorPort = Integer.getInteger("GEODE_LOCATOR_PORT", 10334);
