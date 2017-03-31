@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
@@ -14,11 +15,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-version = 1.2.0-SNAPSHOT
+set -e
 
-geodeVersion = 1.1.0
-junitVersion = 4.12
-mockitocoreVersion = 1.10.19
-commonsExecVersion = 1.3
-awaitilityVersion = 1.7.0
-slf4jVersion = 1.7.22
+current=`pwd`
+
+cd `dirname $0`
+
+. ./setEnv.sh
+
+cd $current
+
+gfsh -e "connect --locator=localhost[${GEODE_LOCATOR_PORT}]" -e "shutdown --include-locators=true"

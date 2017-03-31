@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
@@ -14,11 +15,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-version = 1.2.0-SNAPSHOT
 
-geodeVersion = 1.1.0
-junitVersion = 4.12
-mockitocoreVersion = 1.10.19
-commonsExecVersion = 1.3
-awaitilityVersion = 1.7.0
-slf4jVersion = 1.7.22
+## check if locator port has been set otherwise set to default
+export GEODE_LOCATOR_PORT="${GEODE_LOCATOR_PORT:-10334}"
+
+## check if GEODE_HOME has been set
+: ${GEODE_HOME?"GEODE_HOME enviroment variable needs to be set"}
+
+## check if gfsh script is accessible and print version
+: ${GEODE_HOME/bin/gfsh?"gfsh doesn't seem to be available. Please check $GEODE_HOME"}
+echo "Geode version: `$GEODE_HOME/bin/gfsh version`"
+
+## prefer GEODE_HOME for finding gfsh
+export PATH=$GEODE_HOME/bin:$PATH
+
+: ${GEODE_LOCATOR_PORT?}

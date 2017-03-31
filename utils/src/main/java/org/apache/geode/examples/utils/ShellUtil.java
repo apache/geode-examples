@@ -13,7 +13,7 @@
  * the License.
  */
 
-package org.apache.geode.example.utils;
+package org.apache.geode.examples.utils;
 
 import java.io.File;
 import java.io.IOException;

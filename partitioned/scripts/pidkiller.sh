@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
@@ -14,11 +15,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-version = 1.2.0-SNAPSHOT
+# @brief Script that look for .pid files on a directory and kill those processes.
+#
 
-geodeVersion = 1.1.0
-junitVersion = 4.12
-mockitocoreVersion = 1.10.19
-commonsExecVersion = 1.3
-awaitilityVersion = 1.7.0
-slf4jVersion = 1.7.22
+export DIR=$1
+
+if [ $# -eq 0 ]
+  then
+    echo "No arguments supplied. Script needs directory to look for pid files."
+    exit 1
+fi
+
+for pid in `find $DIR -name "*.pid"`
+do
+ echo "Found: $pid"
+ kill -9 `cat $pid`
+ echo "Killed."
+done
+

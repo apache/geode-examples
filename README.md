@@ -44,7 +44,7 @@ All examples:
 ### Basics
 
 *  [Replicated Region](replicated/README.md)
-*  Partitioned Region
+*  [Partitioned Region](partitioned/README.md)
 *  Persistence
 *  OQL (Querying)
 
