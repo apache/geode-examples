@@ -12,26 +12,27 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.apache.geode.examples.replicated;
+package org.apache.geode.examples.partitioned;
 
-import org.apache.geode.cache.client.ClientCache;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class Consumer extends BaseClient {
+import org.apache.geode.cache.Region;
+import org.geode.examples.util.Mocks;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.contrib.java.lang.system.SystemOutRule;
 
-  public static void main(String[] args) {
-    new Consumer().countEntriesOnServer();
+public class ExampleTest {
+
+  @Rule
+  public SystemOutRule systemOutRule = new SystemOutRule().enableLog();
+
+  @Test
+  public void testExample() throws Exception {
+    Region<EmployeeKey, EmployeeData> region = Mocks.region("example-region");
+    new Example().accept(region);
+
+    assertThat(systemOutRule.getLog()).contains("Counted 10 keys in region");
+    assertThat(systemOutRule.getLog()).contains("Jamie Jive");
   }
-
-  public Consumer() {}
-
-  public Consumer(ClientCache clientCache) {
-    this.clientCache = clientCache;
-  }
-
-  public int countEntriesOnServer() {
-    int size = getRegion().keySetOnServer().size();
-    logger.info(String.format("Done. %d entries available on the server(s).", size));
-    return size;
-  }
-
 }

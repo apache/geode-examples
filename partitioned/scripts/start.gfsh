@@ -1,4 +1,3 @@
-#!/bin/bash
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
@@ -15,18 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+start locator --bind-address=127.0.0.1
 
-## check if locator port has been set otherwise set to default
-export GEODE_LOCATOR_PORT="${GEODE_LOCATOR_PORT:-10334}"
+start server --name=server1 --locators=127.0.0.1[10334] --server-port=0 --classpath=../classes/main
+start server --name=server2 --locators=127.0.0.1[10334] --server-port=0 --classpath=../classes/main
 
-## check if GEODE_HOME has been set
-: ${GEODE_HOME?"GEODE_HOME enviroment variable needs to be set"}
+create region --name=example-region --type=PARTITION
 
-## check if gfsh script is accessible and print version
-: ${GEODE_HOME/bin/gfsh?"gfsh doesn't seem to be available. Please check $GEODE_HOME"}
-echo "Geode version: `$GEODE_HOME/bin/gfsh version`"
-
-## prefer GEODE_HOME for finding gfsh
-export PATH=$GEODE_HOME/bin:$PATH
-
-: ${GEODE_LOCATOR_PORT?}
+list members
+describe region --name=example-region

@@ -17,143 +17,103 @@ limitations under the License.
 
 # Geode partitioned region example
 
-This example demonstrates the basic property of partitioning.
-The basic property of partitioning is that data entries are distributed 
-across all servers that host a region.
-The distribution is like database sharding, except that the distribution
-occurs automatically. 
+This example demonstrates the basic property of partitioning.  The basic
+property of partitioning is that data entries are distributed across all
+servers that host a region.  The distribution is like database sharding, except
+that the distribution occurs automatically.
 
-In this example,
-two servers host a single partitioned region. 
-There is no redundancy, so that the basic property of partitioning
-may be observed.
-The Producer code puts the 10 entries into the region.
-The Consumer gets and prints the entries from the region.
-Because the region is partitioned,
-its entries are distributed among the two servers hosting the region.
-Since there is no redundancy of the data within the region,
-when one of the servers goes away,
-the entries hosted within that server are also gone;
+In this example, two servers host a single partitioned region.  There is no
+redundancy, so that the basic property of partitioning may be observed.  The
+example puts 10 entries into the region and prints them.  Because the region is
+partitioned, its entries are distributed among the two servers hosting the
+region.  Since there is no redundancy of the data within the region, when one
+of the servers goes away, the entries hosted within that server are also gone;
 the example demonstrates this.
+
+This example assumes that Java and Geode are installed.
 
 ## Demonstration of Partitioning
 1. Set directory ```geode-examples/partitioned``` to be the
 current working directory.
 Each step in this example specifies paths relative to that directory.
 
-1. Build the jar (with the ```EmployeeKey``` and ```EmployeeData``` classes):
+1. Build the example (with the `EmployeeKey` and `EmployeeData` classes)
 
-    ```
-    $   ../gradlew build
-    ```
-1. Run a script that starts a locator and two servers.
-The built JAR will be placed onto the classpath when the script 
-starts the servers:
+        $ ./gradlew build
 
-    ```
-    $ scripts/startAll.sh
-    ```
-    Each of the servers hosts the partitioned region.
-    
-1. Run the producer to put 10 entries into the ```EmployeeRegion```.
+2. Run a script that starts a locator and two servers.  Each of the servers
+hosts the partitioned region.  The example classes will be placed onto the
+classpath when the script starts the servers.
 
-    ```
-    $ ../gradlew run -Pmain=Producer
-    ...
-    ... 
-    INFO: Inserted 10 entries in EmployeeRegion.
-    ```
+        $ gfsh run --file=scripts/start.gfsh
 
-1. There are several ways to see the contents of the region.
-Run the consumer to get and print all 10 entries in the `EmployeeRegion`.
+3. Run the example to put 10 entries into the `example-region`. The data
+will also be retrieved from the region and printed to the console.
 
-    ```
-    $ ../gradlew run -Pmain=Consumer
-    ...
-    INFO: 10 entries in EmployeeRegion on the server(s).
-    ...
-    ```
+        $ ./gradlew run
 
-    If desired, use a ```gfsh``` query to see contents of the region keys:
+4. Run a `gfsh` command to see the contents of the region
 
-    ```
-    $ $GEODE_HOME/bin/gfsh
-    ...
-    gfsh>connect
-    gfsh>query --query="select e.key from /EmployeeRegion.entries e"
-    ...
-    ```
+        $ gfsh
+        ...
+        gfsh>connect --locators=127.0.0.1[10334]
+        gfsh>query --query="select e.key from /example-region.entries e"
+        ...
 
     Note that the quantity of entries may also be observed with `gfsh`:
- 
-    ```
-    gfsh>describe region --name=EmployeeRegion
-    ..........................................................
-    Name            : EmployeeRegion
-    Data Policy     : partition
-    Hosting Members : server2
-                      server1
 
-    Non-Default Attributes Shared By Hosting Members  
+        gfsh>describe region --name=example-region
+        ..........................................................
+        Name            : example-region
+        Data Policy     : partition
+        Hosting Members : server2
+                          server1
 
-     Type  |    Name     | Value
-    ------ | ----------- | ---------
-    Region | size        | 10
-           | data-policy | PARTITION
-    ```
+        Non-Default Attributes Shared By Hosting Members  
+
+         Type  |    Name     | Value
+        ------ | ----------- | ---------
+        Region | size        | 10
+               | data-policy | PARTITION
 
     As an alternative, `gfsh` maybe used to identify how many entries
     are in the region on each server by looking at statistics.
 
-    ```
-    gfsh>show metrics --categories=partition --region=/EmployeeRegion --member=server1
-    ```
+        gfsh>show metrics --categories=partition --region=/example-region --member=server1
 
-    Within the output, the result for `totalBucketSize` identifies
-    the number of entries hosted on the specified server.
-    Vary the command to see statistics for both `server1` and `server2`.
-    Note that approximately half the entries will be on each server.
-    And, the quantity on each server may vary if the example is started
-    over and run again.
+    Within the output, the result for `totalBucketSize` identifies the number
+    of entries hosted on the specified server.  Vary the command to see
+    statistics for both `server1` and `server2`.  Note that approximately half
+    the entries will be on each server.  And, the quantity on each server may
+    vary if the example is started over and run again.
 
-1. The region entries are distributed across both servers.
-Kill one of the servers:
+5. The region entries are distributed across both servers.
+Stop one of the servers
 
-    ```
-    $ $GEODE_HOME/bin/gfsh
-    ...
-    gfsh>connect
-    gfsh>stop server --name=server1
-    gfsh>quit
-    ```
+        $ gfsh
+        ...
+        gfsh>connect --locators=127.0.0.1[10334]
+        gfsh>stop server --name=server1
+        gfsh>quit
 
-1. Run the consumer a second time, and notice that approximately half of
-the entries of the ```EmployeeRegion``` are still available on the 
+6. Run the consumer a second time, and notice that approximately half of
+the entries of the ```EmployeeRegion``` are still available on the
 remaining server.
 Those hosted by the server that was stopped were lost.
 
-    ```
-    $ ../gradlew run -Pmain=Consumer
-    ...
-    ...
-    INFO: 5 entries in EmployeeRegion on the server(s).
-    ...
-    ```
+        $ ./gradlew run
 
-6. Shut down the system:
+7. Shut down the cluster
 
-    ```
-    $ scripts/stopAll.sh
-    ```
+        $ gfsh run --file=scripts/stop.gfsh
 
 ## Things to Get Right for Partitioned Regions
 
-- Hashing distributes entries among buckets that reside on servers.
-A good hash code is important in order to spread the entries among buckets
-(and therefore, among servers).
+- Hashing distributes entries among buckets that reside on servers.  A good
+hash code is important in order to spread the entries among buckets (and
+therefore, among servers).
 
-- Besides the hash code, equals() needs to be defined.
+- Besides the hash code, `equals()` needs to be defined.
 
-- A system that ought to not lose data if a system member goes down
-will use redundancy in conjunction with partitioning
-in production systems.
+- A system that ought to not lose data if a system member goes down will use
+redundancy in conjunction with partitioning in production systems.

@@ -17,29 +17,59 @@ limitations under the License.
 
 [<img src="https://geode.apache.org/img/apache_geode_logo.png" align="center"/>](http://geode.apache.org)
 
-[![Build Status](https://travis-ci.org/apache/geode-examples.svg?branch=develop)](https://travis-ci.org/apache/geode-examples) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0) 
+[![Build Status](https://travis-ci.org/apache/geode-examples.svg?branch=develop)](https://travis-ci.org/apache/geode-examples) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 # Apache Geode examples
 
-This is the home of Apache Geode examples that are bundled with the project. Contributions<sup>[2]</sup> and corrections are welcome. Please talk to us about your suggestions at [dev@geode.apache.org](mailto:dev@geode.apache.org) or submit a [pull request](https://github.com/apache/geode/pull/new/develop).
+This is the home of Apache Geode examples that are bundled with the project.
+Contributions<sup>[2]</sup> and corrections are welcome. Please talk to us
+about your suggestions at [dev@geode.apache.org](mailto:dev@geode.apache.org)
+or submit a [pull request](https://github.com/apache/geode/pull/new/develop).
 
-## Example requirements
+## Adding a new example
 
-All examples:
+Follow this approach to add a new example:
 
-*  Need to be testable. Use unit tests, integration tests or whatever is applicable. Tests will run through the project's CI.
-*  Should be `Gradle` projects or part of existing ones. There may be exceptions here, but the community should have a consensus to accept.
-*  Have to follow code format & style from Apache Geode <sup>[1]</sup> guidelines.
-*  Should contain a `README.md` file with step-by-step instruction on how to set up and run the example. *Diagrams give you extra credit.*
-*  Donations need to be licensed through ASL 2.0 and contributors need to file an ICLA<sup>[3]</sup>.
+* Create a subdirectory with a descriptive name like `cache-writer`
+* Create a `README.md` file in the example subproject to walk the user through the tutorial
+* Create a Java class with a main method in the `org.apache.geode.examples.$name.Example` class
+* Create a cluster initialization script in `scripts/start.gfsh`
+* Create a cluster shutdown script in `scripts/stop.gfsh`
 
-## Structure
+The scripts should contain `gfsh` commands for starting locators, servers, and
+creating regions--everything that the example program will need to use.  Where
+appropriate you should also add unit tests.  To customize the build you can add
+a `build.gradle` file.
 
-### Installation and a Tutorial for Beginners
+Note that the build may fail if you do not add ASF license headers or use the
+correct formatting (you can fix formatting with `gradle spotlessApply`).
 
-*  [How to Install](http://geode.apache.org/docs/guide/getting_started/installation/install_standalone.html)
-*  Set a `GEODE_HOME` environment variable to point to the root directory of the installation; this directory contains `bin/`. For those that have built from source, it will be the `/path/to/geode/geode-assembly/build/install/apache-geode` directory.
-*  If desired run the tutorial: [Apache Geode in 15 minutes or Less](http://geode.apache.org/docs/guide/getting_started/15_minute_quickstart_gfsh.html)
+## Running an example
+
+The gradle build will automatically download and install a Geode release in the
+`build` directory.  You can run an example with the following gradle targets:
+
+* `build` - compiles the example and runs unit tests
+* `start` - initializes the Geode cluster
+* `run` - runs the example Application
+* `stop` - shuts down the cluster
+* `runAll` - invokes start, run, stop
+
+The commands you need to invoke will be given in the `README.md` file.  Sample
+usage:
+
+    $ ./gradle :replicated:start
+    $ ./gradle :replicated:run
+    $ ./gradle :replicated:stop
+    $ ./gradle runAll
+
+## Catalog of examples
+
+The following sections call out ready-made examples or new examples that could
+be built.  You may want to start your journey with the [Apache Geode in 15
+minutes or
+Less](http://geode.apache.org/docs/guide/getting_started/15_minute_quickstart_gfsh.html)
+tutorial.
 
 ### Basics
 
@@ -78,7 +108,8 @@ All examples:
 
 ### Use cases, integrations and external examples
 
-This section has self-contained little projects that illustrate a use case or an integration with other projects.
+This section has self-contained little projects that illustrate a use case or
+an integration with other projects.
 
 *  SpringBoot Application
 *  HTTP Session replication

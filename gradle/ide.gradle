@@ -14,7 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+allprojects {
+  apply plugin: 'eclipse'
+  eclipse {
+    classpath {
+      defaultOutputDir = file('build-eclipse')
+      downloadSources = true
+    }
+  }
 
-sourceSets.test {
-  resources.srcDirs = ["${projectDir}/scripts"]
+  apply plugin: 'idea'
+  idea {
+    module { downloadSources = true }
+  }
 }

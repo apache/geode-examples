@@ -17,53 +17,55 @@ package org.apache.geode.examples.partitioned;
 import java.io.Serializable;
 
 public class EmployeeKey implements Serializable {
-
   private static final long serialVersionUID = 1L;
 
   private String name;
   private int emplNumber;
 
-  public EmployeeKey() {}
-
-  public EmployeeKey(String n, int en) {
-    this.name = n;
-    this.emplNumber = en;
-  }
-
   public String getName() {
-    return (name);
+    return name;
   }
 
   public int getEmplNumber() {
-    return (emplNumber);
+    return emplNumber;
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-
-    EmployeeKey that = (EmployeeKey) o;
-
-    if (emplNumber != that.emplNumber) {
-      return false;
-    }
-    return name.equals(that.name);
+  public EmployeeKey(String name, int emplNumber) {
+    super();
+    this.name = name;
+    this.emplNumber = emplNumber;
   }
 
   @Override
   public int hashCode() {
-    int result = name.hashCode();
-    result = 31 * result + emplNumber;
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + emplNumber;
+    result = prime * result + ((name == null) ? 0 : name.hashCode());
     return result;
   }
 
-  public String toString() {
-    return ("Name: " + this.name + " Employee Number: " + this.emplNumber);
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    EmployeeKey other = (EmployeeKey) obj;
+    if (emplNumber != other.emplNumber)
+      return false;
+    if (name == null) {
+      if (other.name != null)
+        return false;
+    } else if (!name.equals(other.name))
+      return false;
+    return true;
   }
 
+  @Override
+  public String toString() {
+    return "EmployeeKey [name=" + name + ", emplNumber=" + emplNumber + "]";
+  }
 }

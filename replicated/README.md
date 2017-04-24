@@ -17,47 +17,28 @@ limitations under the License.
 
 # Geode replicated region example
 
-This is one of the most basic examples. 
-Two servers host a replicated region.
-The producer puts 50 entries into the replicated region. The consumer prints the number of entries in the region.
+This is a simple example that demonstrates putting values into a
+replicated region, checking the size, and retrieving the values.
+
+This example assumes you have installed Java and Geode.
 
 ## Steps
-1. From the ```geode-examples/replicated``` directory, start the locator and two servers:
+1. From the ```geode-examples/replicated``` directory, start the locator and two servers
 
-        $ scripts/startAll.sh
+        $ gfsh run --file=scripts/start.gfsh
 
-2. Run the producer:
+2. Run the example to create entries in the region
 
-        $ ../gradlew run -Pmain=Producer
-        ...
-        ... 
-        INFO: Done. Inserted 50 entries.
+        $ ./gradlew run
 
-3. Run the consumer:
+3. Kill one of the servers
 
-        $ ../gradlew run -Pmain=Consumer
-        ...
-        ...
-        INFO: Done. 50 entries available on the server(s).
+        $ gfsh -e "connect --locator=127.0.0.1[10334]" -e "stop server --name=server1"
 
-4. Kill one of the servers:
+4. Run the example a second time, and notice that all the entries are still available due to replication
 
-        $ $GEODE_HOME/bin/gfsh
-        ...
-        gfsh>connect
-        gfsh>stop server --name=server1
-        gfsh>quit
+        $ ./gradlew run 
 
-5. Run the consumer a second time, and notice that all the entries are still available due to replication: 
+5. Shut down the system:
 
-        $ ../gradlew run -Pmain=Consumer
-        ...
-        ...
-        INFO: Done. 50 entries available on the server(s).
-
-6. Shut down the system:
-
-        $ scripts/stopAll.sh
-
-This example is a simple demonstration of using gfsh and some basic Geode APIs,
-as well how to write tests using mocks for Geode applications.
+        $ gfsh run --file=scripts/stop.gfsh

@@ -17,44 +17,33 @@ package org.apache.geode.examples.partitioned;
 import java.io.Serializable;
 
 public class EmployeeData implements Serializable {
-
   private static final long serialVersionUID = 1L;
 
   private EmployeeKey nameAndNumber;
   private int salary;
   private int hoursPerWeek;
 
-  public EmployeeData() {}
-
-  public EmployeeData(EmployeeKey k, int s, int hrs) {
-    this.nameAndNumber = k;
-    this.salary = s;
-    this.hoursPerWeek = hrs;
+  public EmployeeData(EmployeeKey nameAndNumber, int salary, int hoursPerWeek) {
+    this.nameAndNumber = nameAndNumber;
+    this.salary = salary;
+    this.hoursPerWeek = hoursPerWeek;
   }
 
   public EmployeeKey getNameAndNumber() {
-    return (nameAndNumber);
+    return nameAndNumber;
   }
 
   public int getSalary() {
-    return (salary);
+    return salary;
   }
 
   public int getHoursPerWeek() {
-    return (hoursPerWeek);
+    return hoursPerWeek;
   }
 
-  public boolean equals(EmployeeData e) {
-    if (this.nameAndNumber.equals(e.getNameAndNumber()) && (this.salary == e.getSalary())
-        && (this.hoursPerWeek == e.getHoursPerWeek())) {
-      return true;
-    }
-    return false;
-  }
-
+  @Override
   public String toString() {
-    return (this.nameAndNumber.toString() + " salary=" + this.salary + " hoursPerWeek="
-        + this.hoursPerWeek);
+    return "EmployeeData [nameAndNumber=" + nameAndNumber + ", salary=" + salary + ", hoursPerWeek="
+        + hoursPerWeek + "]";
   }
-
 }

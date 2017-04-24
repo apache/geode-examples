@@ -14,7 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-sourceSets.test {
-  resources.srcDirs = ["${projectDir}/scripts"]
+subprojects {
+  apply plugin: "com.diffplug.gradle.spotless"
+  spotless {
+    lineEndings = 'unix';
+    java {
+      target project.fileTree(project.projectDir) { include '**/*.java' }
+      eclipseFormatFile "${rootProject.projectDir}/etc/eclipse-java-google-style.xml"
+    }
+  }
 }

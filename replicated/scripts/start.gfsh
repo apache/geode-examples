@@ -1,4 +1,3 @@
-#!/bin/bash
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
@@ -15,31 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+start locator --bind-address=127.0.0.1
 
-set -e
+start server --name=server1 --locators=127.0.0.1[10334] --server-port=0
+start server --name=server2 --locators=127.0.0.1[10334] --server-port=0
 
-current=`pwd`
+create region --name=example-region --type=REPLICATE
 
-cd `dirname $0`
-
-. ./setEnv.sh
-
-cd $current
-
-#export GEODE_LOCATOR_PORT="${GEODE_LOCATOR_PORT:-10334}"
-# start a locator
-gfsh start locator --name=locator1 --mcast-port=0 --port=${GEODE_LOCATOR_PORT}
-
-# start 2 servers on a random available port
-for N in {1..2}
-do
- gfsh start server --locators=localhost[${GEODE_LOCATOR_PORT}] --name=server$N  --server-port=0 --mcast-port=0
-done
-
-# create a region using GFSH
-gfsh -e "connect --locator=localhost[${GEODE_LOCATOR_PORT}]" -e "create region --name=myRegion --type=REPLICATE"
-
-gfsh -e "connect --locator=localhost[${GEODE_LOCATOR_PORT}]" -e "list members"
-
-exit 0
-
+list members
+describe region --name=example-region

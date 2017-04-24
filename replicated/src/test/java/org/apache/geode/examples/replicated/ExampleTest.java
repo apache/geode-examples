@@ -14,24 +14,25 @@
  */
 package org.apache.geode.examples.replicated;
 
-import org.apache.geode.cache.client.ClientCache;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class Producer extends BaseClient {
+import org.apache.geode.cache.Region;
+import org.geode.examples.util.Mocks;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.contrib.java.lang.system.SystemOutRule;
 
-  public static void main(String[] args) {
-    new Producer().populateRegion();
-  }
+public class ExampleTest {
 
-  public Producer() {}
+  @Rule
+  public SystemOutRule systemOutRule = new SystemOutRule().enableLog();
 
-  public Producer(ClientCache clientCache) {
-    this.clientCache = clientCache;
-  }
+  @Test
+  public void testExample() throws Exception {
+    Region<Integer, String> region = Mocks.region("example-region");
+    new Example().accept(region);
 
-  public void populateRegion() {
-    for (int i = 0; i < NUM_ENTRIES; i++) {
-      getRegion().put(i, "value" + i);
-    }
-    logger.info("Done. Inserted " + NUM_ENTRIES + " entries.");
+    assertThat(systemOutRule.getLog()).contains("Inserted 10 entries into region");
+    assertThat(systemOutRule.getLog()).contains("value9");
   }
 }

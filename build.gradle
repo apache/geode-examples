@@ -44,7 +44,7 @@ task downloadGeode {
 task verifyGeode(type: de.undercouch.gradle.tasks.download.Verify, dependsOn: downloadGeode) {
   src installFile
   algorithm "SHA-256"
-  doFirst { 
+  doFirst {
     checksum file("${installFile}.sha256").text.split(' ')[0]
   }
 }
@@ -57,52 +57,56 @@ task installGeode(type: Copy, dependsOn: verifyGeode) {
   into buildDir
 }
 
-subprojects {
-    apply plugin:'java'
+allprojects {
+  apply plugin:'java'
 
-    repositories {
-        mavenCentral()
-    }
+  repositories { mavenCentral() }
 
-    dependencies {
-        compile "org.apache.geode:geode-core:$geodeVersion"
-        compile "org.apache.commons:commons-exec:$commonsExecVersion"
-        runtime "org.slf4j:slf4j-log4j12:$slf4jVersion"
-
-        testCompile "com.jayway.awaitility:awaitility:$awaitilityVersion"
-        testCompile project(":utils")
-        testCompile "junit:junit:$junitVersion"
-        testCompile "org.mockito:mockito-core:$mockitocoreVersion"
-    }
-
-    task run(type: JavaExec) {
-        description = 'Run example'
-        def mainClass = rootProject.hasProperty('main') ? "${rootProject.getProperty('main')}" : 'Main'
-        main = "org.apache.geode.examples.${project.name}.$mainClass"
-        classpath = sourceSets.main.runtimeClasspath
-        standardInput = System.in
-        systemProperties = System.getProperties()
-        if (rootProject.hasProperty('args')) {
-            args = ["${rootProject.getProperty('args')}"]
-        }
-    }
-
-    test.dependsOn installGeode
-    test {
-	environment 'GEODE_HOME': "$rootProject.buildDir/apache-geode-$geodeVersion"
-    }
-
-    apply plugin: "com.diffplug.gradle.spotless"
-    spotless {
-	lineEndings = 'unix';
-	java {
-	    target project.fileTree(project.projectDir) {
-		include '**/*.java'
-	    }
-	    eclipseFormatFile "${rootProject.projectDir}/etc/eclipse-java-google-style.xml"
-	}
-    }
+  dependencies {
+    compile "org.apache.geode:geode-core:$geodeVersion"
+    
+    testCompile "com.jayway.awaitility:awaitility:$awaitilityVersion"
+    testCompile "junit:junit:$junitVersion"
+    testCompile "org.mockito:mockito-core:$mockitocoreVersion"
+    testCompile "com.github.stefanbirkner:system-rules:$systemrulesVersion"
+    testCompile "org.assertj:assertj-core:$assertjVersion"
+  }
 }
 
+subprojects {
+  dependencies {
+    runtime "org.slf4j:slf4j-log4j12:$slf4jVersion"
+    
+    testCompile project.parent.sourceSets.test.output
+  }
+  
+  def geodePath = "${System.env.PATH}${System.getProperty('path.separator')}${installDir}/bin"
+  task start(type: Exec, dependsOn: [installGeode, build]) {
+    workingDir buildDir
+    environment 'GEODE_HOME', installDir
+    environment 'PATH', geodePath
+    commandLine 'sh', '-c', "gfsh run --file=${projectDir}/scripts/start.gfsh"
+  }
+
+  task stop(type: Exec, dependsOn: installGeode) {
+    workingDir buildDir
+    environment 'GEODE_HOME', installDir
+    environment 'PATH', geodePath
+    commandLine 'sh', '-c', "gfsh run --file=${projectDir}/scripts/stop.gfsh"
+  }
+
+  task run(type: JavaExec, dependsOn: build) {
+    description = 'Run example'
+    classpath = sourceSets.main.runtimeClasspath
+    main = "org.apache.geode.examples.${project.name}.Example"
+  }
+
+  task runAll(dependsOn: [start, run, stop])
+  run.mustRunAfter start
+  stop.mustRunAfter run
+}
+
+apply from: "gradle/spotless.gradle"
+apply from: "gradle/ide.gradle"
 apply from: "gradle/rat.gradle"
 apply from: "gradle/release.gradle"
