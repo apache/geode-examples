@@ -14,13 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-version = 1.2.0-SNAPSHOT
+start locator --name=locator --bind-address=127.0.0.1
 
-geodeVersion = 1.1.0
+start server --name=server1 --locators=127.0.0.1[10334] --server-port=0 --classpath=../build/classes/main
+start server --name=server2 --locators=127.0.0.1[10334] --server-port=0 --classpath=../build/classes/main
 
-assertjVersion = 3.6.2
-awaitilityVersion = 1.7.0
-junitVersion = 4.12
-mockitocoreVersion = 1.10.19
-log4jVersion = 2.7
-systemrulesVersion = 1.16.1
+create region --name=example-region --type=REPLICATE --cache-loader=org.apache.geode.examples.loader.QuoteLoader
+
+list members
+describe region --name=example-region

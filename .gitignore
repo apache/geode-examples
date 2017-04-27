@@ -13,7 +13,9 @@ build/
 build-eclipse/
 /tags
 
-
+locator
+server1
+server2
 
 *.iml
 *.ipr

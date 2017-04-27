@@ -14,10 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-start locator --bind-address=127.0.0.1
+start locator --name=locator --bind-address=127.0.0.1
 
-start server --name=server1 --locators=127.0.0.1[10334] --server-port=0 --classpath=../classes/main
-start server --name=server2 --locators=127.0.0.1[10334] --server-port=0 --classpath=../classes/main
+start server --name=server1 --locators=127.0.0.1[10334] --server-port=0 --classpath=../build/classes/main
+start server --name=server2 --locators=127.0.0.1[10334] --server-port=0 --classpath=../build/classes/main
 
 create region --name=example-region --type=PARTITION
 

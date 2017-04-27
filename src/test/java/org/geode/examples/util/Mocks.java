@@ -17,6 +17,7 @@ package org.geode.examples.util;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doAnswer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,6 +40,13 @@ public class Mocks {
     when(region.values()).thenReturn(data.values());
     when(region.size()).thenReturn(data.size());
     when(region.keySetOnServer()).thenReturn(data.keySet());
+    when(region.containsKey(any())).then(inv -> data.containsKey(getKey(inv)));
+    when(region.containsKeyOnServer(any())).then(inv -> data.containsKey(getKey(inv)));
+    
+    doAnswer(inv -> {
+      data.putAll((Map<? extends K, ? extends V>) inv.getArguments()[0]);
+      return inv.getArguments();
+    }).when(region).putAll(any());
 
     return region;
   }

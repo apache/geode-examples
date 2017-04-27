@@ -39,7 +39,7 @@ Each step in this example specifies paths relative to that directory.
 
 1. Build the example (with the `EmployeeKey` and `EmployeeData` classes)
 
-        $ ./gradlew build
+        $ ../gradlew build
 
 2. Run a script that starts a locator and two servers.  Each of the servers
 hosts the partitioned region.  The example classes will be placed onto the
@@ -50,7 +50,7 @@ classpath when the script starts the servers.
 3. Run the example to put 10 entries into the `example-region`. The data
 will also be retrieved from the region and printed to the console.
 
-        $ ./gradlew run
+        $ ../gradlew run
 
 4. Run a `gfsh` command to see the contents of the region
 
@@ -101,7 +101,7 @@ the entries of the ```EmployeeRegion``` are still available on the
 remaining server.
 Those hosted by the server that was stopped were lost.
 
-        $ ./gradlew run
+        $ ../gradlew run
 
 7. Shut down the cluster
 

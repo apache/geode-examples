@@ -73,23 +73,38 @@ allprojects {
   }
 }
 
+configurations {
+  testArchives
+}
+
+dependencies {
+  testArchives sourceSets.test.output
+}
+
 subprojects {
   dependencies {
-    runtime "org.slf4j:slf4j-log4j12:$slf4jVersion"
-    
-    testCompile project.parent.sourceSets.test.output
+    compile "org.apache.logging.log4j:log4j-core:$log4jVersion"
+    runtime "org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion"
+    testCompile project(path: ':', configuration: 'testArchives') 
   }
   
+  task cleanServer << {
+    delete 'locator'
+    delete 'server1'
+    delete 'server2'
+  }
+  clean.finalizedBy cleanServer
+
   def geodePath = "${System.env.PATH}${System.getProperty('path.separator')}${installDir}/bin"
-  task start(type: Exec, dependsOn: [installGeode, build]) {
-    workingDir buildDir
+  task start(type: Exec, dependsOn: [installGeode, build, cleanServer]) {
+    workingDir projectDir
     environment 'GEODE_HOME', installDir
     environment 'PATH', geodePath
     commandLine 'sh', '-c', "gfsh run --file=${projectDir}/scripts/start.gfsh"
   }
 
   task stop(type: Exec, dependsOn: installGeode) {
-    workingDir buildDir
+    workingDir projectDir
     environment 'GEODE_HOME', installDir
     environment 'PATH', geodePath
     commandLine 'sh', '-c', "gfsh run --file=${projectDir}/scripts/stop.gfsh"

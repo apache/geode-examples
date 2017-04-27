@@ -14,13 +14,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-version = 1.2.0-SNAPSHOT
-
-geodeVersion = 1.1.0
-
-assertjVersion = 3.6.2
-awaitilityVersion = 1.7.0
-junitVersion = 4.12
-mockitocoreVersion = 1.10.19
-log4jVersion = 2.7
-systemrulesVersion = 1.16.1
+connect --locator=127.0.0.1[10334]
+shutdown --include-locators=true

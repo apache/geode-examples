@@ -18,3 +18,4 @@ rootProject.name = 'geode-examples'
 
 include 'replicated'
 include 'partitioned'
+include 'loader'

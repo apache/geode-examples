@@ -58,7 +58,12 @@ rat {
     '**/*.patch',
     '**/*.diff',
     '**/*.rej',
-    '**/*.orig'
+    '**/*.orig',
+
+    // working directories
+    '**/locator/**',
+    '**/server1/**',
+    '**/server2/**'
   ]
 }
 

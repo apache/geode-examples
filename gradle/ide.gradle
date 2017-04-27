@@ -20,6 +20,12 @@ allprojects {
     classpath {
       defaultOutputDir = file('build-eclipse')
       downloadSources = true
+      file {
+        whenMerged { classpath ->
+          // Remove missing resource dirs
+          classpath.entries.removeAll { entry -> (entry.path.contains('geode-examples/build/resources')) }
+        }
+      }  
     }
   }
 
