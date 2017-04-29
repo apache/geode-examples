@@ -17,7 +17,7 @@ limitations under the License.
 
 [<img src="https://geode.apache.org/img/apache_geode_logo.png" align="center"/>](http://geode.apache.org)
 
-[![Build Status](https://travis-ci.org/apache/geode-examples.svg?branch=develop)](https://travis-ci.org/apache/geode-examples) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0) 
+[![Build Status](https://travis-ci.org/apache/geode-examples.svg?branch=develop)](https://travis-ci.org/apache/geode-examples) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 # Apache Geode examples
 
@@ -37,9 +37,9 @@ All examples:
 
 ### Installation and a Tutorial for Beginners
 
-*  [How to Install](http://geode.apache.org/docs/guide/getting_started/installation/install_standalone.html)
+*  [How to Install](http://geode.apache.org/docs/guide/11/getting_started/installation/install_standalone.html)
 *  Set a `GEODE_HOME` environment variable to point to the root directory of the installation; this directory contains `bin/`. For those that have built from source, it will be the `/path/to/geode/geode-assembly/build/install/apache-geode` directory.
-*  If desired run the tutorial: [Apache Geode in 15 minutes or Less](http://geode.apache.org/docs/guide/getting_started/15_minute_quickstart_gfsh.html)
+*  If desired run the tutorial: [Apache Geode in 15 minutes or Less](http://geode.apache.org/docs/guide/11/getting_started/15_minute_quickstart_gfsh.html)
 
 ### Basics
 
