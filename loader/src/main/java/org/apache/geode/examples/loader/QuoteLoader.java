@@ -83,7 +83,7 @@ public class QuoteLoader implements CacheLoader<String, String>, Declarable {
     quotes.put("Orson Scott Card",
         "Everybody walks past a thousand story ideas every day. The good writers are the ones who see five or six of them. Most people don’t see any.");
     quotes.put("Ray Bradbury",
-        "Any man who keeps working is not a failure. He may not be a great writer, but if he applies the old-fashioned virtues of hard, constant labor, he’ll eventually make some kind of career for himself as writer.");
+        "Any man who keeps working is not a failure. He may not be a great writer, but if he applies the old-fashioned virtues of hard, constant labor, he’ll eventually make some kind of career for himself as a writer.");
     quotes.put("Robert Benchley",
         "It took me fifteen years to discover I had no talent for writing, but I couldn’t give it up because by that time I was too famous.");
     quotes.put("Somerset Maugham",
