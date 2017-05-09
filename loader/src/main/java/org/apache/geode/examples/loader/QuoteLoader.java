@@ -62,40 +62,40 @@ public class QuoteLoader implements CacheLoader<String, String>, Declarable {
 
     // sourced from http://www.writersdigest.com/writing-quotes
     quotes.put("Anton Chekhov",
-        "My own experience is that once a story has been written, one has to cross out the beginning and the end. It is there that we authors do most of our lying");
+        "My own experience is that once a story has been written, one has to cross out the beginning and the end. It is there that we authors do most of our lying.");
     quotes.put("C. J. Cherryh",
-        "It is perfectly okay to write garbage—as long as you edit brilliantly");
-    quotes.put("Dorothy Parker", "I can’t write five words but that I change seven");
+        "It is perfectly okay to write garbage—as long as you edit brilliantly.");
+    quotes.put("Dorothy Parker", "I can’t write five words but that I change seven.");
     quotes.put("Douglas Adams",
-        "I love deadlines. I like the whooshing sound they make as they fly by");
-    quotes.put("Emily Dickinson", "A wounded deer leaps the highest");
-    quotes.put("Ernest Hemingway", "Prose is architecture, not interior decoration");
+        "I love deadlines. I like the whooshing sound they make as they fly by.");
+    quotes.put("Emily Dickinson", "A wounded deer leaps the highest.");
+    quotes.put("Ernest Hemingway", "Prose is architecture, not interior decoration.");
     quotes.put("F. Scott Fitzgerald",
-        "Begin with an individual, and before you know it you have created a type; begin with a type, and you find you have created – nothing");
+        "Begin with an individual, and before you know it you have created a type; begin with a type, and you find you have created – nothing.");
     quotes.put("Henry David Thoreau",
-        "Not that the story need be long, but it will take a long while to make it short");
+        "Not that the story need be long, but it will take a long while to make it short.");
     quotes.put("Henry Wadsworth Longfellow",
-        "Great is the art of beginning, but greater is the art of ending");
-    quotes.put("Herman Melville", "To produce a mighty book, you must choose a mighty theme");
-    quotes.put("Jean-Paul Sartre", "Poetry creates the myth, the prose writer draws its portrait");
+        "Great is the art of beginning, but greater is the art of ending.");
+    quotes.put("Herman Melville", "To produce a mighty book, you must choose a mighty theme.");
+    quotes.put("Jean-Paul Sartre", "Poetry creates the myth, the prose writer draws its portrait.");
     quotes.put("Mark Twain",
-        "Most writers regard the truth as their most valuable possession, and therefore are most economical in its use");
+        "Most writers regard the truth as their most valuable possession, and therefore are most economical in its use.");
     quotes.put("Orson Scott Card",
-        "Everybody walks past a thousand story ideas every day. The good writers are the ones who see five or six of them. Most people don’t see any");
+        "Everybody walks past a thousand story ideas every day. The good writers are the ones who see five or six of them. Most people don’t see any.");
     quotes.put("Ray Bradbury",
-        "Any man who keeps working is not a failure. He may not be a great writer, but if he applies the old-fashioned virtues of hard, constant labor, he’ll eventually make some kind of career for himself as writer");
+        "Any man who keeps working is not a failure. He may not be a great writer, but if he applies the old-fashioned virtues of hard, constant labor, he’ll eventually make some kind of career for himself as writer.");
     quotes.put("Robert Benchley",
-        "It took me fifteen years to discover I had no talent for writing, but I couldn’t give it up because by that time I was too famous");
+        "It took me fifteen years to discover I had no talent for writing, but I couldn’t give it up because by that time I was too famous.");
     quotes.put("Somerset Maugham",
-        "If you can tell stories, create characters, devise incidents, and have sincerity and passion, it doesn’t matter a damn how you write");
+        "If you can tell stories, create characters, devise incidents, and have sincerity and passion, it doesn’t matter a damn how you write.");
     quotes.put("Stephen King",
-        "I try to create sympathy for my characters, then turn the monsters loose");
+        "I try to create sympathy for my characters, then turn the monsters loose.");
     quotes.put("Terry Pratchett",
-        "There’s no such thing as writer’s block. That was invented by people in California who couldn’t write");
+        "There’s no such thing as writer’s block. That was invented by people in California who couldn’t write.");
     quotes.put("Ursula K. Le Guin",
-        "The unread story is not a story; it is little black marks on wood pulp. The reader, reading it, makes it live: a live thing, a story");
+        "The unread story is not a story; it is little black marks on wood pulp. The reader, reading it, makes it live: a live thing, a story.");
     quotes.put("William Faulkner",
-        "Get it down. Take chances. It may be bad, but it’s the only way you can do anything really good");
+        "Get it down. Take chances. It may be bad, but it’s the only way you can do anything really good.");
 
     return quotes;
   }

@@ -45,14 +45,6 @@ This example assumes you have installed Java and Geode.
     server logs.  You can find those at `build/server1/server1.log` or
     `build/server2/server2.log`.
 
-4. Kill one of the servers
-
-        $ gfsh -e "connect --locator=127.0.0.1[10334]" -e "stop server --name=server1"
-
-5. Run the example a second time, and notice that all the entries are still available due to replication
-
-        $ ../gradlew run 
-
-6. Shut down the system:
+4. Shut down the system:
 
         $ gfsh run --file=scripts/stop.gfsh

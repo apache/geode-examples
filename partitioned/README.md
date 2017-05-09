@@ -87,21 +87,18 @@ will also be retrieved from the region and printed to the console.
     the entries will be on each server.  And, the quantity on each server may
     vary if the example is started over and run again.
 
-5. The region entries are distributed across both servers.
-Stop one of the servers
+5. The region entries are distributed across both servers.  Stop one of the servers
 
         $ gfsh
         ...
         gfsh>connect --locators=127.0.0.1[10334]
         gfsh>stop server --name=server1
-        gfsh>quit
 
-6. Run the consumer a second time, and notice that approximately half of
-the entries of the ```EmployeeRegion``` are still available on the
-remaining server.
-Those hosted by the server that was stopped were lost.
+6. Run the query a second time, and notice that all the entries hosted on
+   `server1` are missing as expected.  Those hosted by the server that was stopped
+    were lost.
 
-        $ ../gradlew run
+        gfsh>query --query="select e.key from /example-region.entries e"
 
 7. Shut down the cluster
 

@@ -38,10 +38,8 @@ public class EmployeeKey implements Serializable {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + emplNumber;
-    result = prime * result + ((name == null) ? 0 : name.hashCode());
+    int result = name.hashCode();
+    result = 31 * result + emplNumber;
     return result;
   }
 

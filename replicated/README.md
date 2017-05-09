@@ -41,9 +41,9 @@ This example assumes you have installed Java and Geode.
 
         $ gfsh -e "connect --locator=127.0.0.1[10334]" -e "stop server --name=server1"
 
-5. Run the example a second time, and notice that all the entries are still available due to replication
+5. Run a gfsh query, and notice that all the entries are still available due to replication
 
-        $ ../gradlew run 
+        $ gfsh -e "connect --locator=127.0.0.1[10334]" -e "query --query='select e.key from /example-region.entries e'"
 
 6. Shut down the system:
 
