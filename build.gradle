@@ -21,6 +21,11 @@ plugins {
   id "de.undercouch.download" version "3.1.2"
 }
 
+def downloadUrl = (geodeReleaseUrl != "") ? geodeReleaseUrl : 
+    "https://www.apache.org/dyn/closer.cgi?action=download&filename=geode/$geodeVersion"
+def verificationUrl = (geodeReleaseUrl != "") ? geodeReleaseUrl : 
+    "https://www.apache.org/dist/geode/$geodeVersion"
+
 def downloadFile = "apache-geode-${geodeVersion}.tar.gz"
 def installFile = "$buildDir/$downloadFile"
 def installDir = "$buildDir/apache-geode-${geodeVersion}"
@@ -33,8 +38,8 @@ task downloadGeode {
   doLast {
     download {
       src([
-        "https://www.apache.org/dyn/closer.cgi?action=download&filename=geode/$geodeVersion/$downloadFile",
-        "https://www.apache.org/dist/geode/$geodeVersion/${downloadFile}.sha256"
+        "$downloadUrl/$downloadFile",
+        "$verificationUrl/${downloadFile}.sha256"
       ])
       dest buildDir
     }
@@ -60,7 +65,12 @@ task installGeode(type: Copy, dependsOn: verifyGeode) {
 allprojects {
   apply plugin:'java'
 
-  repositories { mavenCentral() }
+  repositories { 
+    if (geodeRepositoryUrl != "") {
+      maven { url geodeRepositoryUrl }
+    }
+    mavenCentral()
+  }
 
   dependencies {
     compile "org.apache.geode:geode-core:$geodeVersion"
