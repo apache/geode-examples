@@ -15,49 +15,44 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-# Geode partitioned region example
+# Geode Lucene Index Example
 
-This example demonstrates the basic property of partitioning.  The basic
-property of partitioning is that data entries are distributed across all
-servers that host a region.  The distribution is like database sharding, except
-that the distribution occurs automatically.
+This example demonstrates the use of a simple Lucene index. Lucene provides
+a powerful text search and analysis. 
 
-In this example, two servers host a single partitioned region.  There is no
-redundancy, so that the basic property of partitioning may be observed.  The
-example puts 10 entries into the region and prints them.  Because the region is
-partitioned, its entries are distributed among the two servers hosting the
-region.  Since there is no redundancy of the data within the region, when one
-of the servers goes away, the entries hosted within that server are also gone;
-the example demonstrates this.
+In this example, two servers host a single partitioned region with entries
+that represent employee information. The example indexes the first and last
+names of employees.
 
 This example assumes that Java and Geode are installed.
 
-## Demonstration of Partitioning
-1. Set directory ```geode-examples/partitioned``` to be the
+## Set up the Lucene index and region
+1. Set directory ```geode-examples/lucene``` to be the
 current working directory.
 Each step in this example specifies paths relative to that directory.
 
-1. Build the example (with the `EmployeeKey` and `EmployeeData` classes)
+2. Build the example (with `EmployeeData` class)
 
         $ ../gradlew build
 
-2. Run a script that starts a locator and two servers.  Each of the servers
-hosts the partitioned region.  The example classes will be placed onto the
-classpath when the script starts the servers.
+3. Run a script that starts a locator and two servers, creates a Lucene index
+called ```simpleIndex```, and then creates the ```example-region``` region.
+A Lucene index must be created before creating the region.
 
         $ gfsh run --file=scripts/start.gfsh
 
-3. Run the example to put 10 entries into the `example-region`. The data
+4. Run the example to populate both the Lucene index and `example-region`. The data
 will also be retrieved from the region and printed to the console.
 
         $ ../gradlew run
 
-4. Run a `gfsh` command to see the contents of the region
+## Try ```gfsh``` commands that interact with the region and do Lucene searches
+1. Run a `gfsh` command to see the contents of the region
 
         $ gfsh
         ...
         gfsh>connect --locators=127.0.0.1[10334]
-        gfsh>query --query="select e.key from /example-region.entries e"
+        gfsh>query --query="select * from /example-region"
         ...
 
     Note that the quantity of entries may also be observed with `gfsh`:
@@ -76,41 +71,32 @@ will also be retrieved from the region and printed to the console.
         Region | size        | 10
                | data-policy | PARTITION
 
-    As an alternative, `gfsh` maybe used to identify how many entries
-    are in the region on each server by looking at statistics.
+2. Try different Lucene searches for data in example-region
 
-        gfsh>show metrics --categories=partition --region=/example-region --member=server1
+        gfsh> list lucene indexes --with_stats
 
-    Within the output, the result for `totalBucketSize` identifies the number
-    of entries hosted on the specified server.  Vary the command to see
-    statistics for both `server1` and `server2`.  Note that approximately half
-    the entries will be on each server.  And, the quantity on each server may
-    vary if the example is started over and run again.
+    Note that each server that holds partitioned data for this region has the ```simpleIndex```. The Lucene index is stored as a co-located region with the partitioned data region.
 
-5. The region entries are distributed across both servers.  Stop one of the servers
+     // Search for an exact name match
+        gfsh>search lucene --name=simpleIndex --region=example-region --queryStrings="Jive" --defaultField=lastName
 
-        $ gfsh
-        ...
-        gfsh>connect --locators=127.0.0.1[10334]
-        gfsh>stop server --name=server1
+     // Search for a name that sounds like 'ive'
+        gfsh>search lucene --name=simpleIndex --region=example-region --queryStrings="ive~" --defaultField=lastName
 
-6. Run the query a second time, and notice that all the entries hosted on
-   `server1` are missing as expected.  Those hosted by the server that was stopped
-    were lost.
+     // Do a compound search on first and last name
+        gfsh>search lucene --name=simpleIndex --region=example-region --queryStrings="ive~" --defaultField=lastName
 
-        gfsh>query --query="select e.key from /example-region.entries e"
+3. Examine the Lucene index statistics
 
-7. Shut down the cluster
+        gfsh>describe lucene index --name=simpleIndex --region=example-region
+
+    Note the statistic show the fields that are indexed and the Lucene analyzer used for each field. In the next example we will specify a different Lucene analyzer for each field. Additional statistics listed are the number of documents (region entries) indexed, number of entries committed as well as the number of queries executed for each Lucene index.
+
+4. Shut down the cluster
 
         $ gfsh run --file=scripts/stop.gfsh
 
-## Things to Get Right for Partitioned Regions
+5. Clean up any generated directories and files so this example can be rerun.
+    
+        $ ../gradlew cleanServer
 
-- Hashing distributes entries among buckets that reside on servers.  A good
-hash code is important in order to spread the entries among buckets (and
-therefore, among servers).
-
-- Besides the hash code, `equals()` needs to be defined.
-
-- A system that ought to not lose data if a system member goes down will use
-redundancy in conjunction with partitioning in production systems.
