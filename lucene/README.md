@@ -84,7 +84,8 @@ will also be retrieved from the region and printed to the console.
         gfsh>search lucene --name=simpleIndex --region=example-region --queryStrings="ive~" --defaultField=lastName
 
      // Do a compound search on first and last name
-        gfsh>search lucene --name=simpleIndex --region=example-region --queryStrings="ive~" --defaultField=lastName
+        gfsh>search lucene --name=simpleIndex --region=example-region --queryStrings="firstName:at~ OR lastName:ive~" --defaultField=lastName
+
 
 3. Examine the Lucene index statistics
 
