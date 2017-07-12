@@ -16,12 +16,10 @@
 #
 start locator --name=locator --bind-address=127.0.0.1
 
-start server --name=server1 --locators=127.0.0.1[10334] --server-port=0
-start server --name=server2 --locators=127.0.0.1[10334] --server-port=0
+start server --name=server1 --locators=127.0.0.1[10334] --server-port=0 --classpath=../build/classes/main
+start server --name=server2 --locators=127.0.0.1[10334] --server-port=0 --classpath=../build/classes/main
 
-#connect
-
-create region --name=example-region --type=REPLICATE
+create region --name=example-region --type=PARTITION
 
 list members
 describe region --name=example-region
