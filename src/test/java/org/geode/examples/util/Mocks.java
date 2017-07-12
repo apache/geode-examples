@@ -19,10 +19,15 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.doAnswer;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.geode.cache.Region;
+import org.apache.geode.cache.client.ClientCache;
+import org.apache.geode.cache.query.Query;
+import org.apache.geode.cache.query.QueryService;
+import org.apache.geode.cache.query.SelectResults;
 import org.mockito.invocation.InvocationOnMock;
 
 public class Mocks {
@@ -30,6 +35,12 @@ public class Mocks {
   
   @SuppressWarnings("unchecked")
   public static <K, V> Region<K, V> region(String name) throws Exception {
+
+    QueryService queryService = mock(QueryService.class);
+
+    ClientCache regionService = mock(ClientCache.class);
+    when(regionService.getQueryService()).thenReturn(queryService);
+
     Map<K, V> data = new HashMap<>();
     Region<K, V> region = mock(Region.class);
 
@@ -42,6 +53,7 @@ public class Mocks {
     when(region.keySetOnServer()).thenReturn(data.keySet());
     when(region.containsKey(any())).then(inv -> data.containsKey(getKey(inv)));
     when(region.containsKeyOnServer(any())).then(inv -> data.containsKey(getKey(inv)));
+    when(region.getRegionService()).thenReturn(regionService);
     
     doAnswer(inv -> {
       data.putAll((Map<? extends K, ? extends V>) inv.getArguments()[0]);
@@ -50,7 +62,20 @@ public class Mocks {
 
     return region;
   }
-  
+
+  public static <K, V> Region<K, V> addQuery(Region<K, V> region, String queryString, Collection results) throws Exception {
+    ClientCache regionService = (ClientCache) region.getRegionService();
+    QueryService queryService = regionService.getQueryService();
+    SelectResults<V> selectResults = (SelectResults<V>) mock(SelectResults.class);
+    when(selectResults.iterator()).thenReturn(results.iterator());
+
+    Query query = mock(Query.class);
+    when(query.execute()).thenReturn(selectResults);
+
+    when(queryService.newQuery(queryString)).thenReturn(query);
+
+    return region;
+  }
   @SuppressWarnings("unchecked")
   private static <K> K getKey(InvocationOnMock inv) {
     return (K) inv.getArguments()[0];
