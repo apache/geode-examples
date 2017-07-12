@@ -33,7 +33,7 @@ gradle.taskGraph.whenReady( { graph ->
       ant.checksum file:"${archive.archivePath}", algorithm:"md5"
       ant.checksum file:"${archive.archivePath}", algorithm:"sha-256", fileext:".sha256"
       signing {
-        required { !version.endsWith("SNAPSHOT") }
+        required { project.hasProperty("signArchives") }
         sign archive.archivePath
       }
     }
@@ -41,7 +41,7 @@ gradle.taskGraph.whenReady( { graph ->
 })
 
 gradle.taskGraph.whenReady { taskGraph ->
-  if (!version.endsWith('SNAPSHOT')) {
+  if (project.hasProperty('signArchives')) {
     if(!project.hasProperty('signing.keyId') || !project.hasProperty('signing.secretKeyRingFile')) {
       println "You must configure your signing.keyId and signing.secretKeyRingFile"
       println "in ~/.gradle/gradle.properties in order to sign jars\n"
