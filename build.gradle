@@ -74,12 +74,7 @@ allprojects {
 
   dependencies {
     compile "org.apache.geode:geode-core:$geodeVersion"
-    compile "org.apache.geode:geode-lucene:$geodeVersion"
     
-    // for Lucene soundex analyzer
-    compile "org.apache.lucene:lucene-analyzers-phonetic:6.4.1"
-    compile "commons-codec:commons-codec:1.10"
-
     testCompile "com.jayway.awaitility:awaitility:$awaitilityVersion"
     testCompile "junit:junit:$junitVersion"
     testCompile "org.mockito:mockito-core:$mockitocoreVersion"
