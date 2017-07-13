@@ -19,19 +19,12 @@ import java.io.Serializable;
 public class EmployeeData implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  // private EmployeeKey nameAndNumber;
   private String firstName;
   private String lastName;
   private int emplNumber;
   private String email;
   private int salary;
   private int hoursPerWeek;
-
-  // public EmployeeData(EmployeeKey nameAndNumber, int salary, int hoursPerWeek) {
-  // this.nameAndNumber = nameAndNumber;
-  // this.salary = salary;
-  // this.hoursPerWeek = hoursPerWeek;
-  // }
 
   public EmployeeData(String firstName, String lastName, int emplNumber, String email, int salary,
       int hoursPerWeek) {
@@ -68,11 +61,6 @@ public class EmployeeData implements Serializable {
   }
 
   @Override
-  // public String toString() {
-  // return "EmployeeData [nameAndNumber=" + nameAndNumber + ", salary=" + salary + ",
-  // hoursPerWeek="
-  // + hoursPerWeek + "]";
-  // }
   public String toString() {
     return "EmployeeData [firstName=" + firstName + ", lastName=" + lastName + ", emplNumber="
         + emplNumber + ", email= " + email + ", salary=" + salary + ", hoursPerWeek=" + hoursPerWeek

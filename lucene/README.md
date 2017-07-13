@@ -55,37 +55,23 @@ will also be retrieved from the region and printed to the console.
         gfsh>query --query="select * from /example-region"
         ...
 
-    Note that the quantity of entries may also be observed with `gfsh`:
-
-        gfsh>describe region --name=example-region
-        ..........................................................
-        Name            : example-region
-        Data Policy     : partition
-        Hosting Members : server2
-                          server1
-
-        Non-Default Attributes Shared By Hosting Members  
-
-         Type  |    Name     | Value
-        ------ | ----------- | ---------
-        Region | size        | 10
-               | data-policy | PARTITION
-
 2. Try different Lucene searches for data in example-region
 
-        gfsh> list lucene indexes --with_stats
+        gfsh> list lucene indexes
 
-    Note that each server that holds partitioned data for this region has the ```simpleIndex```. The Lucene index is stored as a co-located region with the partitioned data region.
+    Note that each server that holds partitioned data for this region has both the ```simpleIndex``` and the ```analyzerIndex```. Each Lucene index is stored as a co-located region with the partitioned data region.
 
      // Search for an exact name match
         gfsh>search lucene --name=simpleIndex --region=example-region --queryStrings="Jive" --defaultField=lastName
 
-     // Search for a name that sounds like 'ive'
-        gfsh>search lucene --name=simpleIndex --region=example-region --queryStrings="ive~" --defaultField=lastName
+     // Search for last name using fuzzy logic: sounds like 'chive'
+        gfsh>search lucene --name=simpleIndex --region=example-region --queryStrings="chive~" --defaultField=lastName
 
-     // Do a compound search on first and last name
-        gfsh>search lucene --name=simpleIndex --region=example-region --queryStrings="firstName:at~ OR lastName:ive~" --defaultField=lastName
+     // Do a compound search on first and last name using fuzzy sounds like logic
+        gfsh>search lucene --name=simpleIndex --region=example-region --queryStrings="firstName:cat~ OR lastName:chive~" --defaultField=lastName
 
+     // Do a compound search on last name and email using analyzerIndex
+        gfsh>search lucene --name=analyzerIndex --region=example-region --queryStrings="lastName:hall~ AND email:Kris.Call@example.com" --defaultField=lastName
 
 3. Examine the Lucene index statistics
 
@@ -93,8 +79,9 @@ will also be retrieved from the region and printed to the console.
 
     Note the statistic show the fields that are indexed and the Lucene analyzer used for each field. In the next example we will specify a different Lucene analyzer for each field. Additional statistics listed are the number of documents (region entries) indexed, number of entries committed as well as the number of queries executed for each Lucene index.
 
-4. Shut down the cluster
+4. Exit gfsh and shut down the cluster
 
+        gfsh>exit
         $ gfsh run --file=scripts/stop.gfsh
 
 5. Clean up any generated directories and files so this example can be rerun.
