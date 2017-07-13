@@ -44,16 +44,14 @@ public class Example implements Consumer<Region<Integer, EmployeeData>> {
     Random r = new Random();
     String[] firstNames = "Alex,Bertie,Kris,Dale,Frankie,Jamie,Morgan,Pat,Ricky,Taylor".split(",");
     String[] lastNames = "Able,Bell,Call,Driver,Forth,Jive,Minnow,Puts,Reliable,Tack".split(",");
-    int salaries[] = new int[] {60000, 80000, 75000, 90000, 100000};
     for (int index = 0; index < firstNames.length; index++) {
-      // Arrays.stream(firstNames).forEach(firstName -> {
-      // EmployeeKey key = new EmployeeKey(name, r.nextInt());
       // Generating random number between 0 and 999999 for emplNumber which will also be used as the
       // unique key for each region entry
       int emplNumber = r.nextInt(999999);
       Integer key = emplNumber;
       String email = firstNames[index] + "." + lastNames[index] + "@example.com";
-      int salary = salaries[index % 5];
+      // Generating random number between 0 and 100000 for salary 
+      int salary = r.nextInt(100000);
       EmployeeData val =
           new EmployeeData(firstNames[index], lastNames[index], emplNumber, email, salary, 40);
       region.put(key, val);
