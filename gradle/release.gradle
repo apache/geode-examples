@@ -58,6 +58,7 @@ gradle.taskGraph.whenReady { taskGraph ->
 
 distributions {
   main {
+    baseName = 'apache-' + baseName
     contents {
       from (rootDir) {
         exclude 'KEYS'
