@@ -38,7 +38,7 @@ This example assumes you have installed Java and Geode.
 
 4. Kill one of the servers
 
-        $ gfsh -e "connect --locator=127.0.0.1[10334]" -e "stop server --name=server1"
+        $ gfsh -e "connect --locator=127.0.0.1[10334]" -e "stop server --name=server"
 
 5. Run a gfsh query, and notice that all the entries are still available due to replication
 
