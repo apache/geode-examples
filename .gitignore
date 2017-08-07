@@ -11,6 +11,7 @@ build/
 .settings/
 .idea/
 out/
+server/
 build-eclipse/
 /tags
 
