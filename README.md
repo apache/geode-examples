@@ -78,7 +78,7 @@ tutorial.
 *  [Partitioned Region](partitioned/README.md)
 *  [Lucene Indexing](lucene/README.md)
 *  Persistence
-*  OQL (Querying)
+*  [OQL (Querying)](oql/README.md)
 
 ### Intermediate
 
