@@ -16,7 +16,6 @@ package org.apache.geode.examples.putall;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
@@ -43,7 +42,6 @@ public class Example implements Consumer<Region<Integer, String>> {
   @Override
   public void accept(Region<Integer, String> region) {
     Map values = new HashMap<Integer, String>();
-    Random random = new Random();
     IntStream.rangeClosed(1, 10).forEach(i -> values.put(i, "value" + i));
     System.out.println(String.format("Size of region %s before: %d", region.getName(), region.size()));
     region.putAll(values);
