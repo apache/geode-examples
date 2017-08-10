@@ -75,13 +75,14 @@ tutorial.
 
 *  [Replicated Region](replicated/README.md)
 *  [Partitioned Region](partitioned/README.md)
+*  [Put All](putall/README.md)
+*  [Lucene Indexing](lucene/README.md)
 *  Persistence
-*  OQL (Querying)
+*  [OQL (Querying)](oql/README.md)
 
 ### Intermediate
 
 *  PDX & Serialization
-*  Lucene Indexing
 *  OQL Indexing
 *  Functions
 *  CacheLoader & CacheWriter
