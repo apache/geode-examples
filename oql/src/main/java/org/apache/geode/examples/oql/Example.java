@@ -45,75 +45,18 @@ public class Example implements Consumer<Region<Integer, String>> {
 
   @Override
   public void accept(Region<Integer, String> region) {
-    simpleQueryExample(region);
-    //keyValueQueryExample(region);
-    //groupingQueryExample(region);
-  }
-
-  private void simpleQueryExample(Region<Integer, String> region)
-  {
     try {
-
-      SelectResults<String> results = region.query("SELECT * FROM /example-region");
-
-      for (Iterator iter = results.iterator(); iter.hasNext();) {
-        String value = (String) iter.next();
-        System.out.println("Value Found: " + value);
-      }
-
-    } catch (Exception ex)
-    {
-      System.out.println(ex.toString());
-    }
-  }
-
-  private void keyValueQueryExample(Region<Integer, String> region)
-  {
-    try {
-
-      SelectResults<Object> results = region.query("SELECT entry.key, entry.value FROM /example-region.entries entry");
-
-      int counter = 0;
-      for (Iterator iter = results.iterator(); iter.hasNext();) {
-        Struct entry = (Struct) iter.next();
-        System.out.println("Entry #" + (counter++));
-        StructType metaData = entry.getStructType();
-        String[] names = metaData.getFieldNames();
-        for (String name : names) {
-          System.out.println("\t" + name + " -> " + entry.get(name));
-        }
-      }
-
-    } catch (Exception ex)
-    {
-      System.out.println(ex.toString());
-    }
-  }
-
-  private void groupingQueryExample(Region<Integer, String> region)
-  {
-    Map<Integer, String> previousValues = region.getAll(region.keySet());
-    try {
-      region.put(1, "value5");
-      region.put(2, "value5");
-      region.put(3, "value6");
-
       SelectResults<String> results = region.query("SELECT DISTINCT entry.value FROM /example-region.entries entry");
-
-      for (Iterator iter = results.iterator(); iter.hasNext();) {
+      for (Iterator iter = results.iterator(); iter.hasNext(); ) {
         String value = (String) iter.next();
         System.out.print(value + ":");
         SelectResults<Integer> keyCount = region.query("SELECT COUNT(*) FROM /example-region.entries entry WHERE entry.value = '" + value + "'");
         System.out.println("\t " + value + " found " + keyCount + " times");
         System.out.println();
       }
-
-    } catch (Exception ex)
-    {
-      System.out.println(ex.toString());
     }
-    finally {
-      region.putAll(previousValues);
+    catch (Exception ex) {
+      System.out.println(ex.toString());
     }
   }
 }

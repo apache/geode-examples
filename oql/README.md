@@ -47,25 +47,3 @@ This example assumes you have installed Java and Geode.
 6. Shut down the system:
 
         $ gfsh run --file=scripts/stop.gfsh
-
-## Switching the running example
-
-Remember this section, we'll return here periodically to swap the running example as we proceed
-
-		@Override
-		  public void accept(Region<Integer, String> region) {
-		    simpleQueryExample(region);  <-- this one is not commented
-		    //keyValueQueryExample(region);
-		    //groupingQueryExample(region);
-		  }
-		  
-## Let's get started with a basic query
-		
-> In this example we are simply looking to retrieve the set of entities from the region so we have a broad query defined which we will run to see the results in the console
-
-		SelectResults<String> results = region.query("SELECT * FROM /example-region");
-		
-1. Ensure the "simpleQueryExample" is uncommented
-
-		simpleQueryExample(region);
-		

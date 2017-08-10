@@ -21,4 +21,16 @@ start server --name=server --locators=127.0.0.1[10334] --server-port=0
 create region --name=example-region --type=REPLICATE
 
 list members
+
+put --key-class=java.lang.Integer --key=0 --value="value5" --region=example-region
+put --key-class=java.lang.Integer --key=1 --value="value5" --region=example-region
+put --key-class=java.lang.Integer --key=2 --value="value6" --region=example-region
+put --key-class=java.lang.Integer --key=3 --value="value3" --region=example-region
+put --key-class=java.lang.Integer --key=4 --value="value4" --region=example-region
+put --key-class=java.lang.Integer --key=5 --value="value5" --region=example-region
+put --key-class=java.lang.Integer --key=6 --value="value6" --region=example-region
+put --key-class=java.lang.Integer --key=7 --value="value7" --region=example-region
+put --key-class=java.lang.Integer --key=8 --value="value8" --region=example-region
+put --key-class=java.lang.Integer --key=9 --value="value9" --region=example-region
+
 describe region --name=example-region
