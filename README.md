@@ -75,6 +75,7 @@ tutorial.
 
 *  [Replicated Region](replicated/README.md)
 *  [Partitioned Region](partitioned/README.md)
+*  [Put Multiple Values at Once](putall/README.md)
 *  Persistence
 *  OQL (Querying)
 
