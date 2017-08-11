@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-# Geode putAll region example
+# Geode Put Multiple Values at Once Example
 
 This is a simple example that demonstrates putting a map of values into a region, checking the size, and retrieving the values.
 
@@ -24,26 +24,18 @@ This example assumes you have installed Java and Geode.
 ## Steps
 
 1. From the `geode-examples/putall` directory, build the example and
-   run unit tests
+   run unit tests.
 
         $ ../gradlew build
 
-2. Next start the locator and two servers
+2. Next start a locator, start a server, and create a region.
 
         $ gfsh run --file=scripts/start.gfsh
 
-3. Run the example to create entries in the region
+3. Run the example to put entries into the region.
 
         $ ../gradlew run
 
-4. Kill one of the servers
-
-        $ gfsh -e "connect --locator=127.0.0.1[10334]" -e "stop server --name=server"
-
-5. Run a gfsh query, and notice that all the entries are still available due to replication
-
-        $ gfsh -e "connect --locator=127.0.0.1[10334]" -e "query --query='select e.key from /example-region.entries e'"
-
-6. Shut down the system:
+4. Shut down the system.
 
         $ gfsh run --file=scripts/stop.gfsh
