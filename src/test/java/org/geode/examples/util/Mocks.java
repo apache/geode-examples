@@ -23,11 +23,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.geode.cache.Region;
+import org.apache.geode.cache.execute.Execution;
+import org.apache.geode.cache.execute.ResultCollector;
+
 import org.mockito.invocation.InvocationOnMock;
 
 public class Mocks {
-  private Mocks() { }
-  
+  private Mocks() {
+  }
+
   @SuppressWarnings("unchecked")
   public static <K, V> Region<K, V> region(String name) throws Exception {
     Map<K, V> data = new HashMap<>();
@@ -42,7 +46,7 @@ public class Mocks {
     when(region.keySetOnServer()).thenReturn(data.keySet());
     when(region.containsKey(any())).then(inv -> data.containsKey(getKey(inv)));
     when(region.containsKeyOnServer(any())).then(inv -> data.containsKey(getKey(inv)));
-    
+
     doAnswer(inv -> {
       data.putAll((Map<? extends K, ? extends V>) inv.getArguments()[0]);
       return inv.getArguments();
@@ -50,7 +54,18 @@ public class Mocks {
 
     return region;
   }
-  
+
+  @SuppressWarnings("unchecked")
+  public static Execution execution(String functionId, Object result) throws Exception {
+    ResultCollector resultCollector = mock(ResultCollector.class);
+    when(resultCollector.getResult()).thenReturn(result);
+
+    Execution execution = mock(Execution.class);
+    when(execution.execute(functionId)).thenReturn(resultCollector);
+
+    return execution;
+  }
+
   @SuppressWarnings("unchecked")
   private static <K> K getKey(InvocationOnMock inv) {
     return (K) inv.getArguments()[0];
