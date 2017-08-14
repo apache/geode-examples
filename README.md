@@ -78,6 +78,7 @@ tutorial.
 *  [Put Multiple Values at Once](putall/README.md)
 *  [Functions](functions/README.md)
 *  [Put Multiple Values at Once](putall/README.md)
+*  [Functions](functions/README.md)
 *  Persistence
 *  OQL (Querying)
 
