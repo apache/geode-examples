@@ -118,7 +118,7 @@ subprojects {
     workingDir projectDir
     environment 'GEODE_HOME', installDir
     environment 'PATH', geodePath
-    commandLine 'sh', '-c', "gfsh run --file=${projectDir}/scripts/start.gfsh"
+    commandLine 'sh', '-c', "gfsh run --file=${projectDir}/build/start.gfsh"
   }
   start.dependsOn replaceVersion
 
@@ -126,7 +126,7 @@ subprojects {
     workingDir projectDir
     environment 'GEODE_HOME', installDir
     environment 'PATH', geodePath
-    commandLine 'sh', '-c', "gfsh run --file=${projectDir}/scripts/stop.gfsh"
+    commandLine 'sh', '-c', "gfsh run --file=${projectDir}/build/stop.gfsh"
   }
 
   task run(type: JavaExec, dependsOn: build) {
