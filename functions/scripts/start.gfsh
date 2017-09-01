@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
 start locator --name=locator --bind-address=127.0.0.1
 
 start server --name=server1 --locators=127.0.0.1[10334] --server-port=0
@@ -24,5 +25,5 @@ create region --name=example-region --type=REPLICATE
 list members
 describe region --name=example-region
 
-deploy --jar=build/libs/functions.jar
+deploy --jar=build/libs/functions-${version}.jar
 list functions
