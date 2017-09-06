@@ -68,9 +68,8 @@ public class Example implements BiConsumer<Region<Integer, String>, Execution> {
       region.put(key, key.toString());
     }
 
-    ResultCollector results = execution.execute(PrimeNumber.ID);
-    Object result = results.getResult();
-    primes.addAll((List) result);
+    ResultCollector<Integer, List> results = execution.execute(PrimeNumber.ID);
+    primes.addAll(results.getResult());
 
     System.out.println("The primes in the range from 1 to " + maximum + " are:\n" + primes);
   }

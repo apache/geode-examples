@@ -17,6 +17,7 @@ package org.apache.geode.examples.functions;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.geode.cache.Region;
@@ -32,11 +33,10 @@ public class ExampleTest {
     Example example = new Example(10);
 
     Region<Integer, String> region = Mocks.region("example-region");
-    List<Integer> result = Arrays.asList(1, 2, 3, 5, 7);
-    Execution execution = Mocks.execution(PrimeNumber.ID, result);
+    List<Integer> primes = Arrays.asList(1, 2, 3, 5, 7);
+    Execution execution = Mocks.execution(PrimeNumber.ID, primes);
 
     example.accept(region, execution);
-    System.err.println("size=" + example.getPrimes().size());
-    assertEquals(5, example.getPrimes().size());
+    assertEquals(new HashSet(primes), example.getPrimes());
   }
 }

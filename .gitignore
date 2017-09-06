@@ -15,7 +15,6 @@ build-eclipse/
 out/
 
 locator
-server
 server1
 server2
 
