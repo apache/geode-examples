@@ -41,7 +41,7 @@ This security manager reads a JSON that defines which roles are granted which pe
  as well as each user's username, password, and roles.
 The JSON is present in `src/main/resources/example_security.json`.
 
-        $ gfsh run --continue-on-error --file=scripts/start.gfsh 
+        $ gfsh run --file=scripts/start.gfsh 
 
 4. The `scripts` directory contains several scripts that will attempt to execute various commands
  with the given user's permissions.
