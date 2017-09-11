@@ -59,6 +59,7 @@ rat {
     '**/*.diff',
     '**/*.rej',
     '**/*.orig',
+    '**/*.json',
 
     // working directories
     '**/locator/**',
