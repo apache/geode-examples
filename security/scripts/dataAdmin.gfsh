@@ -32,6 +32,6 @@ query --query="select * from /region2"
 
 gc
 
-change loglevel --loglevel=DEBUG --member=server1
+change loglevel --loglevel=DEBUG --members=server1
 
 export cluster-configuration --zip-file-name=dataAdmin-config.zip
