@@ -16,7 +16,8 @@ package org.apache.geode.examples.security;
 
 import static org.apache.geode.distributed.ConfigurationProperties.SECURITY_CLIENT_AUTH_INIT;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.logging.log4j.Logger;
@@ -25,132 +26,129 @@ import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.client.ClientRegionShortcut;
-import org.apache.geode.cache.client.ServerOperationException;
 import org.apache.geode.internal.logging.LogService;
-import org.apache.geode.security.NotAuthorizedException;
 
-public class Example {
+public class Example implements AutoCloseable {
   private static Logger logger = LogService.getLogger();
   private static final String REGION1 = "region1";
   private static final String REGION2 = "region2";
 
-  // We use the data present in the loader example
-  private static final String[] AUTHORS =
-      ("Anton Chekhov,C. J. Cherryh,Dorothy Parker,Douglas Adams,Emily Dickinson,"
-          + "Ernest Hemingway,F. Scott Fitzgerald,Henry David Thoreau,Henry Wadsworth Longfellow,"
-          + "Herman Melville,Jean-Paul Sartre,Mark Twain,Orson Scott Card,Ray Bradbury,Robert Benchley,"
-          + "Somerset Maugham,Stephen King,Terry Pratchett,Ursula K. Le Guin,William Faulkner")
-              .split(",");
+  private static final Map<String, String> REGION1_EXAMPLE_DATA = new HashMap<>();
+  private static final Map<String, String> REGION2_EXAMPLE_DATA = new HashMap<>();
+  static {
+    REGION1_EXAMPLE_DATA.put("'Soon I Will Be Invincible', Austin Grossman",
+        "Once you get past a certain threshold, everyone's problems are the same: fortifying your island and hiding the heat signature from your fusion reactor.");
+    REGION1_EXAMPLE_DATA.put("'The Name of the Wind', Patrick Rothfuss",
+        "You have to be a bit of a liar to tell a story the right way.");
+    REGION1_EXAMPLE_DATA.put("'The Lies of Locke Lamora', Scott Lynch",
+        "You can't help being young, but it's past time that you stopped being stupid.");
 
-  private String username;
-  private String password;
+    REGION2_EXAMPLE_DATA.put("'Old Man's War', John Scalzi",
+        "I'm not insane, sir. I have a finely calibrated sense of acceptable risk.");
+    REGION2_EXAMPLE_DATA.put("'The Way of Kings', Brandon Sanderson",
+        "'Ah, the outdoors,' Shallan said. 'I visited that mythical place once.'");
+    REGION2_EXAMPLE_DATA.put("'The Blade Itself', Joe Abercrombie",
+        "But that was civilisation, so far as Logen could tell. People with nothing better to do, dreaming up ways to make easy things difficult.");
+  }
+
+  private final String username;
+  private final String password;
+
   private final ClientCache cache;
+  private final Region<String, String> region1;
+  private final Region<String, String> region2;
 
 
   private Example(String username, String password) {
     this.username = username;
     this.password = password;
+
     Properties props = new Properties();
-    props.setProperty(ExampleAuthInit.USER_NAME, this.username);
-    props.setProperty(ExampleAuthInit.PASSWORD, this.password);
+    props.setProperty(ExampleAuthInit.USER_NAME, username);
+    props.setProperty(ExampleAuthInit.PASSWORD, password);
     props.setProperty(SECURITY_CLIENT_AUTH_INIT, ExampleAuthInit.class.getName());
+
+    // This cache is a singleton and must be closed before another instance of Example
+    // is instantiated with different credentials in the same VM.
+
     // connect to the locator using default port 10334
     cache = new ClientCacheFactory(props).setPoolSubscriptionEnabled(true)
         .addPoolLocator("localhost", 10334).create();
-  }
-
-  /** A far-from-comprehensive example of integrated security in action. */
-  public static void main(String[] args) {
-    printCurrentData();
-
-    getDataExample("dataReader", false);
-    getDataExample("dataWriter", true);
-
-    copyDataExample("dataWriter", true);
-    copyDataExample("dataReader", true);
-    copyDataExample("dataAdmin", false);
-
-    printCurrentData();
-  }
-
-  /** Prints the data currently present in both /region1 and /region2 */
-  private static void printCurrentData() {
-    Example example = new Example("super-user", "123");
-    Region<String, String> region1 =
-        example.cache.<String, String>createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY)
-            .create(REGION1);
-    logger.info("======\nContents of /region1:");
-    example.getData(region1, false);
-    Region<String, String> region2 =
-        example.cache.<String, String>createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY)
-            .create(REGION2);
-    logger.info("======\nContents of /region2:");
-    example.getData(region2, false);
-
-    example.cache.close(true);
+    region1 = cache.<String, String>createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY)
+        .create(REGION1);
+    region2 = cache.<String, String>createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY)
+        .create(REGION2);
   }
 
 
   /**
-   * Attempt to fetch and print the data in /region1 using the authorization of the
-   * provided @username.
+   * A far-from-comprehensive example of integrated security in action.
    */
-  private static void getDataExample(String username, boolean expectAuthFailure) {
-    logger.info(String.format("Starting get example with user '%s', expecting %s", username,
-        expectAuthFailure ? "authorization failure." : "success."));
+  public static void main(String[] args) throws Exception {
 
-    Example example = new Example(username, "123");
+    // dataReader is allowed to get but not put data on both regions
+    try (Example example = new Example("dataReader", "123")) {
+      example.putDataExample();
+      example.getDataExample();
+    }
 
-    Region<String, String> region =
-        example.cache.<String, String>createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY)
-            .create(REGION1);
+    // region1dataAdmin is allowed to both put and get data, but only in /region1
+    try (Example example = new Example("region1dataAdmin", "123")) {
+      example.putDataExample();
+      example.getDataExample();
+    }
 
-    example.getData(region, expectAuthFailure);
-
-    example.cache.close(true);
-  }
-
-  /** Attempt to print the data present in the given @region. */
-  private void getData(Region<String, String> region, boolean expectAuthFailure) {
-    try {
-      Arrays.stream(AUTHORS).forEach(author -> logger.info(author + ": " + region.get(author)));
-    } catch (ServerOperationException e) {
-      if (e.getCause() instanceof NotAuthorizedException && expectAuthFailure) {
-        logger.info("Got ServerOperationExpectation, caused by expected NotAuthorizedException");
-      } else {
-        throw e;
-      }
+    // dataAdmin is authorized to put and get data on all regions
+    try (Example example = new Example("dataAdmin", "123")) {
+      example.putDataExample();
+      example.getDataExample();
     }
   }
 
-  /**
-   * Attempt to copy data from /region1 to /region2 using the authorization of the
-   * provided @username.
-   */
-  private static void copyDataExample(String username, boolean expectAuthFailure) {
-    logger.info(String.format("Starting copy example with user '%s', expecting %s", username,
-        expectAuthFailure ? "authorization failure." : "success."));
-    Example example = new Example(username, "123");
-
-    Region<String, String> region1 =
-        example.cache.<String, String>createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY)
-            .create(REGION1);
-
-    Region<String, String> region2 =
-        example.cache.<String, String>createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY)
-            .create(REGION2);
-
+  /** Attempt to put REGION1_EXAMPLE_DATA into /region1 and REGION2_EXAMPLE_DATA into /region2 */
+  private void putDataExample() {
+    logger.info("Writing example data to /region1 as user " + username);
     try {
-      Arrays.stream(AUTHORS).forEach(author -> region2.put(author, region1.get(author)));
-    } catch (ServerOperationException e) {
-      if (e.getCause() instanceof NotAuthorizedException && expectAuthFailure) {
-        logger.info("Got ServerOperationExpectation, caused by expected NotAuthorizedException");
-      } else {
-        throw e;
-      }
+      region1.putAll(REGION1_EXAMPLE_DATA);
+      logger.info("Writing complete.");
+    } catch (Exception e) {
+      logger.info("Writing to /region1 as user '" + username + "' threw an exception.", e);
     }
 
-    example.cache.close(true);
+    logger.info("Writing example data to /region2 as user " + username);
+    try {
+      region2.putAll(REGION2_EXAMPLE_DATA);
+      logger.info("Writing complete.");
+    } catch (Exception e) {
+      logger.info("Writing to /region2 as user '" + username + "' threw an exception.", e);
+    }
   }
 
+
+  /** Attempt to read data from both /region1 and /region2 */
+  private void getDataExample() {
+    logger.info("Reading data from /region1 as user " + username);
+    try {
+      region1.getAll(REGION1_EXAMPLE_DATA.keySet()).forEach(this::logEntry);
+    } catch (Exception e) {
+      logger.info("Reading from /region1 as user '" + username + "' threw an exception.", e);
+    }
+
+    logger.info("Reading data from /region2 as user " + username);
+    try {
+      region2.getAll(REGION2_EXAMPLE_DATA.keySet()).forEach(this::logEntry);
+    } catch (Exception e) {
+      logger.info("Reading from /region2 as user '" + username + "' threw an exception.", e);
+    }
+  }
+
+  private void logEntry(String key, String value) {
+    logger.info(String.format("\n\"%s\"\n -- %s", value, key));
+
+  }
+
+  @Override
+  public void close() throws Exception {
+    cache.close();
+  }
 }

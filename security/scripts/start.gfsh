@@ -42,5 +42,5 @@ start server --name=server2 --locators=127.0.0.1[10334]\
 # To create a region, we can connect as any user with CLUSTER:MANAGE
 
 connect --user=super-user --password=123
-create region --name=region1 --type=REPLICATE --cache-loader=org.apache.geode.examples.loader.QuoteLoader
+create region --name=region1 --type=REPLICATE
 create region --name=region2 --type=PARTITION
