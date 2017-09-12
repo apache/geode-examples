@@ -1,0 +1,46 @@
+#
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# Start a locator.
+# The security properties file specifies the ExampleSecurityManager to be the security manager.
+# This requires that the example_security.json be on the classpath.
+# Recall that the --classpath option is specified relative to the locator's working directory.
+
+start locator --name=locator --bind-address=127.0.0.1\
+ --security-properties-file=example_security.properties --classpath=../build/resources/main/
+
+# Now we may start our cluster.
+# Servers also require security properties to be set and a copy of the security JSON
+# We use `--server-port=0` to use a random available port.
+# Note that we can start a server with any user with CLUSTER:MANAGE permissions
+
+start server --name=server1 --locators=127.0.0.1[10334]\
+ --classpath=../build/resources/main/:../build/classes/main/\
+ --security-properties-file=./example_security.properties --server-port=0\
+ --user=super-user --password=123
+
+start server --name=server2 --locators=127.0.0.1[10334]\
+ --classpath=../build/resources/main/:../build/classes/main/\
+ --security-properties-file=./example_security.properties --server-port=0\
+ --user=clusterManager --password=123
+
+# To execute any online commands, we need to connect to the locator
+# To create a region, we can connect as any user with CLUSTER:MANAGE
+
+connect --user=super-user --password=123
+create region --name=region1 --type=REPLICATE
+create region --name=region2 --type=PARTITION
