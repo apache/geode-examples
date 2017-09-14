@@ -29,7 +29,7 @@ This example assumes you have installed Java and Geode.
 
 ## Steps
 
-1. From the `geode-examples/functions` directory, update the versions numbers, build the example, and
+1. From the `geode-examples/functions` directory, build the example, and
    run unit tests.
 
         $ ../gradlew build
