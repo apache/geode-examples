@@ -114,14 +114,14 @@ subprojects {
     workingDir projectDir
     environment 'GEODE_HOME', installDir
     environment 'PATH', geodePath
-    commandLine 'sh', '-c', "gfsh run --file=${projectDir}/build/start.gfsh"
+    commandLine 'sh', '-c', "gfsh run --file=${projectDir}/scripts/start.gfsh"
   }
 
   task stop(type: Exec, dependsOn: installGeode) {
     workingDir projectDir
     environment 'GEODE_HOME', installDir
     environment 'PATH', geodePath
-    commandLine 'sh', '-c', "gfsh run --file=${projectDir}/build/stop.gfsh"
+    commandLine 'sh', '-c', "gfsh run --file=${projectDir}/scripts/stop.gfsh"
   }
 
   task run(type: JavaExec, dependsOn: build) {
