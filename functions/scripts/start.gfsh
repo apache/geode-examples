@@ -25,5 +25,5 @@ create region --name=example-region --type=REPLICATE
 list members
 describe region --name=example-region
 
-deploy --jar=build/libs/functions-${version}.jar
+deploy --jar=build/libs/functions.jar
 list functions

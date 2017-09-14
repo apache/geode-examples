@@ -98,20 +98,16 @@ subprojects {
     testCompile project(path: ':', configuration: 'testArchives')
   }
 
+  jar {
+    archiveName "${baseName}.${extension}"
+  }
+
   task cleanServer << {
     delete 'locator'
     delete 'server1'
     delete 'server2'
   }
   clean.finalizedBy cleanServer
-
-  task replaceVersion(type:Copy) {
-    from "$projectDir/scripts/start.gfsh"
-    from "$projectDir/scripts/stop.gfsh"
-    into (project.getBuildDir())
-    expand(version: "${version}")
-  }
-  compileJava.dependsOn replaceVersion
 
   def geodePath = "${System.env.PATH}${System.getProperty('path.separator')}${installDir}/bin"
   task start(type: Exec, dependsOn: [installGeode, build, cleanServer]) {
@@ -120,7 +116,6 @@ subprojects {
     environment 'PATH', geodePath
     commandLine 'sh', '-c', "gfsh run --file=${projectDir}/build/start.gfsh"
   }
-  start.dependsOn replaceVersion
 
   task stop(type: Exec, dependsOn: installGeode) {
     workingDir projectDir
