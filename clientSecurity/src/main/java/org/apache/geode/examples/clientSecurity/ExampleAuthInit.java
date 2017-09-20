@@ -27,7 +27,6 @@ public class ExampleAuthInit implements AuthInitialize {
 
   static final String USER_NAME = "security-username";
   static final String PASSWORD = "security-password";
-  private static String password;
 
   public static AuthInitialize create() {
     return new ExampleAuthInit();
@@ -45,15 +44,15 @@ public class ExampleAuthInit implements AuthInitialize {
     String userName = securityProps.getProperty(USER_NAME);
     if (userName == null) {
       throw new AuthenticationFailedException(
-          "SampleAuthInit: user name property [" + USER_NAME + "] not set.");
+          "ExampleAuthInit: user name property [" + USER_NAME + "] not set.");
     }
     credentials.setProperty(USER_NAME, userName);
-    String passwd = securityProps.getProperty(PASSWORD);
-    if (passwd == null) {
+    String password = securityProps.getProperty(PASSWORD);
+    if (password == null) {
       throw new AuthenticationFailedException(
-          "SampleAuthInit: password property [" + PASSWORD + "] not set.");
+          "ExampleAuthInit: password property [" + PASSWORD + "] not set.");
     }
-    credentials.setProperty(PASSWORD, passwd);
+    credentials.setProperty(PASSWORD, password);
     logger.info("SampleAuthInit: successfully obtained credentials for user " + userName);
     return credentials;
   }
