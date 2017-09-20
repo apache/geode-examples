@@ -20,13 +20,12 @@ limitations under the License.
 This example demonstrates basic command security and user authentication in a client application
 backed by a secured Geode cluster.
 
-In this example, three data users with varying permissions attempt to read and write data
+In this example, four users with varying permissions attempt to read and write data
  in two regions.
-The `dataReader` user has `DATA:READ` permission, `dataWriter` has`DATA:WRITE` permission, and
- `region1dataAdmin` has permissions `DATA:READ:region1` and `DATA:WRITE:region1`, but no permissions
- that apply to `/region2`.
-(`region1dataAdmin` also has `DATA:MANAGE:region1` permission, but this permissions is unused
- in this example.)
+* The `superUser` user has full permissions and may read and write to all regions.
+* The `dataReader` user has `DATA:READ` permission, granting read access to all regions.
+* The `dataWriter` user has `DATA:WRITE` permission, granting write access to all regions.
+* The `region1dataAdmin` has permissions `DATA:READ:region1` and `DATA:WRITE:region1`, granting read and write access only to `/region1`.
 
 This example assumes that Java and Geode are installed.
 
@@ -38,14 +37,15 @@ Each step in this example specifies paths relative to that directory.
 
         $ ../gradlew build
 
-3. Start a secure cluster consisting of one locator with two servers hosting two regions with
- the script `scripts/start.gfsh`.
-In this example, we use the security manager `org.apache.geode.examples.clientSecurity.ExampleSecurityManager`.
-This security manager reads a JSON file that defines which roles are granted which permissions,
+3. Start a secure cluster consisting of one locator with two servers with two regions.
+ Refer to `scripts/start.gfsh`.
+ When starting a secure cluster, you must specify a *security manager* that implements authorization.
+ In this example, we use the security manager `org.apache.geode.examples.clientSecurity.ExampleSecurityManager`.
+ This security manager reads a JSON file that defines which roles are granted which permissions,
  as well as each user's username, password, and roles.
-The JSON is present in `src/main/resources/example_security.json`.
-For convenience, you can run this script with the command:
-
+ The JSON is present in `src/main/resources/example_security.json`.
+ You can execute the `scripts/start.gfsh` script with the command:
+ 
         $ ../gradlew start
 
 4. Run the example.  Each user will attempt to put data to `/region1` and `/region2`,
@@ -54,8 +54,8 @@ For convenience, you can run this script with the command:
 
         $ ../gradlew run
 
-5. Stop the cluster using the script `scripts/stop.gfsh`.
-For convenience, you can run this script with the command:
+5. Stop the cluster using the script `scripts/stop.gfsh`.  
+You can run this script with the command:
 
         $ ../gradlew stop
 
@@ -64,10 +64,14 @@ For convenience, you can run this script with the command:
 - User authentication can be handled by any class that implements `SecurityManager`.
 
 - Specify the `SecurityManager` by the `security-manager` property of all locator and server
-property files.  Additional properties may be required by your choice of security manager -- for instance,
-our implementation also requires `security-json` to be specified.
+property files.  An unsecured member or a member secured by a different security manager will not
+be allowed to join the cluster.
+
+- Additional properties may be required by your choice of security manager.  For instance,
+our implementation also requires `security-json` to be specified in the member property file.
 
 - Any class that implements `AuthInitialize` can handle the interaction between your Java code and
  the username and password passed to your `SecurityManager`.
+ Refer to `org.apache.geode.examples.clientSecurity.ExampleAuthInit`.
 
 - Refer to the documentation for explicit detailing of permissions required for each command.
