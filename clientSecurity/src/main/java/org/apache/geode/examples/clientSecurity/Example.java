@@ -14,8 +14,6 @@
  */
 package org.apache.geode.examples.clientSecurity;
 
-import static org.apache.geode.distributed.ConfigurationProperties.SECURITY_CLIENT_AUTH_INIT;
-
 import java.util.Properties;
 
 import org.apache.commons.lang.Validate;
@@ -52,15 +50,15 @@ public class Example implements AutoCloseable {
   private static final String AUTHOR_ABERCROMBIE = "Abercrombie";
   private static final String BOOK_BY_ABERCROMBIE = "The Blade Itself";
 
+  // Each example will have its own proxy for the cache and both regions.
   private final ClientCache cache;
   private final Region<String, String> region1;
   private final Region<String, String> region2;
 
-  private Example(String username, String password) {
+  private Example(String username) {
     Properties props = new Properties();
-    props.setProperty(ExampleAuthInit.USER_NAME, username);
-    props.setProperty(ExampleAuthInit.PASSWORD, password);
-    props.setProperty(SECURITY_CLIENT_AUTH_INIT, ExampleAuthInit.class.getName());
+    props.setProperty("security-username", username);
+    props.setProperty("security-client-auth-init", ExampleAuthInit.class.getName());
 
     // connect to the locator using default port 10334
     cache = new ClientCacheFactory(props).setPoolSubscriptionEnabled(true)
@@ -80,7 +78,7 @@ public class Example implements AutoCloseable {
 
   private static void adminUserCanPutAndGetEverywhere() throws Exception {
     String valueFromRegion;
-    try (Example example = new Example("superUser", "123")) {
+    try (Example example = new Example("superUser")) {
       // All puts and gets should pass
       example.region1.put(AUTHOR_ABERCROMBIE, BOOK_BY_ABERCROMBIE);
       example.region2.put(AUTHOR_GROSSMAN, BOOK_BY_GROSSMAN);
@@ -94,7 +92,7 @@ public class Example implements AutoCloseable {
   }
 
   private static void writeOnlyUserCannotGet() {
-    try (Example example = new Example("dataWriter", "123")) {
+    try (Example example = new Example("dataWriter")) {
       // Writes to any region should pass
       example.region1.put(AUTHOR_LYNCH, BOOK_BY_LYNCH);
       example.region2.put(AUTHOR_ROTHFUSS, BOOK_BY_ROTHFUSS);
@@ -107,7 +105,7 @@ public class Example implements AutoCloseable {
   }
 
   private static void readOnlyUserCannotPut() {
-    try (Example example = new Example("dataReader", "123")) {
+    try (Example example = new Example("dataReader")) {
       // This will pass
       example.region1.get(AUTHOR_LYNCH);
       example.region2.get(AUTHOR_ROTHFUSS);
@@ -120,7 +118,7 @@ public class Example implements AutoCloseable {
   }
 
   private static void regionUserIsRestrictedByRegion() {
-    try (Example example = new Example("region1dataAdmin", "123")) {
+    try (Example example = new Example("region1dataAdmin")) {
       // This user can read and write only in region1
       example.region1.put(AUTHOR_SANDERSON, BOOK_BY_SANDERSON);
       String valueFromRegion = example.region1.get(AUTHOR_SANDERSON);

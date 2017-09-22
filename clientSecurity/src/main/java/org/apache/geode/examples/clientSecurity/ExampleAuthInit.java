@@ -16,30 +16,30 @@ package org.apache.geode.examples.clientSecurity;
 
 import java.util.Properties;
 
+import org.apache.logging.log4j.Logger;
+
 import org.apache.geode.LogWriter;
 import org.apache.geode.distributed.DistributedMember;
+import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.security.AuthInitialize;
 import org.apache.geode.security.AuthenticationFailedException;
 
 public class ExampleAuthInit implements AuthInitialize {
 
-  private LogWriter logger;
+  private static final Logger logger = LogService.getLogger();
 
-  static final String USER_NAME = "security-username";
-  static final String PASSWORD = "security-password";
+  private static final String USER_NAME = "security-username";
+  private static final String PASSWORD = "security-password";
 
-  public static AuthInitialize create() {
-    return new ExampleAuthInit();
-  }
+  private static final String INSECURE_PASSWORD_FOR_EVERY_USER = "123";
 
-
-  public void init(LogWriter systemLogger, LogWriter securityLogger)
-      throws AuthenticationFailedException {
-    this.logger = securityLogger;
-  }
-
-  public Properties getCredentials(Properties securityProps, DistributedMember server,
-      boolean isPeer) throws AuthenticationFailedException {
+  /**
+   * The implementer would use their existing infrastructure (e.g., ldap) here to populate these
+   * properties with the user credentials. These properties will in turn be handled by the
+   * implementer's design of SecurityManager to authenticate users and authorize operations.
+   */
+  @Override
+  public Properties getCredentials(Properties securityProps) throws AuthenticationFailedException {
     Properties credentials = new Properties();
     String userName = securityProps.getProperty(USER_NAME);
     if (userName == null) {
@@ -47,15 +47,24 @@ public class ExampleAuthInit implements AuthInitialize {
           "ExampleAuthInit: user name property [" + USER_NAME + "] not set.");
     }
     credentials.setProperty(USER_NAME, userName);
-    String password = securityProps.getProperty(PASSWORD);
-    if (password == null) {
-      throw new AuthenticationFailedException(
-          "ExampleAuthInit: password property [" + PASSWORD + "] not set.");
-    }
-    credentials.setProperty(PASSWORD, password);
+    credentials.setProperty(PASSWORD, INSECURE_PASSWORD_FOR_EVERY_USER);
     logger.info("SampleAuthInit: successfully obtained credentials for user " + userName);
     return credentials;
   }
 
+  @Override
   public void close() {}
+
+  @Override
+  @Deprecated
+  public void init(LogWriter systemLogger, LogWriter securityLogger)
+      throws AuthenticationFailedException {
+  }
+
+  @Override
+  @Deprecated
+  public Properties getCredentials(Properties securityProps, DistributedMember server,
+      boolean isPeer) throws AuthenticationFailedException {
+    return getCredentials(securityProps);
+  }
 }
