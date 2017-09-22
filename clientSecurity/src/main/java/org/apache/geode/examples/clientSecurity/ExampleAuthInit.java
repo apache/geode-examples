@@ -58,8 +58,7 @@ public class ExampleAuthInit implements AuthInitialize {
   @Override
   @Deprecated
   public void init(LogWriter systemLogger, LogWriter securityLogger)
-      throws AuthenticationFailedException {
-  }
+      throws AuthenticationFailedException {}
 
   @Override
   @Deprecated
