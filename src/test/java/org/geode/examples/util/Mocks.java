@@ -72,6 +72,8 @@ public class Mocks {
     Query query = mock(Query.class);
     when(query.execute()).thenReturn(selectResults);
 
+    when(selectResults.size()).thenReturn(results.size());
+
     when(queryService.newQuery(queryString)).thenReturn(query);
 
     return region;

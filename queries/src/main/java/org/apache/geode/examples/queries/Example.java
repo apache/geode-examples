@@ -37,9 +37,6 @@ public class Example implements Consumer<Region<Integer, EmployeeData>> {
   static String QUERY1 = "SELECT DISTINCT * FROM /%s";
   static String QUERY2 = "SELECT DISTINCT * FROM /%s h WHERE h.hoursPerWeek < 40";
   static String QUERY3 = "SELECT DISTINCT * FROM /%s x WHERE x.lastName='Jive'";
-  private int numberOfQ1Employees = 0;
-  private int numberOfQ2Employees = 0;
-  private int numberOfQ3Employees = 0;
 
   public static void main(String[] args) {
     // connect to the locator using default port 10334
@@ -56,17 +53,6 @@ public class Example implements Consumer<Region<Integer, EmployeeData>> {
     cache.close();
   }
 
-  public int getNumberOfQ1Employees() {
-    return numberOfQ1Employees;
-  }
-
-  public int getNumberOfQ2Employees() {
-    return numberOfQ2Employees;
-  }
-
-  public int getNumberOfQ3Employees() {
-    return numberOfQ3Employees;
-  }
 
   public Map<Integer, EmployeeData> populateEmployeeData() {
     // put entries in the hashmap
@@ -118,54 +104,38 @@ public class Example implements Consumer<Region<Integer, EmployeeData>> {
     try {
 
       // Query for every entry in the region, and print query results.
-      // Count the number of results returned to facilitate testing.
-      numberOfQ1Employees = 0;
       String queryString1 = String.format(QUERY1, regionName);
       System.out.println(String.format("\nQuery: %s", queryString1));
       Query query = queryService.newQuery(queryString1);
       SelectResults<EmployeeData> results = null;
       results = (SelectResults<EmployeeData>) query.execute();
-      Iterator<EmployeeData> i = results.iterator();
-      while (i.hasNext()) {
-        System.out.println(String.format("Employee: %s", i.next().toString()));
-        ++numberOfQ1Employees;
+      System.out.println("Query 1 returned " + results.size() + " results.");
+      for (EmployeeData eachEmployee : results) {
+        System.out.println(String.format("Employee: %s", eachEmployee.toString()));
       }
 
       // Query for all part time employees, and print query results.
-      // Count the number of results returned to facilitate testing.
-      numberOfQ2Employees = 0;
       String queryString2 = String.format(QUERY2, regionName);
       System.out.println(String.format("\nQuery: %s", queryString2));
       query = queryService.newQuery(queryString2);
       results = (SelectResults<EmployeeData>) query.execute();
-      i = results.iterator();
-      while (i.hasNext()) {
-        System.out.println(String.format("Employee: %s", i.next().toString()));
-        ++numberOfQ2Employees;
+      System.out.println("Query 2 returned " + results.size() + " results.");
+      for (EmployeeData eachEmployee : results) {
+        System.out.println(String.format("Employee: %s", eachEmployee.toString()));
       }
 
       // Query for last name of Jive, and print the full name and employee number.
-      // Count the number of results returned to facilitate testing.
-      numberOfQ3Employees = 0;
       String queryString3 = String.format(QUERY3, regionName);
       System.out.println(String.format("\nQuery: %s", queryString3));
       query = queryService.newQuery(queryString3);
       results = (SelectResults<EmployeeData>) query.execute();
-      i = results.iterator();
-      while (i.hasNext()) {
-        EmployeeData empl = i.next();
+      for (EmployeeData eachEmployee : results) {
         System.out.println(String.format("Employee %s %s has employee number %d",
-            empl.getFirstName(), empl.getLastName(), empl.getEmplNumber()));
-        ++numberOfQ3Employees;
+            eachEmployee.getFirstName(), eachEmployee.getLastName(), eachEmployee.getEmplNumber()));
       }
 
-    } catch (FunctionDomainException e) {
-      e.printStackTrace();
-    } catch (NameResolutionException e) {
-      e.printStackTrace();
-    } catch (QueryInvocationTargetException e) {
-      e.printStackTrace();
-    } catch (TypeMismatchException e) {
+    } catch (FunctionDomainException | NameResolutionException | QueryInvocationTargetException
+        | TypeMismatchException e) {
       e.printStackTrace();
     }
 

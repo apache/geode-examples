@@ -14,7 +14,8 @@
  */
 package org.apache.geode.examples.queries;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+// import static org.junit.Assert.assertEquals;
 
 import org.apache.geode.cache.Region;
 import org.geode.examples.util.Mocks;
@@ -77,11 +78,10 @@ public class ExampleTest {
 
     // run all the mocked queries, and check quantities of query results
     example.accept(region);
-    assertEquals(example.populateEmployeeData().size(), example.getNumberOfQ1Employees());
 
-    assertEquals(query2Values.size(), example.getNumberOfQ2Employees());
-
-    assertEquals(query3Values.size(), example.getNumberOfQ3Employees());
+    assertThat(systemOutRule.getLog()).contains("Query 1 returned 14 results.");
+    assertThat(systemOutRule.getLog()).contains("Query 2 returned 4 results.");
+    assertThat(systemOutRule.getLog()).contains("Employee Jaime Jive has employee number 10015");
 
   }
 }
