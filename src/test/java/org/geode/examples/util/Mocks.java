@@ -15,11 +15,12 @@
 package org.geode.examples.util;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doAnswer;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.geode.cache.Region;
@@ -28,17 +29,72 @@ import org.apache.geode.cache.execute.ResultCollector;
 
 import org.mockito.invocation.InvocationOnMock;
 
+import org.apache.geode.cache.CacheListener;
+import org.apache.geode.cache.CacheWriter;
+import org.apache.geode.cache.CacheWriterException;
+import org.apache.geode.cache.Operation;
+import org.apache.geode.cache.Region;
+
 public class Mocks {
   private Mocks() {
   }
 
   @SuppressWarnings("unchecked")
   public static <K, V> Region<K, V> region(String name) throws Exception {
+    return region(name, null, null);
+  }
+
+  @SuppressWarnings("unchecked")
+  public static <K, V> Region<K, V> region(String name, CacheWriter cacheWriter,
+                                           List<CacheListener> cacheListeners) throws Exception {
     Map<K, V> data = new HashMap<>();
     Region<K, V> region = mock(Region.class);
 
     when(region.getName()).thenReturn(name);
-    when(region.put(any(), any())).then(inv -> data.put(getKey(inv), getValue(inv)));
+    when(region.put(any(), any())).then(inv -> {
+      final K key = getKey(inv);
+      final V oldValue = data.get(key);
+      final V newValue = getValue(inv);
+
+      if (!data.containsKey(key)) {
+        final TestEntryEvent<K, V>
+            entryEvent =
+            new TestEntryEvent<K, V>(region, Operation.CREATE, key, oldValue, newValue);
+        if (cacheWriter != null) {
+          try {
+            cacheWriter.beforeCreate(entryEvent);
+          } catch (CacheWriterException e) {
+            return oldValue;
+          }
+        }
+
+        if (cacheListeners != null) {
+          for (CacheListener cacheListener : cacheListeners) {
+            cacheListener.afterCreate(entryEvent);
+          }
+        }
+      } else {
+        final TestEntryEvent<K, V>
+            entryEvent =
+            new TestEntryEvent<K, V>(region, Operation.UPDATE, key, oldValue, newValue);
+        if (cacheWriter != null) {
+          try {
+            cacheWriter.beforeUpdate(entryEvent);
+          } catch (CacheWriterException e) {
+            return oldValue;
+          }
+        }
+
+        if (cacheListeners != null) {
+          for (CacheListener cacheListener : cacheListeners) {
+            cacheListener.afterUpdate(entryEvent);
+          }
+        }
+      }
+
+      data.put(getKey(inv), getValue(inv));
+      return oldValue;
+    });
     when(region.get(any())).then(inv -> data.get(getKey(inv)));
     when(region.keySet()).thenReturn(data.keySet());
     when(region.values()).thenReturn(data.values());

@@ -70,8 +70,8 @@ tutorial.
 *  Functions
 *  [Cache Loader](loader/README.md)
 *  [Cache Writer](writer/README.md)
-*  Listeners
-*  Async Event Queues
+*  [Cache Listeners](listener/README.md)
+*  Async Event Queues & Async Event Listeners
 *  Continuous Querying
 *  Transactions
 *  Eviction
