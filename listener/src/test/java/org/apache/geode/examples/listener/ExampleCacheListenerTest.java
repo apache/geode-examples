@@ -14,26 +14,31 @@
  */
 package org.apache.geode.examples.listener;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.LinkedList;
 import java.util.Queue;
 
-import org.apache.geode.cache.CacheListener;
+import org.geode.examples.util.TestEntryEvent;
+import org.junit.Test;
+
 import org.apache.geode.cache.EntryEvent;
-import org.apache.geode.cache.RegionEvent;
-import org.apache.geode.cache.util.CacheListenerAdapter;
+import org.apache.geode.cache.Operation;
 
-public class ExampleCacheListener extends CacheListenerAdapter<Integer, String> {
-  private final Queue<EntryEvent<Integer, String>> events;
+public class ExampleCacheListenerTest {
+  @Test
+  public void testAfterCreate() {
+    Queue<EntryEvent<Integer, String>> events = new LinkedList<>();
+    events.add(new TestEntryEvent<>(null, Operation.CREATE, 1, "one", "uno"));
+    events.add(new TestEntryEvent<>(null, Operation.CREATE, 2, "two", "dos"));
+    events.add(new TestEntryEvent<>(null, Operation.CREATE, 3, "three", "tres"));
 
-  public ExampleCacheListener(Queue<EntryEvent<Integer, String>> events) {
-    this.events = events;
-  }
+    ExampleCacheListener cacheListener =
+        new ExampleCacheListener(new LinkedList<EntryEvent<Integer, String>>());
+    for (EntryEvent<Integer, String> event : events) {
+      cacheListener.afterCreate(event);
+    }
 
-  public Queue<EntryEvent<Integer, String>> getEvents() {
-    return events;
-  }
-
-  @Override
-  public void afterCreate(EntryEvent<Integer, String> event) {
-    events.add(event);
+    assertEquals(events, cacheListener.getEvents());
   }
 }

@@ -15,10 +15,8 @@
 package org.apache.geode.examples.listener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -36,9 +34,9 @@ import org.apache.geode.cache.client.ClientRegionShortcut;
 public class Example implements Consumer<Region<Integer, String>> {
   public static final int ITERATIONS = 100;
 
-  final List<CacheListener> cacheListeners = new ArrayList();
+  private final CacheListener cacheListener;
 
-  Queue<EntryEvent<Integer, String>> events =
+  private Queue<EntryEvent<Integer, String>> events =
       new ArrayBlockingQueue<EntryEvent<Integer, String>>(100, true);
 
   public static void main(String[] args) {
@@ -51,9 +49,7 @@ public class Example implements Consumer<Region<Integer, String>> {
     // create a local region that matches the server region
     ClientRegionFactory<Integer, String> clientRegionFactory =
         cache.<Integer, String>createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY);
-    for (CacheListener cacheListener : example.getCacheListeners()) {
-      clientRegionFactory.addCacheListener(cacheListener);
-    }
+    clientRegionFactory.addCacheListener(example.getCacheListener());
     Region<Integer, String> region = clientRegionFactory.create("example-region");
 
     example.accept(region);
@@ -61,11 +57,11 @@ public class Example implements Consumer<Region<Integer, String>> {
   }
 
   Example() {
-    cacheListeners.add(new ExampleCacheListener(events));
+    cacheListener = new ExampleCacheListener(events);
   }
 
-  List<CacheListener> getCacheListeners() {
-    return cacheListeners;
+  CacheListener getCacheListener() {
+    return cacheListener;
   }
 
   Queue<EntryEvent<Integer, String>> getEvents() {
@@ -94,6 +90,6 @@ public class Example implements Consumer<Region<Integer, String>> {
       Integer integer = iterator.next();
       region.put(integer, integer.toString());
     }
-    System.out.println("Created " + getEvents().size() + " entries.");
+    System.out.println("Created " + region.size() + " entries.");
   }
 }

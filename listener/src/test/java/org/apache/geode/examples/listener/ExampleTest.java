@@ -15,21 +15,18 @@
 package org.apache.geode.examples.listener;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 
 import org.apache.geode.cache.Region;
 import org.geode.examples.util.Mocks;
 import org.junit.Test;
 
 public class ExampleTest {
-
   @Test
   public void testExample() throws Exception {
     Example example = new Example();
-    Region<Integer, String> region =
-        Mocks.region("example-region", null, example.getCacheListeners());
+    Region<Integer, String> region = Mocks.region("example-region");
     example.accept(region);
 
-    assertEquals(Example.ITERATIONS, example.getEvents().size());
+    assertEquals(Example.ITERATIONS, region.size());
   }
 }
