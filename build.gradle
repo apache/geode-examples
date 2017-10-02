@@ -97,6 +97,10 @@ subprojects {
     runtime "org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion"
     testCompile project(path: ':', configuration: 'testArchives') 
   }
+
+  jar {
+    archiveName "${baseName}.${extension}"
+  }
   
   task cleanServer << {
     delete 'locator'
