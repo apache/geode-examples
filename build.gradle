@@ -105,6 +105,10 @@ subprojects {
   jar {
     archiveName "${baseName}.${extension}"
   }
+
+  jar {
+    archiveName "${baseName}.${extension}"
+  }
   
   task cleanServer {
     doLast {
