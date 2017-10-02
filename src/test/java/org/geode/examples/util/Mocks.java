@@ -44,7 +44,6 @@ public class Mocks {
     when(region.get(any())).then(inv -> data.get(getKey(inv)));
     when(region.keySet()).thenReturn(data.keySet());
     when(region.values()).thenReturn(data.values());
-//    when(region.size()).thenReturn(data.size());
     when(region.size()).then(inv -> { return data.size(); });
     when(region.keySetOnServer()).thenReturn(data.keySet());
     when(region.containsKey(any())).then(inv -> data.containsKey(getKey(inv)));
