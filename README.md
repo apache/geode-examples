@@ -26,24 +26,6 @@ Contributions<sup>[2]</sup> and corrections are welcome. Please talk to us
 about your suggestions at [dev@geode.apache.org](mailto:dev@geode.apache.org)
 or submit a [pull request](https://github.com/apache/geode/pull/new/develop).
 
-## Adding a new example
-
-Follow this approach to add a new example:
-
-* Create a subdirectory with a descriptive name like `cache-writer`
-* Create a `README.md` file in the example subproject to walk the user through the tutorial
-* Create a Java class with a main method in the `org.apache.geode.examples.$name.Example` class
-* Create a cluster initialization script in `scripts/start.gfsh`
-* Create a cluster shutdown script in `scripts/stop.gfsh`
-
-The scripts should contain `gfsh` commands for starting locators, servers, and
-creating regions--everything that the example program will need to use.  Where
-appropriate you should also add unit tests.  To customize the build you can add
-a `build.gradle` file.
-
-Note that the build may fail if you do not add ASF license headers or use the
-correct formatting (you can fix formatting with `gradle spotlessApply`).
-
 ## Running an example
 
 The gradle build will automatically download and install a Geode release in the
@@ -117,6 +99,24 @@ an integration with other projects.
 *  Redis
 *  Memcached
 *  Spark Connector
+
+## Adding a new example
+
+Follow this approach to add a new example:
+
+* Create a subdirectory with a descriptive name like `cache-writer`
+* Create a `README.md` file in the example subproject to walk the user through the tutorial
+* Create a Java class with a main method in the `org.apache.geode.examples.$name.Example` class
+* Create a cluster initialization script in `scripts/start.gfsh`
+* Create a cluster shutdown script in `scripts/stop.gfsh`
+
+The scripts should contain `gfsh` commands for starting locators, servers, and
+creating regions--everything that the example program will need to use.  Where
+appropriate you should also add unit tests.  To customize the build you can add
+a `build.gradle` file.
+
+Note that the build may fail if you do not add ASF license headers or use the
+correct formatting (you can fix formatting with `gradle spotlessApply`).
 
 ## References
 

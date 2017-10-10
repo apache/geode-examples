@@ -56,7 +56,7 @@ will also be retrieved from the region and printed to the console.
 
         $ gfsh
         ...
-        gfsh>connect --locators=127.0.0.1[10334]
+        gfsh>connect --locator=127.0.0.1[10334]
         gfsh>query --query="select e.key from /example-region.entries e"
         ...
 
@@ -91,7 +91,7 @@ will also be retrieved from the region and printed to the console.
 
         $ gfsh
         ...
-        gfsh>connect --locators=127.0.0.1[10334]
+        gfsh>connect --locator=127.0.0.1[10334]
         gfsh>stop server --name=server1
 
 6. Run the query a second time, and notice that all the entries hosted on
