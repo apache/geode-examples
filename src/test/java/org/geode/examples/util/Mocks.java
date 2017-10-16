@@ -27,7 +27,7 @@ import org.mockito.invocation.InvocationOnMock;
 
 public class Mocks {
   private Mocks() { }
-  
+
   @SuppressWarnings("unchecked")
   public static <K, V> Region<K, V> region(String name) throws Exception {
     Map<K, V> data = new HashMap<>();
@@ -38,11 +38,11 @@ public class Mocks {
     when(region.get(any())).then(inv -> data.get(getKey(inv)));
     when(region.keySet()).thenReturn(data.keySet());
     when(region.values()).thenReturn(data.values());
-    when(region.size()).thenReturn(data.size());
+    when(region.size()).then(inv -> { return data.size(); });
     when(region.keySetOnServer()).thenReturn(data.keySet());
     when(region.containsKey(any())).then(inv -> data.containsKey(getKey(inv)));
     when(region.containsKeyOnServer(any())).then(inv -> data.containsKey(getKey(inv)));
-    
+
     doAnswer(inv -> {
       data.putAll((Map<? extends K, ? extends V>) inv.getArguments()[0]);
       return inv.getArguments();
@@ -50,7 +50,7 @@ public class Mocks {
 
     return region;
   }
-  
+
   @SuppressWarnings("unchecked")
   private static <K> K getKey(InvocationOnMock inv) {
     return (K) inv.getArguments()[0];
