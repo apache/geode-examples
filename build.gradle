@@ -53,7 +53,6 @@ task installGeode(type: Copy) {
 allprojects {
   apply plugin:'java'
 
-
   dependencies {
     compile "org.apache.geode:geode-core:$geodeVersion"
 
