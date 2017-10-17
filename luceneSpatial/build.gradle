@@ -14,18 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-rootProject.name = 'geode-examples'
+dependencies {
+    compile "org.apache.geode:geode-lucene:$geodeVersion"
+    compile "org.apache.lucene:lucene-spatial-extras:6.4.1"
+}
 
-include 'replicated'
-include 'partitioned'
-include 'queries'
-include 'lucene'
-include 'loader'
-include 'putall'
-include 'clientSecurity'
-include 'functions'
-include 'persistence'
-include 'writer'
-include 'listener'
-include 'async'
-include 'luceneSpatial'
+task copyDependencies(type:Copy) {
+    into "$buildDir/libs"
+    from configurations['runtime']
+}
+
+build.dependsOn(copyDependencies)
