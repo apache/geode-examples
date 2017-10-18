@@ -27,7 +27,6 @@ import org.geode.examples.util.Mocks;
 import org.junit.Test;
 
 public class ExampleTest {
-
   @Test
   public void testExample() throws Exception {
     Example example = new Example(10);

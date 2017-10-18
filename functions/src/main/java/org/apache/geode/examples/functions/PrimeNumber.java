@@ -51,7 +51,7 @@ public class PrimeNumber implements Function {
     Set<Integer> keys = region.keySet();
     for (Integer key : keys) {
       if (isPrime(key)) {
-        primes.add(Integer.decode(region.get(key)));
+        primes.add(key);
       }
     }
     Collections.sort(primes);

@@ -29,9 +29,8 @@ import org.apache.geode.cache.execute.FunctionService;
 import org.apache.geode.cache.execute.ResultCollector;
 
 public class Example implements BiConsumer<Region<Integer, String>, Execution> {
-  int maximum;
-
-  Set<Integer> primes = new HashSet<>();
+  private int maximum;
+  private Set<Integer> primes = new HashSet<>();
 
   public static void main(String[] args) {
     // connect to the locator using default port 10334
