@@ -34,7 +34,7 @@ public class Example implements Consumer<Region<String, Integer>> {
 
     // create a local region that matches the server region
     Region<String, Integer> region =
-        cache.<String, Integer>createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY)
+        cache.<String, Integer>createClientRegionFactory(ClientRegionShortcut.PROXY)
             .create("example-region");
 
     new Example().accept(region);
