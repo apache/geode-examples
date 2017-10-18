@@ -26,7 +26,7 @@ def downloadUrl = (geodeReleaseUrl != "") ? geodeReleaseUrl :
 def verificationUrl = (geodeReleaseUrl != "") ? geodeReleaseUrl : 
     "https://www.apache.org/dist/geode/$geodeVersion"
 
-def downloadFile = "apache-geode-${geodeVersion}.tar.gz"
+def downloadFile = "apache-geode-${geodeVersion}.tgz"
 def installFile = "$buildDir/$downloadFile"
 def installDir = "$buildDir/apache-geode-${geodeVersion}"
 
