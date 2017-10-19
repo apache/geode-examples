@@ -67,7 +67,9 @@ tutorial.
 *  PDX & Serialization
 *  Lucene Indexing
 *  OQL Indexing
-*  CacheLoader & CacheWriter
+*  Functions
+*  [Cache Loader](loader/README.md)
+*  [Cache Writer](writer/README.md)
 *  Listeners
 *  Async Event Queues
 *  Continuous Querying
