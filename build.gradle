@@ -21,9 +21,9 @@ plugins {
   id "de.undercouch.download" version "3.1.2"
 }
 
-def downloadUrl = (geodeReleaseUrl != "") ? geodeReleaseUrl : 
+def downloadUrl = (geodeReleaseUrl != "") ? geodeReleaseUrl :
     "https://www.apache.org/dyn/closer.cgi?action=download&filename=geode/$geodeVersion"
-def verificationUrl = (geodeReleaseUrl != "") ? geodeReleaseUrl : 
+def verificationUrl = (geodeReleaseUrl != "") ? geodeReleaseUrl :
     "https://www.apache.org/dist/geode/$geodeVersion"
 
 def downloadFile = "apache-geode-${geodeVersion}.tar.gz"
@@ -65,7 +65,7 @@ task installGeode(type: Copy, dependsOn: verifyGeode) {
 allprojects {
   apply plugin:'java'
 
-  repositories { 
+  repositories {
     if (geodeRepositoryUrl != "") {
       maven { url geodeRepositoryUrl }
     }
@@ -74,7 +74,7 @@ allprojects {
 
   dependencies {
     compile "org.apache.geode:geode-core:$geodeVersion"
-    
+
     testCompile "com.jayway.awaitility:awaitility:$awaitilityVersion"
     testCompile "junit:junit:$junitVersion"
     testCompile "org.mockito:mockito-core:$mockitocoreVersion"
@@ -95,9 +95,13 @@ subprojects {
   dependencies {
     compile "org.apache.logging.log4j:log4j-core:$log4jVersion"
     runtime "org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion"
-    testCompile project(path: ':', configuration: 'testArchives') 
+    testCompile project(path: ':', configuration: 'testArchives')
   }
-  
+
+  jar {
+    archiveName "${baseName}.${extension}"
+  }
+
   task cleanServer << {
     delete 'locator'
     delete 'server1'

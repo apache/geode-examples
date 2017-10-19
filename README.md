@@ -58,6 +58,7 @@ tutorial.
 *  [Replicated Region](replicated/README.md)
 *  [Partitioned Region](partitioned/README.md)
 *  [Put Multiple Values at Once](putall/README.md)
+*  [Functions](functions/README.md)
 *  Persistence
 *  OQL (Querying)
 
@@ -66,7 +67,6 @@ tutorial.
 *  PDX & Serialization
 *  Lucene Indexing
 *  OQL Indexing
-*  Functions
 *  CacheLoader & CacheWriter
 *  Listeners
 *  Async Event Queues
