@@ -59,7 +59,7 @@ tutorial.
 *  [Partitioned Region](partitioned/README.md)
 *  [Put Multiple Values at Once](putall/README.md)
 *  [Functions](functions/README.md)
-*  Persistence
+*  [Persistence](persistence/README.md)
 *  OQL (Querying)
 
 ### Intermediate
