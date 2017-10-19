@@ -35,7 +35,6 @@ public class ExampleTest {
     List<Integer> primes = Arrays.asList(1, 2, 3, 5, 7);
     Execution execution = Mocks.execution(PrimeNumber.ID, primes);
 
-    example.accept(region, execution);
-    assertEquals(new HashSet(primes), example.getPrimes());
+    assertEquals(new HashSet(primes), example.getPrimes(region, execution));
   }
 }

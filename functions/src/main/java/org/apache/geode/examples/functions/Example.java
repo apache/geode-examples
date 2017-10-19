@@ -17,7 +17,6 @@ package org.apache.geode.examples.functions;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.BiConsumer;
 import java.util.stream.IntStream;
 
 import org.apache.geode.cache.Region;
@@ -28,9 +27,8 @@ import org.apache.geode.cache.execute.Execution;
 import org.apache.geode.cache.execute.FunctionService;
 import org.apache.geode.cache.execute.ResultCollector;
 
-public class Example implements BiConsumer<Region<Integer, String>, Execution> {
+public class Example {
   private int maximum;
-  private Set<Integer> primes = new HashSet<>();
 
   public static void main(String[] args) {
     // connect to the locator using default port 10334
@@ -43,7 +41,7 @@ public class Example implements BiConsumer<Region<Integer, String>, Execution> {
             .create("example-region");
 
     Execution execution = FunctionService.onRegion(region);
-    new Example().accept(region, execution);
+    new Example().getPrimes(region, execution);
     cache.close();
   }
 
@@ -55,13 +53,8 @@ public class Example implements BiConsumer<Region<Integer, String>, Execution> {
     this.maximum = maximum;
   }
 
-  public Set<Integer> getPrimes() {
-    return primes;
-  }
-
-  @Override
-  public void accept(Region<Integer, String> region, Execution execution) {
-    primes.clear();
+  public Set<Integer> getPrimes(Region<Integer, String> region, Execution execution) {
+    Set<Integer> primes = new HashSet<>();
 
     for (Integer key : (Iterable<Integer>) () -> IntStream.rangeClosed(1, maximum).iterator()) {
       region.put(key, key.toString());
@@ -69,7 +62,7 @@ public class Example implements BiConsumer<Region<Integer, String>, Execution> {
 
     ResultCollector<Integer, List> results = execution.execute(PrimeNumber.ID);
     primes.addAll(results.getResult());
-
     System.out.println("The primes in the range from 1 to " + maximum + " are:\n" + primes);
+    return primes;
   }
 }
