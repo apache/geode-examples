@@ -1,6 +1,6 @@
-﻿# Cache Example
-This is a very simple example showing how to create a `Cache` using the `CacheFactory`,
-configure a `Pool` with a `PoolFactory`, and configure a `Region` with a `RegionFactory`.
+﻿# AuthInitialize Example
+This example shows how to create and register a custom `IAuthIntialize` authentivation
+handler. 
 
 ## Prerequisits
 * Install [Apache Geode](https://geode.apache.org)
@@ -13,10 +13,12 @@ configure a `Pool` with a `PoolFactory`, and configure a `Region` with a `Region
   gfsh>start server --name=server
   gfsh>create region --name=region --type=PARTITION
   ```
-* Execute `Apache.Geode.Examples.Cache.exe`.
+* Execute `Apache.Geode.Examples.AuthInitialize.exe`.
   
   output:
   ```
+  ExampleAuthInitialize::ExampleAuthInitialize called
+  ExampleAuthInitialize::GetCredentials called
   a = 1
   b = 2
   ```

@@ -24,7 +24,8 @@ namespace Apache.Geode.Examples.Cache
   {
     static void Main(string[] args)
     {
-      var cacheFactory = CacheFactory.CreateCacheFactory();
+      var cacheFactory = CacheFactory.CreateCacheFactory()
+          .Set("log-level", "none");
       var cache = cacheFactory.Create();
 
       var poolFactory = cache.GetPoolFactory()
@@ -43,6 +44,8 @@ namespace Apache.Geode.Examples.Cache
 
       Console.Out.WriteLine("a = " + a);
       Console.Out.WriteLine("b = " + b);
+
+      cache.Close();
     }
   }
 }

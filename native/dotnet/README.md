@@ -4,7 +4,8 @@
 * Install [Apache Geode](https://geode.apache.org)
 * Build and install [Apache Geode Native](https://github.com/apache/geode-native)
 
-## Solution Includes
+## Examples
+* [Apache.Geode.Examples.AuthInitialize](Apache.Geode.Examples.Cache/README.md)
 * [Apache.Geode.Examples.Cache](Apache.Geode.Examples.Cache/README.md)
 
 ## Using
