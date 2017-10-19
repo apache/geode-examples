@@ -14,12 +14,9 @@
  */
 package org.apache.geode.examples.async;
 
-import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.function.Consumer;
+import java.util.Arrays;
+import java.util.List;
 
-import org.apache.geode.cache.Cache;
-import org.apache.geode.cache.EntryEvent;
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.ClientCacheFactory;
@@ -27,11 +24,9 @@ import org.apache.geode.cache.client.ClientRegionFactory;
 import org.apache.geode.cache.client.ClientRegionShortcut;
 import org.apache.geode.cache.client.PoolManager;
 
-public class Example implements Consumer<Region<Integer, String>> {
+public class Example {
   public static final String INCOMING_REGION_NAME = "incoming-region";
   public static final String OUTGOING_REGION_NAME = "outgoing-region";
-  private final Queue<EntryEvent<String, String>> events;
-  private final ExampleCacheListener cacheListener;
 
   public static void main(String[] args) {
     // connect to the locator using default port 10334
@@ -39,63 +34,43 @@ public class Example implements Consumer<Region<Integer, String>> {
 
     final String poolName = "subscriptionPool";
     PoolManager.createFactory().addLocator("127.0.0.1", 10334).setSubscriptionEnabled(true)
-        .setMinConnections(0).create(poolName);
+        .create(poolName);
 
     // create a local region that matches the server region
     final ClientRegionFactory<Integer, String> incomingRegionFactory =
-        cache.<Integer, String>createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY);
+        cache.<Integer, String>createClientRegionFactory(ClientRegionShortcut.PROXY);
     Region<Integer, String> incomingRegion =
         incomingRegionFactory.setPoolName(poolName).create(INCOMING_REGION_NAME);
 
     // create another local region that matches the server region
-    final Example example = new Example();
     final ClientRegionFactory<String, String> outgoingRegionFactory =
-        cache.<String, String>createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY);
-    outgoingRegionFactory.addCacheListener(example.getCacheListener());
+        cache.<String, String>createClientRegionFactory(ClientRegionShortcut.PROXY);
     Region<String, String> outgoingRegion =
         outgoingRegionFactory.setPoolName(poolName).create(OUTGOING_REGION_NAME);
 
-    // register interest so the cache listener gets called
-    outgoingRegion.registerInterestRegex(".*");
-
-    example.accept(incomingRegion);
+    new Example().checkWords(incomingRegion, outgoingRegion,
+        Arrays.asList(new String[] {"that", "teh", "wil", "i'"}));
     cache.close();
   }
 
-  private void printResults(Region<String, String> region) {
-    if (region != null) {
-      // Give the process a chance to work.
+  public void checkWords(Region<Integer, String> incomingRegion,
+      Region<String, String> outgoingRegion, List<String> words) {
+    int key = 0;
+    for (String word : words) {
+      incomingRegion.put(key++, word);
+    }
+
+    // Give the process a chance to work.
+    while (outgoingRegion.sizeOnServer() < words.size()) {
       try {
         Thread.sleep(500);
       } catch (InterruptedException ie) {
         // NOP
       }
-
-      for (EntryEvent<String, String> event : cacheListener.getEvents()) {
-        System.out.println(event.getKey() + " -> " + event.getNewValue());
-      }
     }
-  }
 
-  Example() {
-    events = new ArrayBlockingQueue<>(100, true);
-    cacheListener = new ExampleCacheListener(events);
-  }
-
-  public ExampleCacheListener getCacheListener() {
-    return cacheListener;
-  }
-
-  @Override
-  public void accept(Region<Integer, String> region) {
-    region.put(0, "that");
-    region.put(1, "teh");
-    region.put(2, "wil");
-    region.put(3, "i");
-
-    Cache cache = (Cache) region.getRegionService();
-    if (cache != null) {
-      printResults(cache.getRegion(OUTGOING_REGION_NAME));
+    for (String candidate : outgoingRegion.keySetOnServer()) {
+      System.out.println(candidate + " -> " + outgoingRegion.get(candidate));
     }
   }
 }
