@@ -14,30 +14,30 @@
  */
 package org.apache.geode.examples.writer;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.Arrays;
-
-import org.apache.geode.cache.CacheWriterException;
-import org.apache.geode.cache.Region;
-
-import org.geode.examples.util.Mocks;
 import org.junit.Test;
 
-public class ExampleTest {
+import org.apache.geode.cache.CacheWriterException;
+import org.apache.geode.cache.EntryEvent;
+
+public class ExampleCacheWriterTest {
+  @Test(expected = CacheWriterException.class)
+  public void testBeforeCreateFailsForBadSSN() throws Exception {
+    ExampleCacheWriter writer = new ExampleCacheWriter();
+
+    EntryEvent<String, String> event = mock(EntryEvent.class);
+    when(event.getKey()).thenReturn("666-66-6666");
+    writer.beforeCreate(event);
+  }
+
   @Test
-  public void testExample() throws Exception {
-    Example example = new Example();
+  public void testBeforeCreatePassesWithGoodSSN() throws Exception {
+    ExampleCacheWriter writer = new ExampleCacheWriter();
 
-    Region<String, String> region = Mocks.region("example-region");
-    when(region.put(eq("666-66-6666"), any())).thenThrow(new CacheWriterException());
-    when(region.put(eq("8675309"), any())).thenThrow(new CacheWriterException());
-    when(region.put(eq("999-000-0000"), any())).thenThrow(new CacheWriterException());
-
-    assertEquals(Arrays.asList(new String[] {"Bart Simpson", "Raymond Babbitt"}),
-        example.getValidNames(region));
+    EntryEvent<String, String> event = mock(EntryEvent.class);
+    when(event.getKey()).thenReturn("555-66-6666");
+    writer.beforeCreate(event);
   }
 }

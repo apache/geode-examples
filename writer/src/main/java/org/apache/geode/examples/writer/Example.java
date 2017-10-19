@@ -16,7 +16,6 @@ package org.apache.geode.examples.writer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import org.apache.geode.cache.CacheWriterException;
 import org.apache.geode.cache.Region;
@@ -25,9 +24,7 @@ import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.client.ClientRegionShortcut;
 import org.apache.geode.cache.client.ServerOperationException;
 
-public class Example implements Consumer<Region<String, String>> {
-  private List<String> names = new ArrayList<>();
-
+public class Example {
   public static void main(String[] args) {
     // connect to the locator using default port 10334
     ClientCache cache = new ClientCacheFactory().addPoolLocator("127.0.0.1", 10334)
@@ -38,15 +35,11 @@ public class Example implements Consumer<Region<String, String>> {
         cache.<String, String>createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY)
             .create("example-region");
 
-    new Example().accept(region);
+    new Example().getValidNames(region);
     cache.close();
   }
 
-  public List<String> getNames() {
-    return names;
-  }
-
-  private void put(Region<String, String> region, String ssn, String name) {
+  private void addName(Region<String, String> region, String ssn, String name, List<String> names) {
     try {
       region.put(ssn, name);
       names.add(name);
@@ -55,12 +48,13 @@ public class Example implements Consumer<Region<String, String>> {
     }
   }
 
-  @Override
-  public void accept(Region<String, String> region) {
-    put(region, "123-45-6789", "Bart Simpson");
-    put(region, "666-66-6666", "Bill Gates");
-    put(region, "777-77-7777", "Raymond Babbitt");
-    put(region, "8675309", "Jenny");
-    put(region, "999-000-0000", "Blackberry");
+  public List<String> getValidNames(Region<String, String> region) {
+    List<String> names = new ArrayList<>();
+    addName(region, "123-45-6789", "Bart Simpson", names);
+    addName(region, "666-66-6666", "Bill Gates", names);
+    addName(region, "777-77-7777", "Raymond Babbitt", names);
+    addName(region, "8675309", "Jenny", names);
+    addName(region, "999-000-0000", "Blackberry", names);
+    return names;
   }
 }
