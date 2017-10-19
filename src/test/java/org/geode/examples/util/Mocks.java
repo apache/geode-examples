@@ -15,9 +15,9 @@
 package org.geode.examples.util;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doAnswer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +27,8 @@ import org.apache.geode.cache.execute.Execution;
 import org.apache.geode.cache.execute.ResultCollector;
 
 import org.mockito.invocation.InvocationOnMock;
+
+import org.apache.geode.cache.Region;
 
 public class Mocks {
   private Mocks() {
@@ -42,7 +44,7 @@ public class Mocks {
     when(region.get(any())).then(inv -> data.get(getKey(inv)));
     when(region.keySet()).thenReturn(data.keySet());
     when(region.values()).thenReturn(data.values());
-    when(region.size()).thenReturn(data.size());
+    when(region.size()).then(inv -> { return data.size(); });
     when(region.keySetOnServer()).thenReturn(data.keySet());
     when(region.containsKey(any())).then(inv -> data.containsKey(getKey(inv)));
     when(region.containsKeyOnServer(any())).then(inv -> data.containsKey(getKey(inv)));
