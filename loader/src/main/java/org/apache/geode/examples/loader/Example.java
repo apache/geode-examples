@@ -15,14 +15,14 @@
 package org.apache.geode.examples.loader;
 
 import java.util.Arrays;
-import java.util.function.Consumer;
+import java.util.Map;
 
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.client.ClientRegionShortcut;
 
-public class Example implements Consumer<Region<String, String>> {
+public class Example {
   private static final String[] AUTHORS =
       ("Anton Chekhov,C. J. Cherryh,Dorothy Parker,Douglas Adams,Emily Dickinson,"
           + "Ernest Hemingway,F. Scott Fitzgerald,Henry David Thoreau,Henry Wadsworth Longfellow,"
@@ -40,32 +40,31 @@ public class Example implements Consumer<Region<String, String>> {
         cache.<String, String>createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY)
             .create("example-region");
 
-    new Example().accept(region);
+    printQuotes(region);
     cache.close();
   }
 
-  @Override
-  public void accept(Region<String, String> region) {
+  public static void printQuotes(Map<String, String> region) {
     // initial fetch invokes the cache loader
     {
-      long start = System.currentTimeMillis();
-      Arrays.stream(AUTHORS)
-          .forEach(author -> System.out.println(author + ": " + region.get(author)));
-
-      long elapsed = System.currentTimeMillis() - start;
+      long elapsed = printQuotesAndMeasureTime(region);
       System.out.println(
           String.format("\n\nLoaded %d definitions in %d ms\n\n", AUTHORS.length, elapsed));
     }
 
     // fetch from cache, really fast!
     {
-      long start = System.currentTimeMillis();
-      Arrays.stream(AUTHORS)
-          .forEach(author -> System.out.println(author + ": " + region.get(author)));
-
-      long elapsed = System.currentTimeMillis() - start;
+      long elapsed = printQuotesAndMeasureTime(region);
       System.out.println(
           String.format("\n\nFetched %d cached definitions in %d ms\n\n", AUTHORS.length, elapsed));
     }
+  }
+
+  private static long printQuotesAndMeasureTime(Map<String, String> region) {
+    long start = System.currentTimeMillis();
+    Arrays.stream(AUTHORS)
+        .forEach(author -> System.out.println(author + ": " + region.get(author)));
+
+    return System.currentTimeMillis() - start;
   }
 }

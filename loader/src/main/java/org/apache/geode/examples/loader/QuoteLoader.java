@@ -25,7 +25,7 @@ import org.apache.geode.cache.LoaderHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class QuoteLoader implements CacheLoader<String, String>, Declarable {
+public class QuoteLoader implements CacheLoader<String, String> {
   private static final Logger log = LogManager.getLogger(QuoteLoader.class);
 
   private final Map<String, String> quotes;
@@ -43,7 +43,7 @@ public class QuoteLoader implements CacheLoader<String, String>, Declarable {
   @Override
   public String load(LoaderHelper<String, String> helper) throws CacheLoaderException {
 
-    log.info("Loading quote for {} into region {}", helper.getKey(), helper.getRegion().getName());
+    log.info("Loading quote for {}", helper.getKey());
     String quote = quotes.get(helper.getKey());
 
     try {
