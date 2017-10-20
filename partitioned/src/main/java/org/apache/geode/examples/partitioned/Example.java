@@ -15,47 +15,55 @@
 package org.apache.geode.examples.partitioned;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Random;
-import java.util.function.Consumer;
+import java.util.Set;
 
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.client.ClientRegionShortcut;
 
-public class Example implements Consumer<Region<EmployeeKey, EmployeeData>> {
+public class Example {
+  private final Region<EmployeeKey, EmployeeData> region;
+
+  public Example(Region<EmployeeKey, EmployeeData> region) {
+    this.region = region;
+  }
+
   public static void main(String[] args) {
     // connect to the locator using default port 10334
     ClientCache cache = new ClientCacheFactory().addPoolLocator("127.0.0.1", 10334)
         .set("log-level", "WARN").create();
 
     // create a local region that matches the server region
-    Region<EmployeeKey, EmployeeData> region = cache
-        .<EmployeeKey, EmployeeData>createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY)
-        .create("example-region");
+    Region<EmployeeKey, EmployeeData> region =
+        cache.<EmployeeKey, EmployeeData>createClientRegionFactory(ClientRegionShortcut.PROXY)
+            .create("example-region");
 
-    new Example().accept(region);
+    Example example = new Example(region);
+    example.insertValues(new String[] {"Alex Able", "Bertie Bell", "Chris Call", "Dale Driver",
+        "Frankie Forth", "Jamie Jive", "Morgan Minnow", "Pat Pearson", "Ricky Reliable",
+        "Taylor Tack", "Zelda Zankowski"});
+    example.printValues(example.getValues());
+
     cache.close();
   }
 
-  @Override
-  public void accept(Region<EmployeeKey, EmployeeData> region) {
-    // insert values into the region
+  Set<EmployeeKey> getValues() {
+    return new HashSet<>(region.keySetOnServer());
+  }
+
+  void insertValues(String[] names) {
     Random r = new Random();
-    String[] names =
-        "Alex Able,Bertie Bell,Kris Call,Dale Driver,Frankie Forth,Jamie Jive,Morgan Minnow,Pat Puts,Ricky Reliable,Taylor Tack"
-            .split(",");
     Arrays.stream(names).forEach(name -> {
-      EmployeeKey key = new EmployeeKey(name, r.nextInt());
-      EmployeeData val = new EmployeeData(key, r.nextInt(), 40);
+      EmployeeKey key = new EmployeeKey(name, 1 + r.nextInt(1000000));
+      EmployeeData val = new EmployeeData(key, 50000 + r.nextInt(100000), 40);
       region.put(key, val);
     });
+  }
 
-    // count the values in the region
-    int inserted = region.keySetOnServer().size();
-    System.out.println(String.format("Counted %d keys in region %s", inserted, region.getName()));
-
-    // fetch the values in the region
-    region.keySetOnServer().forEach(key -> System.out.println(region.get(key)));
+  void printValues(Set<EmployeeKey> values) {
+    values.forEach(key -> System.out.println(key.getName() + " -> " + region.get(key)));
   }
 }

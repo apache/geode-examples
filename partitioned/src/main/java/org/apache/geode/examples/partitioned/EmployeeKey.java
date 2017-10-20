@@ -17,10 +17,14 @@ package org.apache.geode.examples.partitioned;
 import java.io.Serializable;
 
 public class EmployeeKey implements Serializable {
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 160372860L;
+  private final String name;
+  private final int emplNumber;
 
-  private String name;
-  private int emplNumber;
+  public EmployeeKey(String name, int emplNumber) {
+    this.name = name;
+    this.emplNumber = emplNumber;
+  }
 
   public String getName() {
     return name;
@@ -28,12 +32,6 @@ public class EmployeeKey implements Serializable {
 
   public int getEmplNumber() {
     return emplNumber;
-  }
-
-  public EmployeeKey(String name, int emplNumber) {
-    super();
-    this.name = name;
-    this.emplNumber = emplNumber;
   }
 
   @Override

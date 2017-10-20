@@ -14,18 +14,14 @@
  */
 package org.apache.geode.examples.persistence;
 
-import java.util.function.Consumer;
-
-import org.apache.geode.cache.DiskStore;
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.client.ClientRegionShortcut;
 
-public class Example implements Consumer<Region<String, Integer>> {
-  static final String KEY = "counter";
-
-  int counter;
+public class Example {
+  private static final String KEY = "counter";
+  private final Region<String, Integer> region;
 
   public static void main(String[] args) {
     // connect to the locator using default port 10334
@@ -37,32 +33,27 @@ public class Example implements Consumer<Region<String, Integer>> {
         cache.<String, Integer>createClientRegionFactory(ClientRegionShortcut.PROXY)
             .create("example-region");
 
-    new Example().accept(region);
+    Example example = new Example(region);
+    final int previous = example.getCounter();
+    example.increment();
+    final int current = example.getCounter();
+    System.out.println(previous + " -> " + current);
+
     cache.close();
   }
 
-  public Example() {
-    counter = -1;
+  public Example(Region<String, Integer> region) {
+    this.region = region;
+    if (!region.containsKeyOnServer(KEY)) {
+      region.put(KEY, 0);
+    }
   }
 
   public int getCounter() {
-    return counter;
+    return region.get(KEY);
   }
 
-  @Override
-  public void accept(Region<String, Integer> region) {
-    if (region.containsKeyOnServer(KEY)) {
-      counter = region.get(KEY);
-      System.out.println("Retrieved counter of " + getCounter());
-    } else {
-      counter = 0;
-      System.out.println("Initialized counter to " + getCounter());
-    }
-
-    ++counter;
-    region.put(KEY, counter);
-
-    counter = region.get(KEY);
-    System.out.println("Incremented counter to " + getCounter());
+  public void increment() {
+    region.put(KEY, region.get(KEY) + 1);
   }
 }
