@@ -14,25 +14,20 @@
  */
 package org.apache.geode.examples.lucene;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
-import org.apache.geode.cache.Region;
-import org.geode.examples.util.Mocks;
-import org.junit.Rule;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Test;
-import org.junit.contrib.java.lang.system.SystemOutRule;
 
 public class ExampleTest {
 
-  @Rule
-  public SystemOutRule systemOutRule = new SystemOutRule().enableLog();
-
   @Test
-  public void testExample() throws Exception {
-    Region<Integer, EmployeeData> region = Mocks.region("example-region");
-    new Example().accept(region);
+  public void testInsertEntries() throws Exception {
+    Map<Integer, EmployeeData> region = new HashMap<>();
+    Example.insertValues(region);
 
-    assertThat(systemOutRule.getLog()).contains("Counted 10 keys in region");
-    assertThat(systemOutRule.getLog()).contains("Jamie");
+    assertEquals(10, region.size());
   }
 }

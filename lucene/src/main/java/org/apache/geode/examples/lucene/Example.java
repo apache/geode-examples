@@ -15,6 +15,7 @@
 package org.apache.geode.examples.lucene;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Random;
 import java.util.function.Consumer;
 
@@ -22,9 +23,13 @@ import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.client.ClientRegionShortcut;
+import org.apache.geode.cache.lucene.LuceneQuery;
+import org.apache.geode.cache.lucene.LuceneQueryException;
+import org.apache.geode.cache.lucene.LuceneService;
+import org.apache.geode.cache.lucene.LuceneServiceProvider;
 
-public class Example implements Consumer<Region<Integer, EmployeeData>> {
-  public static void main(String[] args) {
+public class Example {
+  public static void main(String[] args) throws LuceneQueryException {
     // connect to the locator using default port 10334
     ClientCache cache = new ClientCacheFactory().addPoolLocator("127.0.0.1", 10334)
         .set("log-level", "WARN").create();
@@ -34,12 +39,20 @@ public class Example implements Consumer<Region<Integer, EmployeeData>> {
         cache.<Integer, EmployeeData>createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY)
             .create("example-region");
 
-    new Example().accept(region);
+    insertValues(region);
+    query(cache);
     cache.close();
   }
 
-  @Override
-  public void accept(Region<Integer, EmployeeData> region) {
+  private static void query(ClientCache cache) throws LuceneQueryException {
+    LuceneService lucene = LuceneServiceProvider.get(cache);
+    LuceneQuery<Integer, EmployeeData> query = lucene.createLuceneQueryFactory()
+        .create("simpleIndex", "example-region", "firstName:Chris~2", "firstname");
+    System.out.println("Employees with first names like Chris: " + query.findValues());
+  }
+
+
+  public static void insertValues(Map<Integer, EmployeeData> region) {
     // insert values into the region
     String[] firstNames = "Alex,Bertie,Kris,Dale,Frankie,Jamie,Morgan,Pat,Ricky,Taylor".split(",");
     String[] lastNames = "Able,Bell,Call,Driver,Forth,Jive,Minnow,Puts,Reliable,Tack".split(",");
@@ -57,12 +70,5 @@ public class Example implements Consumer<Region<Integer, EmployeeData>> {
           salary, hoursPerWeek);
       region.put(key, val);
     }
-
-    // count the values in the region
-    int inserted = region.keySetOnServer().size();
-    System.out.println(String.format("Counted %d keys in region %s", inserted, region.getName()));
-
-    // fetch the values in the region
-    region.keySetOnServer().forEach(key -> System.out.println(region.get(key)));
   }
 }
