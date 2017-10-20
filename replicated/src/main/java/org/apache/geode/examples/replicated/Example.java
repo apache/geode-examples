@@ -14,7 +14,8 @@
  */
 package org.apache.geode.examples.replicated;
 
-import java.util.function.Consumer;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 import org.apache.geode.cache.Region;
@@ -22,7 +23,13 @@ import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.client.ClientRegionShortcut;
 
-public class Example implements Consumer<Region<Integer, String>> {
+public class Example {
+  private final Region<Integer, String> region;
+
+  public Example(Region<Integer, String> region) {
+    this.region = region;
+  }
+
   public static void main(String[] args) {
     // connect to the locator using default port 10334
     ClientCache cache = new ClientCacheFactory().addPoolLocator("127.0.0.1", 10334)
@@ -30,27 +37,25 @@ public class Example implements Consumer<Region<Integer, String>> {
 
     // create a local region that matches the server region
     Region<Integer, String> region =
-        cache.<Integer, String>createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY)
+        cache.<Integer, String>createClientRegionFactory(ClientRegionShortcut.PROXY)
             .create("example-region");
 
-    new Example().accept(region);
+    Example example = new Example(region);
+    example.insertValues(10);
+    example.printValues(example.getValues());
+
     cache.close();
   }
 
-  @Override
-  public void accept(Region<Integer, String> region) {
-    // insert values into the region
-    int count = 10;
-    IntStream.range(0, count).forEach(i -> region.put(i, "value" + i));
-    System.out
-        .println(String.format("Inserted %d entries into region %s", count, region.getName()));
+  Set<Integer> getValues() {
+    return new HashSet<>(region.keySetOnServer());
+  }
 
-    // count the values in the region
-    int inserted = region.keySetOnServer().size();
-    System.out.println(String.format("Counted %d keys in region %s", inserted, region.getName()));
+  void insertValues(int upperLimit) {
+    IntStream.rangeClosed(1, upperLimit).forEach(i -> region.put(i, "value" + i));
+  }
 
-    // fetch the values in the region
-    region.keySetOnServer()
-        .forEach(key -> System.out.println(String.format("%d:%s", key, region.get(key))));
+  void printValues(Set<Integer> values) {
+    values.forEach(key -> System.out.println(String.format("%d:%s", key, region.get(key))));
   }
 }
