@@ -1,6 +1,6 @@
 ﻿# Geode Native .NET Examples
 
-## Prerequisits
+## Prerequisites
 * Install [Apache Geode](https://geode.apache.org)
 * Build and install [Apache Geode Native](https://github.com/apache/geode-native)
 

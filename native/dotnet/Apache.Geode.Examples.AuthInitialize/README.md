@@ -1,8 +1,8 @@
 ﻿# AuthInitialize Example
-This example shows how to create and register a custom `IAuthIntialize` authentivation
+This example shows how to create and register a custom `IAuthIntialize` authentication
 handler. 
 
-## Prerequisits
+## Prerequisites
 * Install [Apache Geode](https://geode.apache.org)
 * Build and install [Apache Geode Native](https://github.com/apache/geode-native)
 
