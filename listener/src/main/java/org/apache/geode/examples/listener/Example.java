@@ -17,10 +17,10 @@ package org.apache.geode.examples.listener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 import org.apache.geode.cache.CacheListener;
@@ -31,13 +31,8 @@ import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.client.ClientRegionFactory;
 import org.apache.geode.cache.client.ClientRegionShortcut;
 
-public class Example implements Consumer<Region<Integer, String>> {
+public class Example {
   public static final int ITERATIONS = 100;
-
-  private final CacheListener cacheListener;
-
-  private Queue<EntryEvent<Integer, String>> events =
-      new ArrayBlockingQueue<EntryEvent<Integer, String>>(100, true);
 
   public static void main(String[] args) {
     // connect to the locator using default port 10334
@@ -48,24 +43,11 @@ public class Example implements Consumer<Region<Integer, String>> {
 
     // create a local region that matches the server region
     ClientRegionFactory<Integer, String> clientRegionFactory =
-        cache.<Integer, String>createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY);
-    clientRegionFactory.addCacheListener(example.getCacheListener());
+        cache.createClientRegionFactory(ClientRegionShortcut.PROXY);
     Region<Integer, String> region = clientRegionFactory.create("example-region");
 
-    example.accept(region);
+    example.putEntries(region);
     cache.close();
-  }
-
-  Example() {
-    cacheListener = new ExampleCacheListener(events);
-  }
-
-  CacheListener getCacheListener() {
-    return cacheListener;
-  }
-
-  Queue<EntryEvent<Integer, String>> getEvents() {
-    return events;
   }
 
   private Collection<Integer> generateIntegers() {
@@ -81,8 +63,7 @@ public class Example implements Consumer<Region<Integer, String>> {
     return integers;
   }
 
-  @Override
-  public void accept(Region<Integer, String> region) {
+  public void putEntries(Map<Integer, String> region) {
     Collection<Integer> integers = generateIntegers();
     Iterator<Integer> iterator = integers.iterator();
 
@@ -90,6 +71,6 @@ public class Example implements Consumer<Region<Integer, String>> {
       Integer integer = iterator.next();
       region.put(integer, integer.toString());
     }
-    System.out.println("Created " + region.size() + " entries.");
+    System.out.println("Created " + integers.size() + " entries.");
   }
 }
