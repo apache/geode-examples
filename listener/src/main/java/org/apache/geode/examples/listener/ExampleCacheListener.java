@@ -14,6 +14,7 @@
  */
 package org.apache.geode.examples.listener;
 
+import java.util.LinkedList;
 import java.util.Queue;
 
 import org.apache.geode.cache.CacheListener;
@@ -22,18 +23,10 @@ import org.apache.geode.cache.RegionEvent;
 import org.apache.geode.cache.util.CacheListenerAdapter;
 
 public class ExampleCacheListener extends CacheListenerAdapter<Integer, String> {
-  private final Queue<EntryEvent<Integer, String>> events;
-
-  public ExampleCacheListener(Queue<EntryEvent<Integer, String>> events) {
-    this.events = events;
-  }
-
-  public Queue<EntryEvent<Integer, String>> getEvents() {
-    return events;
-  }
+  public ExampleCacheListener() {}
 
   @Override
   public void afterCreate(EntryEvent<Integer, String> event) {
-    events.add(event);
+    System.out.println("received create for key " + event.getKey());
   }
 }

@@ -16,6 +16,9 @@ package org.apache.geode.examples.listener;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.geode.cache.Region;
 import org.geode.examples.util.Mocks;
 import org.junit.Test;
@@ -24,8 +27,8 @@ public class ExampleTest {
   @Test
   public void testExample() throws Exception {
     Example example = new Example();
-    Region<Integer, String> region = Mocks.region("example-region");
-    example.accept(region);
+    Map<Integer, String> region = new HashMap<>();
+    example.putEntries(region);
 
     assertEquals(Example.ITERATIONS, region.size());
   }

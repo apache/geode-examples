@@ -19,7 +19,7 @@ limitations under the License.
 
 This is a simple example that demonstrates the use of a cache listener to capture modifications to a region.
 
-A cache listener is added to a region before the region is created. _After_ an event (e.g., create a new entry, update an existing entry) occurs on that region, the cache listener has the appropriate handler method invoked, e.g., `afterCreate()` for creating a new entry. This method invocation can _not_ affect the operation on the region.
+A cache listener is added to a region when the region is created. _After_ an event (e.g., create a new entry, update an existing entry) occurs on that region, the cache listener has the appropriate handler method invoked, e.g., `afterCreate()` for creating a new entry. This method invocation can _not_ affect the operation on the region.
 
 In this example, a cache listener is installed that captures all of the creation events for the region. A number of entries are created in the region. The cache listener is notified of each creation and adds it to its queue of events. In other applications, the event could either be persisted to some other data store (i.e., write-behind) or a notification about the activity could be sent via some other mechanism.
 
