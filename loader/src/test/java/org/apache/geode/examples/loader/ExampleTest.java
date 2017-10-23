@@ -24,8 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.geode.cache.LoaderHelper;
-import org.apache.geode.cache.Region;
-import org.geode.examples.util.Mocks;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.SystemOutRule;

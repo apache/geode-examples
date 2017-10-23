@@ -19,11 +19,12 @@ import static org.junit.Assert.assertEquals;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.geode.examples.util.TestAsyncEvent;
 import org.junit.Test;
 
 import org.apache.geode.cache.Operation;
+import org.apache.geode.cache.Region;
 import org.apache.geode.cache.asyncqueue.AsyncEvent;
+import org.apache.geode.cache.wan.EventSequenceID;
 
 public class ExampleAsyncEventListenerTest {
   @Test
@@ -43,5 +44,59 @@ public class ExampleAsyncEventListenerTest {
     assertEquals("the", listener.spellCheck("teh"));
     assertEquals("will", listener.spellCheck("wil"));
     assertEquals("I", listener.spellCheck("i"));
+  }
+
+  public class TestAsyncEvent<K, V> implements AsyncEvent<K, V> {
+    private final Region region;
+    private final Operation operation;
+    private final K key;
+    private final V value;
+
+    public TestAsyncEvent(Region region, Operation operation, K key, V value) {
+      this.region = region;
+      this.operation = operation;
+      this.key = key;
+      this.value = value;
+    }
+
+    @Override
+    public boolean getPossibleDuplicate() {
+      return false;
+    }
+
+    @Override
+    public EventSequenceID getEventSequenceID() {
+      return null;
+    }
+
+    @Override
+    public Region<K, V> getRegion() {
+      return region;
+    }
+
+    @Override
+    public Operation getOperation() {
+      return operation;
+    }
+
+    @Override
+    public Object getCallbackArgument() {
+      return null;
+    }
+
+    @Override
+    public K getKey() {
+      return key;
+    }
+
+    @Override
+    public V getDeserializedValue() {
+      return value;
+    }
+
+    @Override
+    public byte[] getSerializedValue() {
+      return new byte[0];
+    }
   }
 }

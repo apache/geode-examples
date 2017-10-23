@@ -17,6 +17,7 @@ package org.apache.geode.examples.writer;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -24,7 +25,6 @@ import java.util.Arrays;
 import org.apache.geode.cache.CacheWriterException;
 import org.apache.geode.cache.Region;
 
-import org.geode.examples.util.Mocks;
 import org.junit.Test;
 
 public class ExampleTest {
@@ -32,7 +32,7 @@ public class ExampleTest {
   public void testExample() throws Exception {
     Example example = new Example();
 
-    Region<String, String> region = Mocks.region("example-region");
+    Region<String, String> region = mock(Region.class);
     when(region.put(eq("666-66-6666"), any())).thenThrow(new CacheWriterException());
     when(region.put(eq("8675309"), any())).thenThrow(new CacheWriterException());
     when(region.put(eq("999-000-0000"), any())).thenThrow(new CacheWriterException());
