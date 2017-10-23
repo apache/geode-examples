@@ -28,7 +28,7 @@ def verificationUrl = (geodeReleaseUrl != "") ? geodeReleaseUrl :
 
 def downloadFile = "apache-geode-${geodeVersion}.tar.gz"
 def installFile = "$buildDir/$downloadFile"
-def installDir = "$buildDir/apache-geode-${geodeVersion}"
+project.ext.installDir = "$buildDir/apache-geode-${geodeVersion}"
 
 task downloadGeode {
   inputs.property 'geodeVersion', geodeVersion
@@ -56,7 +56,7 @@ task verifyGeode(type: de.undercouch.gradle.tasks.download.Verify, dependsOn: do
 
 task installGeode(type: Copy, dependsOn: verifyGeode) {
   inputs.file installFile
-  outputs.dir installDir
+  outputs.dir project.installDir
 
   from tarTree(resources.gzip(installFile))
   into buildDir
@@ -119,18 +119,18 @@ subprojects {
   }
   clean.finalizedBy cleanServer
 
-  def geodePath = "${System.env.PATH}${System.getProperty('path.separator')}${installDir}/bin"
+  project.ext.geodePath = "${System.env.PATH}${System.getProperty('path.separator')}${project.installDir}/bin"
   task start(type: Exec, dependsOn: [installGeode, build, cleanServer]) {
     workingDir projectDir
-    environment 'GEODE_HOME', installDir
-    environment 'PATH', geodePath
+    environment 'GEODE_HOME', project.installDir
+    environment 'PATH', project.geodePath
     commandLine 'sh', '-c', "gfsh run --file=${projectDir}/scripts/start.gfsh"
   }
 
   task stop(type: Exec, dependsOn: installGeode) {
     workingDir projectDir
-    environment 'GEODE_HOME', installDir
-    environment 'PATH', geodePath
+    environment 'GEODE_HOME', project.installDir
+    environment 'PATH', project.geodePath
     commandLine 'sh', '-c', "gfsh run --file=${projectDir}/scripts/stop.gfsh"
   }
 
