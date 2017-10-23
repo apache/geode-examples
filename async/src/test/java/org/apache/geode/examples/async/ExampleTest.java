@@ -15,6 +15,7 @@
 package org.apache.geode.examples.async;
 
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -23,7 +24,6 @@ import java.util.List;
 
 import org.apache.geode.cache.Region;
 
-import org.geode.examples.util.Mocks;
 import org.junit.Test;
 
 public class ExampleTest {
@@ -31,8 +31,8 @@ public class ExampleTest {
   public void testExample() throws Exception {
     Example example = new Example();
 
-    Region<String, String> outgoingRegion = Mocks.region(Example.OUTGOING_REGION_NAME);
-    Region<Integer, String> incomingRegion = Mocks.region(Example.INCOMING_REGION_NAME);
+    Region<String, String> outgoingRegion = mock(Region.class);
+    Region<Integer, String> incomingRegion = mock(Region.class);
 
     final List<String> words = Arrays.asList(new String[] {"that", "teh"});
     when(outgoingRegion.sizeOnServer()).thenReturn(words.size());

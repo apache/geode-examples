@@ -15,6 +15,8 @@
 package org.apache.geode.examples.functions;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -22,8 +24,8 @@ import java.util.List;
 
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.execute.Execution;
+import org.apache.geode.cache.execute.ResultCollector;
 
-import org.geode.examples.util.Mocks;
 import org.junit.Test;
 
 public class ExampleTest {
@@ -31,9 +33,12 @@ public class ExampleTest {
   public void testExample() throws Exception {
     Example example = new Example(10);
 
-    Region<Integer, String> region = Mocks.region("example-region");
+    Region<Integer, String> region = mock(Region.class);
     List<Integer> primes = Arrays.asList(1, 2, 3, 5, 7);
-    Execution execution = Mocks.execution(PrimeNumber.ID, primes);
+    ResultCollector resultCollector = mock(ResultCollector.class);
+    when(resultCollector.getResult()).thenReturn(primes);
+    Execution execution = mock(Execution.class);
+    when(execution.execute(PrimeNumber.ID)).thenReturn(resultCollector);
 
     assertEquals(new HashSet(primes), example.getPrimes(region, execution));
   }
