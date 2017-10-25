@@ -63,21 +63,6 @@ public class Mocks {
     return region;
   }
 
-  public static <K, V> Region<K, V> addQuery(Region<K, V> region, String queryString, Collection results) throws Exception {
-    ClientCache regionService = (ClientCache) region.getRegionService();
-    QueryService queryService = regionService.getQueryService();
-    SelectResults<V> selectResults = (SelectResults<V>) mock(SelectResults.class);
-    when(selectResults.iterator()).thenReturn(results.iterator());
-
-    Query query = mock(Query.class);
-    when(query.execute()).thenReturn(selectResults);
-
-    when(selectResults.size()).thenReturn(results.size());
-
-    when(queryService.newQuery(queryString)).thenReturn(query);
-
-    return region;
-  }
   @SuppressWarnings("unchecked")
   private static <K> K getKey(InvocationOnMock inv) {
     return (K) inv.getArguments()[0];

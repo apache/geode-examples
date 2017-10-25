@@ -15,74 +15,35 @@
 package org.apache.geode.examples.queries;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
+import org.apache.geode.cache.query.FunctionDomainException;
+import org.apache.geode.cache.query.NameResolutionException;
+import org.apache.geode.cache.query.Query;
+import org.apache.geode.cache.query.QueryInvocationTargetException;
+import org.apache.geode.cache.query.QueryService;
+import org.apache.geode.cache.query.SelectResults;
+import org.apache.geode.cache.query.TypeMismatchException;
+
 import org.geode.examples.util.Mocks;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class ExampleTest {
-  static String REGIONNAME = "example-region";
-
-  @Rule
-  public SystemOutRule systemOutRule = new SystemOutRule().enableLog();
 
   @Test
-  public void testExample() throws Exception {
-    Example example = new Example();
-
-    Region<Integer, EmployeeData> region = Mocks.region(REGIONNAME);
-
-    // SET UP FIRST QUERY
-    Mocks.addQuery(region, String.format(Example.QUERY1, REGIONNAME),
-        example.populateEmployeeData().values());
-
-
-    // SET UP SECOND QUERY
-    // Second query returns 4 results. Create new hashmap with exactly those 4 results,
-    // and use it in the mock of the second query.
-    Map<Integer, EmployeeData> query2Values = new HashMap<Integer, EmployeeData>();
-    String[] firstNames = "Casey,Jaime,Jessie,Frankie".split(",");
-    String[] lastNames = "Catch,Jive,Jam,Forth".split(",");
-    int salaries[] = new int[] {60000, 60000, 80000, 100000};
-    int hours[] = new int[] {30, 20, 20, 30};
-    int emplNumber[] = new int[] {10055, 10015, 10066, 10010};
-
-    for (int index = 0; index < firstNames.length; index++) {
-      String email = firstNames[index] + "." + lastNames[index] + "@example.com";
-      EmployeeData value = new EmployeeData(firstNames[index], lastNames[index], emplNumber[index],
-          email, salaries[index], hours[index]);
-      query2Values.put(emplNumber[index], value);
-    }
-    Mocks.addQuery(region, String.format(Example.QUERY2, REGIONNAME), query2Values.values());
-
-    // SET UP THIRD QUERY
-    // Third query returns a single employee. Create a new hashmap with that single
-    // employee, and used it in comparison to the third query result.
-    Map<Integer, EmployeeData> query3Values = new HashMap<Integer, EmployeeData>();
-    String firstName = "Jaime";
-    String lastName = "Jive";
-    int salary = 60000;
-    int hour = 20;
-    int employeeNumber = 10015;
-    String email = firstName + "." + lastName + "@example.com";
-    EmployeeData value3 =
-        new EmployeeData(firstName, lastName, employeeNumber, email, salary, hour);
-    query3Values.put(employeeNumber, value3);
-    Mocks.addQuery(region, String.format(Example.QUERY3, REGIONNAME), query3Values.values());
-
-    // run all the mocked queries, and check quantities of query results
-    ClientCache regionService = (ClientCache) region.getRegionService();
-    example.doQueries(regionService, region);
-
-    assertThat(systemOutRule.getLog()).contains("Query returned 14 results.");
-    assertThat(systemOutRule.getLog()).contains("Query returned 4 results.");
-    assertThat(systemOutRule.getLog()).contains("Employee Jaime Jive has employee number 10015");
-
+  public void testCreateEmployeeData() {
+    Map<Integer, EmployeeData> data = Example.createEmployeeData();
+    assertEquals(14, data.size());
   }
 }
