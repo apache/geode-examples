@@ -14,17 +14,21 @@
  */
 package org.apache.geode.examples.loader;
 
+import static org.apache.geode.examples.loader.Example.printQuotes;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.geode.cache.LoaderHelper;
-import org.apache.geode.cache.Region;
-import org.geode.examples.util.Mocks;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.SystemOutRule;
+import org.mockito.Mockito;
 
 public class ExampleTest {
 
@@ -34,20 +38,17 @@ public class ExampleTest {
   @Test
   public void testExample() throws Exception {
     QuoteLoader loader = new QuoteLoader();
-    Region<String, String> region = Mocks.region("example-region");
-
-    @SuppressWarnings("unchecked")
-    LoaderHelper<String, String> helper = mock(LoaderHelper.class);
-    when(helper.getRegion()).thenReturn(region);
+    Map<String, String> region = Mockito.spy(new HashMap<>());
 
     when(region.get(any())).then(inv -> {
       String key = inv.getArgumentAt(0, String.class);
+      LoaderHelper<String, String> helper = mock(LoaderHelper.class);
       when(helper.getKey()).thenReturn(key);
 
       return loader.load(helper);
     });
 
-    new Example().accept(region);
+    printQuotes(region);
 
     assertThat(systemOutRule.getLog()).contains("Anton Chekhov");
     assertThat(systemOutRule.getLog()).contains("Loaded 20 definitions");

@@ -21,60 +21,42 @@ plugins {
   id "de.undercouch.download" version "3.1.2"
 }
 
-def downloadUrl = (geodeReleaseUrl != "") ? geodeReleaseUrl : 
-    "https://www.apache.org/dyn/closer.cgi?action=download&filename=geode/$geodeVersion"
-def verificationUrl = (geodeReleaseUrl != "") ? geodeReleaseUrl : 
-    "https://www.apache.org/dist/geode/$geodeVersion"
-
-def downloadFile = "apache-geode-${geodeVersion}.tar.gz"
-def installFile = "$buildDir/$downloadFile"
-def installDir = "$buildDir/apache-geode-${geodeVersion}"
-
-task downloadGeode {
-  inputs.property 'geodeVersion', geodeVersion
-  outputs.file installFile
-  outputs.file "${installFile}.sha256"
-
-  doLast {
-    download {
-      src([
-        "$downloadUrl/$downloadFile",
-        "$verificationUrl/${downloadFile}.sha256"
-      ])
-      dest buildDir
+allprojects {
+  repositories {
+    if (geodeRepositoryUrl != "") {
+      maven {
+        url geodeRepositoryUrl
+      }
+    }
+    mavenCentral()
+    maven {
+      url 'http://repository.apache.org/snapshots'
     }
   }
 }
 
-task verifyGeode(type: de.undercouch.gradle.tasks.download.Verify, dependsOn: downloadGeode) {
-  src installFile
-  algorithm "SHA-256"
-  doFirst {
-    checksum file("${installFile}.sha256").text.split(' ')[0]
-  }
+def installDir = "$buildDir/apache-geode-${geodeVersion}"
+
+configurations {
+  geodeDistribution
 }
 
-task installGeode(type: Copy, dependsOn: verifyGeode) {
-  inputs.file installFile
-  outputs.dir installDir
+dependencies {
+  geodeDistribution "org.apache.geode:apache-geode:$geodeVersion"
+}
 
-  from tarTree(resources.gzip(installFile))
+task installGeode(type: Copy) {
+  from zipTree(configurations.geodeDistribution.singleFile)
   into buildDir
 }
 
 allprojects {
   apply plugin:'java'
 
-  repositories { 
-    if (geodeRepositoryUrl != "") {
-      maven { url geodeRepositoryUrl }
-    }
-    mavenCentral()
-  }
 
   dependencies {
     compile "org.apache.geode:geode-core:$geodeVersion"
-    
+
     testCompile "com.jayway.awaitility:awaitility:$awaitilityVersion"
     testCompile "junit:junit:$junitVersion"
     testCompile "org.mockito:mockito-core:$mockitocoreVersion"
@@ -95,13 +77,27 @@ subprojects {
   dependencies {
     compile "org.apache.logging.log4j:log4j-core:$log4jVersion"
     runtime "org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion"
-    testCompile project(path: ':', configuration: 'testArchives') 
+    testCompile project(path: ':', configuration: 'testArchives')
+  }
+
+  jar {
+    archiveName "${baseName}.${extension}"
+  }
+
+  jar {
+    archiveName "${baseName}.${extension}"
+  }
+
+  jar {
+    archiveName "${baseName}.${extension}"
   }
   
-  task cleanServer << {
-    delete 'locator'
-    delete 'server1'
-    delete 'server2'
+  task cleanServer {
+    doLast {
+      delete 'locator'
+      delete 'server1'
+      delete 'server2'
+    }
   }
   clean.finalizedBy cleanServer
 
