@@ -16,8 +16,6 @@ package org.apache.geode.examples.queries;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
-import java.util.Iterator;
 
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
@@ -32,7 +30,7 @@ import org.apache.geode.cache.query.SelectResults;
 import org.apache.geode.cache.query.TypeMismatchException;
 
 
-public class Example implements Consumer<Region<Integer, EmployeeData>> {
+public class Example {
   static String REGIONNAME = "example-region";
   static String QUERY1 = "SELECT DISTINCT * FROM /%s";
   static String QUERY2 = "SELECT DISTINCT * FROM /%s h WHERE h.hoursPerWeek < 40";
@@ -45,11 +43,22 @@ public class Example implements Consumer<Region<Integer, EmployeeData>> {
 
     // create a local region that matches the server region
     Region<Integer, EmployeeData> region =
-        cache.<Integer, EmployeeData>createClientRegionFactory(ClientRegionShortcut.CACHING_PROXY)
+        cache.<Integer, EmployeeData>createClientRegionFactory(ClientRegionShortcut.PROXY)
             .create(REGIONNAME);
 
     Example e = new Example();
-    e.accept(region);
+    Map<Integer, EmployeeData> employees = e.populateEmployeeData();
+    for (EmployeeData value : employees.values()) {
+      region.put(value.getEmplNumber(), value);
+    }
+    // count the values in the region
+    int inserted = region.keySetOnServer().size();
+    System.out.println(String.format("Counted %d keys in region %s", inserted, region.getName()));
+
+    // fetch and print all values in the region (without using a query)
+    region.keySetOnServer().forEach(key -> System.out.println(region.get(key)));
+    // do a set of queries, printing the results of each query
+    e.doQueries((ClientCache) region.getRegionService(), region);
     cache.close();
   }
 
@@ -80,55 +89,24 @@ public class Example implements Consumer<Region<Integer, EmployeeData>> {
     return employees;
   }
 
-  @Override
-  public void accept(Region<Integer, EmployeeData> region) {
-    Map<Integer, EmployeeData> employees = populateEmployeeData();
-    for (EmployeeData value : employees.values()) {
-      region.put(value.getEmplNumber(), value);
-    }
 
-    // count the values in the region
-    int inserted = region.keySetOnServer().size();
-    System.out.println(String.format("Counted %d keys in region %s", inserted, region.getName()));
-
-    // fetch and print all values in the region (without using a query)
-    region.keySetOnServer().forEach(key -> System.out.println(region.get(key)));
-    doQueries((ClientCache) region.getRegionService(), region);
-  }
-
-  // Demonstrate querying using the API.
-  private void doQueries(ClientCache cache, Region<Integer, EmployeeData> region) {
+  // Demonstrate querying using the API by doing a set of 3 queries.
+  public void doQueries(ClientCache cache, Region<Integer, EmployeeData> region) {
     String regionName = region.getName();
     QueryService queryService = cache.getQueryService();
 
     try {
 
       // Query for every entry in the region, and print query results.
-      String queryString1 = String.format(QUERY1, regionName);
-      System.out.println(String.format("\nQuery: %s", queryString1));
-      Query query = queryService.newQuery(queryString1);
-      SelectResults<EmployeeData> results = null;
-      results = (SelectResults<EmployeeData>) query.execute();
-      System.out.println("Query 1 returned " + results.size() + " results.");
-      for (EmployeeData eachEmployee : results) {
-        System.out.println(String.format("Employee: %s", eachEmployee.toString()));
-      }
+      SelectResults<EmployeeData> results = doQuery(queryService, QUERY1, regionName);
+      printSetOfEmployees(results);
 
       // Query for all part time employees, and print query results.
-      String queryString2 = String.format(QUERY2, regionName);
-      System.out.println(String.format("\nQuery: %s", queryString2));
-      query = queryService.newQuery(queryString2);
-      results = (SelectResults<EmployeeData>) query.execute();
-      System.out.println("Query 2 returned " + results.size() + " results.");
-      for (EmployeeData eachEmployee : results) {
-        System.out.println(String.format("Employee: %s", eachEmployee.toString()));
-      }
+      results = doQuery(queryService, QUERY2, regionName);
+      printSetOfEmployees(results);
 
       // Query for last name of Jive, and print the full name and employee number.
-      String queryString3 = String.format(QUERY3, regionName);
-      System.out.println(String.format("\nQuery: %s", queryString3));
-      query = queryService.newQuery(queryString3);
-      results = (SelectResults<EmployeeData>) query.execute();
+      results = doQuery(queryService, QUERY3, regionName);
       for (EmployeeData eachEmployee : results) {
         System.out.println(String.format("Employee %s %s has employee number %d",
             eachEmployee.getFirstName(), eachEmployee.getLastName(), eachEmployee.getEmplNumber()));
@@ -139,5 +117,23 @@ public class Example implements Consumer<Region<Integer, EmployeeData>> {
       e.printStackTrace();
     }
 
+  }
+
+  private SelectResults<EmployeeData> doQuery(QueryService queryService, String queryString,
+      String regionName) throws FunctionDomainException, NameResolutionException,
+      QueryInvocationTargetException, TypeMismatchException {
+    String fullQueryString = String.format(queryString, regionName);
+    System.out.println(String.format("\nQuery: %s", fullQueryString));
+    Query query = queryService.newQuery(fullQueryString);
+    SelectResults<EmployeeData> results = null;
+    results = (SelectResults<EmployeeData>) query.execute();
+    return results;
+  }
+
+  private void printSetOfEmployees(SelectResults<EmployeeData> results) {
+    System.out.println("Query returned " + results.size() + " results.");
+    for (EmployeeData eachEmployee : results) {
+      System.out.println(String.format("Employee: %s", eachEmployee.toString()));
+    }
   }
 }

@@ -77,14 +77,14 @@ printing the results of each query.
 
         gfsh>query --query="SELECT DISTINCT * FROM /example-region x WHERE x.lastName.startsWith('C')"
 
-## Shut down the cluster and clean up the directory
+## Shut down the cluster and (optionally) clean up the directory
 1. Shut down the cluster and exit `gfsh`, answering `Y` when prompted:
 
         gfsh>run --file=scripts/stop.gfsh
         gfsh>exit
 
-2. Clean up the generated directories and files so that this example
-can be rerun from the step that invokes the `start.gfsh` script.
+2. If desired, clean up the generated directories containing
+logs:
     
         $ ../gradlew cleanServer
 

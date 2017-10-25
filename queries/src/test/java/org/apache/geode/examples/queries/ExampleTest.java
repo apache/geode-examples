@@ -15,9 +15,9 @@
 package org.apache.geode.examples.queries;
 
 import static org.assertj.core.api.Assertions.assertThat;
-// import static org.junit.Assert.assertEquals;
 
 import org.apache.geode.cache.Region;
+import org.apache.geode.cache.client.ClientCache;
 import org.geode.examples.util.Mocks;
 import org.junit.Rule;
 import org.junit.Test;
@@ -77,10 +77,11 @@ public class ExampleTest {
     Mocks.addQuery(region, String.format(Example.QUERY3, REGIONNAME), query3Values.values());
 
     // run all the mocked queries, and check quantities of query results
-    example.accept(region);
+    ClientCache regionService = (ClientCache) region.getRegionService();
+    example.doQueries(regionService, region);
 
-    assertThat(systemOutRule.getLog()).contains("Query 1 returned 14 results.");
-    assertThat(systemOutRule.getLog()).contains("Query 2 returned 4 results.");
+    assertThat(systemOutRule.getLog()).contains("Query returned 14 results.");
+    assertThat(systemOutRule.getLog()).contains("Query returned 4 results.");
     assertThat(systemOutRule.getLog()).contains("Employee Jaime Jive has employee number 10015");
 
   }
