@@ -16,5 +16,4 @@
 #
 
 connect --locator=127.0.0.1[10334]
-destroy region --name=example-region
 shutdown --include-locators=true
