@@ -23,7 +23,6 @@ import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.client.ClientRegionShortcut;
 import org.apache.geode.cache.query.FunctionDomainException;
 import org.apache.geode.cache.query.NameResolutionException;
-import org.apache.geode.cache.query.Query;
 import org.apache.geode.cache.query.QueryInvocationTargetException;
 import org.apache.geode.cache.query.QueryService;
 import org.apache.geode.cache.query.SelectResults;
@@ -42,11 +41,12 @@ public class Example {
     ClientCache cache = new ClientCacheFactory().addPoolLocator("127.0.0.1", 10334)
         .set("log-level", "WARN").create();
 
-    // create a local region that matches the server region
+    // create a region on the server
     Region<Integer, EmployeeData> region =
         cache.<Integer, EmployeeData>createClientRegionFactory(ClientRegionShortcut.PROXY)
             .create(REGIONNAME);
 
+    // create a set of employee data and put it into the region
     Map<Integer, EmployeeData> employees = createEmployeeData();
     region.putAll(employees);
 
@@ -65,7 +65,6 @@ public class Example {
 
 
   public static Map<Integer, EmployeeData> createEmployeeData() {
-    // put entries in the hashmap
     String[] firstNames =
         "Alex,Bertie,Kris,Dale,Frankie,Jamie,Morgan,Pat,Ricky,Taylor,Casey,Jessie,Ryan,Skyler"
             .split(",");
@@ -75,6 +74,7 @@ public class Example {
     int hours[] = new int[] {40, 40, 40, 40, 30, 20};
     int emplNumber = 10000;
 
+    // put data into the hashmap
     Map<Integer, EmployeeData> employees = new HashMap<Integer, EmployeeData>();
     for (int index = 0; index < firstNames.length; index++) {
       emplNumber = emplNumber + index;
@@ -90,25 +90,24 @@ public class Example {
   }
 
 
-  // Demonstrate querying using the API by doing a set of 3 queries.
+  // Demonstrate querying using the API by doing 3 queries.
   public static void doQueries(ClientCache cache) throws NameResolutionException,
       TypeMismatchException, QueryInvocationTargetException, FunctionDomainException {
     QueryService queryService = cache.getQueryService();
 
     // Query for every entry in the region, and print query results.
-    System.out.println("Executing query: " + QUERY1);
+    System.out.println("\nExecuting query: " + QUERY1);
     SelectResults<EmployeeData> results =
         (SelectResults<EmployeeData>) queryService.newQuery(QUERY1).execute();
-
     printSetOfEmployees(results);
 
     // Query for all part time employees, and print query results.
-    System.out.println("Executing query: " + QUERY2);
+    System.out.println("\nExecuting query: " + QUERY2);
     results = (SelectResults<EmployeeData>) queryService.newQuery(QUERY2).execute();
     printSetOfEmployees(results);
 
     // Query for last name of Jive, and print the full name and employee number.
-    System.out.println("Executing query: " + QUERY3);
+    System.out.println("\nExecuting query: " + QUERY3);
     results =
         (SelectResults<EmployeeData>) queryService.newQuery(QUERY3).execute(new String[] {"Jive"});
     for (EmployeeData eachEmployee : results) {

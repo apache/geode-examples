@@ -35,10 +35,11 @@ Each step in this example specifies paths relative to that directory.
 
         $ ../gradlew build
 
-3. Run a script that starts a locator and two servers,
+
+4. Run a script that starts a locator and two servers,
 and then creates the ```example-region``` region.
 
-        $ gfsh run --file=scripts/start.gfsh
+        $ ../gradlew start
 
 ## Run the example program
 1. Run the example to populate `example-region` with employee information,
@@ -52,13 +53,23 @@ printing the results of each query.
 
 `gfsh` can also be used to issue queries.
 
-1. Start `gfsh` and connect to the cluster:
+1.  If you have not already installed Geode,
+the build step will have installed a `gfsh` executable for you
+at a path relative to the current working directory
+within a versioned directory:
+
+        ../build/apache-geode-<version>/bin/gfsh
+
+    You can use this relative path to invoke gfsh by substituting
+the appropriate `<version>`.
+
+2. Start `gfsh` and connect to the cluster:
 
         $ gfsh
         ...
         gfsh>connect --locator=127.0.0.1[10334]
 
-2. The quantity of entries may be observed with `gfsh`:
+3. The quantity of entries may be observed with `gfsh`:
 
         gfsh>describe region --name=example-region
 
@@ -77,11 +88,14 @@ printing the results of each query.
 
         gfsh>query --query="SELECT DISTINCT * FROM /example-region x WHERE x.lastName.startsWith('C')"
 
-## Shut down the cluster and (optionally) clean up the directory
-1. Shut down the cluster and exit `gfsh`, answering `Y` when prompted:
+    Exit gfsh:
 
-        gfsh>run --file=scripts/stop.gfsh
         gfsh>exit
+
+## Shut down the cluster and (optionally) clean up the directory
+1. Shut down the cluster:
+
+        $ ../gradlew stop
 
 2. If desired, clean up the generated directories containing
 logs:
