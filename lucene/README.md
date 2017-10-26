@@ -73,15 +73,15 @@ will also be retrieved from the region and printed to the console.
      // Do a compound search on last name and email using analyzerIndex
         gfsh>search lucene --name=analyzerIndex --region=example-region --queryStrings="lastName:hall~ AND email:Kris.Call@example.com" --defaultField=lastName
 
-     // Do a compound search on nested object with both 5035330001 AND 5036430001 in either home or office. 
-     // Note: 5035330001 is one of his home phone, 5036430001 is one of his office phone. 
-        gfsh>search lucene --name=nestedObjectIndex --region=/example-region --queryString="5035330001 AND 5036430001" --defaultField=zipAndPhoneBook.phones
+     // Do a compound search on nested object with both 5035330001 AND 5036430001 in contacts
+     // Note: 5035330001 is the phone number of one of the contacts, 5036430001 is phone number of another contact. Since they are both contacts of this employee, it will lead to this employee. 
+        gfsh>search lucene --name=nestedObjectIndex --region=/example-region --queryString="5035330001 AND 5036430001" --defaultField=contacts.phoneNumbers
 
-     // If query on 5035330001 AND 5036430002, it will not find the person, because the 2 phone numbers belong to different person's entry. 
-        gfsh>search lucene --name=nestedObjectIndex --region=/example-region --queryString="5035330001 AND 5036430002" --defaultField=zipAndPhoneBook.phones
+     // If query on 5035330001 AND 5036430002, it will not find the person, because the 2 phone numbers belong to different people's contacts. 
+        gfsh>search lucene --name=nestedObjectIndex --region=/example-region --queryString="5035330001 AND 5036430002" --defaultField=contacts.phoneNumbers
 
      // If query on 5035330001 OR 5036430002, it will find 2 people's entries
-        gfsh>search lucene --name=nestedObjectIndex --region=/example-region --queryString="5035330001 OR 5036430002" --defaultField=zipAndPhoneBook.phones
+        gfsh>search lucene --name=nestedObjectIndex --region=/example-region --queryString="5035330001 OR 5036430002" --defaultField=contacts.phoneNumbers
 
 3. Examine the Lucene index statistics
 
