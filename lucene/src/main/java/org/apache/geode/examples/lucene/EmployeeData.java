@@ -15,6 +15,7 @@
 package org.apache.geode.examples.lucene;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 public class EmployeeData implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -25,15 +26,17 @@ public class EmployeeData implements Serializable {
   private String email;
   private int salary;
   private int hoursPerWeek;
+  private Collection<ZipAndPhone> zipAndPhoneBook;
 
   public EmployeeData(String firstName, String lastName, int emplNumber, String email, int salary,
-      int hoursPerWeek) {
+      int hoursPerWeek, Collection<ZipAndPhone> zipAndPhoneBook) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.emplNumber = emplNumber;
     this.email = email;
     this.salary = salary;
     this.hoursPerWeek = hoursPerWeek;
+    this.zipAndPhoneBook = zipAndPhoneBook;
   }
 
   public String getFirstName() {
@@ -60,10 +63,14 @@ public class EmployeeData implements Serializable {
     return hoursPerWeek;
   }
 
+  public Collection<ZipAndPhone> getZipAndPhones() {
+    return this.zipAndPhoneBook;
+  }
+
   @Override
   public String toString() {
     return "EmployeeData [firstName=" + firstName + ", lastName=" + lastName + ", emplNumber="
         + emplNumber + ", email= " + email + ", salary=" + salary + ", hoursPerWeek=" + hoursPerWeek
-        + "]";
+        + ", zipAndPhoneBook=" + zipAndPhoneBook + "]";
   }
 }
