@@ -17,25 +17,25 @@ package org.apache.geode.examples.lucene;
 import java.io.Serializable;
 import java.util.Arrays;
 
-public class ZipAndPhone implements Serializable {
-  private int zip;
-  private String[] phones;
+public class Contact implements Serializable {
+  private String name;
+  private String[] phoneNumbers;
 
-  ZipAndPhone(int zip, String[] phones) {
-    this.zip = zip;
-    this.phones = phones;
+  Contact(String name, String[] phoneNumbers) {
+    this.name = name;
+    this.phoneNumbers = phoneNumbers;
   }
 
-  public int getZip() {
-    return this.zip;
+  public String getName() {
+    return this.name;
   }
 
   public String[] getPhones() {
-    return this.phones;
+    return this.phoneNumbers;
   }
 
   @Override
   public String toString() {
-    return "(zip=" + zip + ", phones=" + Arrays.toString(phones) + ")";
+    return "(name=" + name + ", phones=" + Arrays.toString(phoneNumbers) + ")";
   }
 }

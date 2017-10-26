@@ -26,7 +26,7 @@ create lucene index --name=simpleIndex --region=example-region --field=firstName
 create lucene index --name=analyzerIndex --region=example-region --field=lastName,email --analyzer=DEFAULT,org.apache.lucene.analysis.core.KeywordAnalyzer
 
 ## nestedObjectIndex will index on nested objects or collection objects
-create lucene index --name=nestedObjectIndex --region=example-region --field=zipAndPhoneBook.phones --serializer=org.apache.geode.cache.lucene.FlatFormatSerializer
+create lucene index --name=nestedObjectIndex --region=example-region --field=contacts.phoneNumbers --serializer=org.apache.geode.cache.lucene.FlatFormatSerializer
 
 create region --name=example-region --type=PARTITION --enable-statistics=true
 

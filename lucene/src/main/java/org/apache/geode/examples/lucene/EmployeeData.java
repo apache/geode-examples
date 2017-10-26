@@ -26,17 +26,17 @@ public class EmployeeData implements Serializable {
   private String email;
   private int salary;
   private int hoursPerWeek;
-  private Collection<ZipAndPhone> zipAndPhoneBook;
+  private Collection<Contact> contacts;
 
   public EmployeeData(String firstName, String lastName, int emplNumber, String email, int salary,
-      int hoursPerWeek, Collection<ZipAndPhone> zipAndPhoneBook) {
+      int hoursPerWeek, Collection<Contact> contacts) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.emplNumber = emplNumber;
     this.email = email;
     this.salary = salary;
     this.hoursPerWeek = hoursPerWeek;
-    this.zipAndPhoneBook = zipAndPhoneBook;
+    this.contacts = contacts;
   }
 
   public String getFirstName() {
@@ -63,14 +63,14 @@ public class EmployeeData implements Serializable {
     return hoursPerWeek;
   }
 
-  public Collection<ZipAndPhone> getZipAndPhones() {
-    return this.zipAndPhoneBook;
+  public Collection<Contact> getContacts() {
+    return this.contacts;
   }
 
   @Override
   public String toString() {
     return "EmployeeData [firstName=" + firstName + ", lastName=" + lastName + ", emplNumber="
         + emplNumber + ", email= " + email + ", salary=" + salary + ", hoursPerWeek=" + hoursPerWeek
-        + ", zipAndPhoneBook=" + zipAndPhoneBook + "]";
+        + ", contacts=" + contacts + "]";
   }
 }
