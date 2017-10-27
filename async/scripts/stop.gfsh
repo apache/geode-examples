@@ -16,7 +16,5 @@
 #
 
 connect --locator=127.0.0.1[10334]
-destroy region --name=outgoing-region
-destroy region --name=incoming-region
 undeploy --jar=build/libs/async.jar
 shutdown --include-locators=true
