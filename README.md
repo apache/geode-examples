@@ -106,10 +106,6 @@ tutorial.
 *  Resource manager
 *  PDX Advanced
 
-### Native
-*  C++
-*  [.NET](native/dotnet/README.md)
-
 ### Use cases, integrations and external examples
 
 This section has self-contained little projects that illustrate a use case or

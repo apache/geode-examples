@@ -27,8 +27,3 @@ server2
 *.dat
 *.rej
 *.orig
-
-/native/dotnet/*/bin
-/native/dotnet/*/obj
-/native/dotnet/.vs
-
