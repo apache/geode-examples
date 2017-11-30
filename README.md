@@ -50,7 +50,7 @@ usage:
 The following sections call out ready-made examples or new examples that could
 be built.  You may want to start your journey with the [Apache Geode in 15
 minutes or
-Less](http://geode.apache.org/docs/guide/getting_started/15_minute_quickstart_gfsh.html)
+Less](http://geode.apache.org/docs/guide/13/getting_started/15_minute_quickstart_gfsh.html)
 tutorial.
 
 ### Basics
