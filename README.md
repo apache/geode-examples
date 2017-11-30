@@ -64,10 +64,9 @@ tutorial.
 
 ### Intermediate
 
-*  PDX & Serialization
+*  [Serialization](serialization/README.md)
 *  Lucene Indexing
 *  OQL Indexing
-*  Functions
 *  [Cache Loader](loader/README.md)
 *  [Cache Writer](writer/README.md)
 *  [Cache Listeners](listener/README.md)
