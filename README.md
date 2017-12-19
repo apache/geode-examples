@@ -74,7 +74,7 @@ tutorial.
 *  [Async Event Queues & Async Event Listeners](async/README.md)
 *  Continuous Querying
 *  Transactions
-*  Eviction
+*  [Eviction](eviction/README.md)
 *  Expiration
 *  Overflow
 *  Security
