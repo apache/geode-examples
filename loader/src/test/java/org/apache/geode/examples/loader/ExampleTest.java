@@ -12,9 +12,9 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.apache.geode.examples.loader;
+package org.apache.geode_examples.loader;
 
-import static org.apache.geode.examples.loader.Example.printQuotes;
+import static org.apache.geode_examples.loader.Example.printQuotes;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;

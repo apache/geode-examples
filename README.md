@@ -17,7 +17,7 @@ limitations under the License.
 
 [<img src="https://geode.apache.org/img/apache_geode_logo.png" align="center"/>](http://geode.apache.org)
 
-[![Build Status](https://travis-ci.org/apache/geode-examples.svg?branch=develop)](https://travis-ci.org/apache/geode-examples) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Build Status](https://travis-ci.org.apache.geode_examples.svg?branch=develop)](https://travis-ci.org.apache.geode_examples) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 # Apache Geode examples
 
@@ -108,7 +108,7 @@ Follow this approach to add a new example:
 
 * Create a subdirectory with a descriptive name like `cache-writer`
 * Create a `README.md` file in the example subproject to walk the user through the tutorial
-* Create a Java class with a main method in the `org.apache.geode.examples.$name.Example` class
+* Create a Java class with a main method in the `org.apache.geode_examples.$name.Example` class
 * Create a cluster initialization script in `scripts/start.gfsh`
 * Create a cluster shutdown script in `scripts/stop.gfsh`
 

@@ -20,5 +20,5 @@ start server --name=server1 --locators=127.0.0.1[10334] --server-port=0 --classp
 start server --name=server2 --locators=127.0.0.1[10334] --server-port=0 --classpath=../build/classes/main
 list members
 
-create region --name=example-region --type=REPLICATE --cache-listener=org.apache.geode.examples.listener.ExampleCacheListener
+create region --name=example-region --type=REPLICATE --cache-listener=org.apache.geode_examples.listener.ExampleCacheListener
 describe region --name=example-region

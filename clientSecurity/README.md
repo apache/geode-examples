@@ -57,7 +57,7 @@ For more information on what permission is required for a given operation,
   
   Your implementation of `org.apache.geode.security.AuthInitialize` should handle the interaction
    with any existing security infrastructure (e.g., ldap).  In this example, we provide a trivial
-   implementation in `org.apache.geode.examples.clientSecurity.ExampleAuthInit`.
+   implementation in `org.apache.geode_examples.clientSecurity.ExampleAuthInit`.
 
   These credentials are then given to your implementation
    of `org.apache.geode.security.SecurityManager`

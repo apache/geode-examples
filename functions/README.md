@@ -21,7 +21,7 @@ This is a simple example that calculates which integers in the region are prime 
 
 The data for a region resides in memory in the JVM for the server. Functions provide a means for calculations to be performed on the data inside the server, avoiding the transfer of the data. For large values, the latency of transferring the data from the server to the client can be large enough to adversely impact performance. Additionally, the server may have access to resources that are unavailable to the client.
 
-A function is implemented by creating a Java class that implements `org.apache.geode.examples.functions.Function`. Using the function context that is passed to a function's execution, the function can access the data from the region. The function's results can be returned from the server to the client using the result sender.
+A function is implemented by creating a Java class that implements `org.apache.geode_examples.functions.Function`. Using the function context that is passed to a function's execution, the function can access the data from the region. The function's results can be returned from the server to the client using the result sender.
 
 The `deploy` command in `gfsh` deploys all the functions in the specified JAR file. A function's implementation of `execute()` will be run inside the server when `org.apache.geode.cache.execute.Execution.execute()` is invoked for that function.
 
