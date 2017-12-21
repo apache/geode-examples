@@ -28,7 +28,7 @@ create async-event-queue --id=example-async-event-queue \
   --enable-batch-conflation=false \
   --batch-size=1 \
   --batch-time-interval=0 \
-  --listener=org.apache.geode.examples.async.ExampleAsyncEventListener
+  --listener=org.apache.geode_examples.async.ExampleAsyncEventListener
 list async-event-queues
 
 create region --name=incoming-region --type=REPLICATE --async-event-queue-id=example-async-event-queue

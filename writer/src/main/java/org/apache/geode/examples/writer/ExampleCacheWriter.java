@@ -12,7 +12,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.apache.geode.examples.writer;
+package org.apache.geode_examples.writer;
 
 import org.apache.geode.cache.CacheWriter;
 import org.apache.geode.cache.CacheWriterException;

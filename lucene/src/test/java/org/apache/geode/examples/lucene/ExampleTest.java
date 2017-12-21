@@ -12,7 +12,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.apache.geode.examples.lucene;
+package org.apache.geode_examples.lucene;
 
 import static org.junit.Assert.assertEquals;
 
