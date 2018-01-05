@@ -76,7 +76,7 @@ tutorial.
 *  [Cache Listeners](listener/README.md)
 *  [Async Event Queues & Async Event Listeners](async/README.md)
 *  Continuous Querying
-*  Transactions
+*  [Transaction](transaction/README.md)
 *  [Eviction](eviction/README.md)
 *  [Expiration](expiration/README.md)
 *  Overflow
@@ -85,6 +85,7 @@ tutorial.
 
 ### Advanced
 
+*  [Lucene Spatial Indexing](luceneSpatial/README.md)
 *  WAN Gateway
 *  Durable subscriptions
 *  Delta propagation
