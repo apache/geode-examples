@@ -74,7 +74,7 @@ tutorial.
 *  Continuous Querying
 *  Transactions
 *  [Eviction](eviction/README.md)
-*  Expiration
+*  [Expiration](expiration/README.md)
 *  Overflow
 *  Security
 *  Off-heap
