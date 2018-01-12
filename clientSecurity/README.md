@@ -18,7 +18,8 @@ limitations under the License.
 # Geode security example - Client
 
 This example demonstrates basic command security and user authentication in a client application
-backed by a secured Geode cluster.  This example assumes that Java and Geode are installed.
+backed by a secured Geode cluster, also it demonstrates use of secure sockets (SSL) between all
+members and between client/server.  This example assumes that Java is installed.
 
 ## Security Basics
 
