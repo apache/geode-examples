@@ -42,8 +42,8 @@ start server --name=server2 --locators=127.0.0.1[10334]\
 # To create a region, we can connect as any user with CLUSTER:MANAGE
 
 connect --user=superUser --password=123 --use-ssl=true \
-  --key-store=trusted.keystore --key-store-password=password \
-  --trust-store=trusted.keystore --trust-store-password=password
+  --key-store=keystore.jks --key-store-password=password \
+  --trust-store=truststore.jks --trust-store-password=password
 
 create region --name=region1 --type=REPLICATE
 create region --name=region2 --type=PARTITION

@@ -15,6 +15,6 @@
 # limitations under the License.
 #
 connect --locator=127.0.0.1[10334] --user=superUser --password=123 --use-ssl=true \
-   --key-store=./trusted.keystore --key-store-password=password \
-   --trust-store=./trusted.keystore --trust-store-password=password
+   --key-store=./keystore.jks --key-store-password=password \
+   --trust-store=./truststore.jks --trust-store-password=password
 shutdown --include-locators=true

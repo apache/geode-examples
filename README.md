@@ -28,8 +28,7 @@ or submit a [pull request](https://github.com/apache/geode/pull/new/develop).
 
 # Apache Geode Version
 
-If you are on develop, examples are run against the latest snapshot release. To run against a specific
-geode version you can check out the corresponding release/*.*.* branch or update gradle.properties.
+Check out the master branch to run examples against the latest geode release.
 
 ## Running an example
 
