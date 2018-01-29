@@ -26,6 +26,10 @@ Contributions<sup>[2]</sup> and corrections are welcome. Please talk to us
 about your suggestions at [dev@geode.apache.org](mailto:dev@geode.apache.org)
 or submit a [pull request](https://github.com/apache/geode/pull/new/develop).
 
+# Apache Geode Version
+
+Check out the master branch to run examples against the latest geode release.
+
 ## Running an example
 
 The gradle build will automatically download and install a Geode release in the

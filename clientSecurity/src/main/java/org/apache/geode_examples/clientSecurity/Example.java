@@ -59,6 +59,11 @@ public class Example implements AutoCloseable {
     Properties props = new Properties();
     props.setProperty("security-username", username);
     props.setProperty("security-client-auth-init", ExampleAuthInit.class.getName());
+    props.setProperty("ssl-enabled-components", "all");
+    props.setProperty("ssl-keystore", "keystore.jks");
+    props.setProperty("ssl-keystore-password", "password");
+    props.setProperty("ssl-truststore", "truststore.jks");
+    props.setProperty("ssl-truststore-password", "password");
 
     // connect to the locator using default port 10334
     cache = new ClientCacheFactory(props).setPoolSubscriptionEnabled(true)

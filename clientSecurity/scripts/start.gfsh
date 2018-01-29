@@ -20,7 +20,7 @@
 # This requires that the example_security.json be on the classpath.
 # Recall that the --classpath option is specified relative to the locator's working directory.
 
-start locator --name=locator --bind-address=127.0.0.1\
+start locator --name=locator --bind-address=127.0.0.1 --connect=false\
  --security-properties-file=example_security.properties --classpath=../build/resources/main/
 
 # Now we may start our cluster.
@@ -41,6 +41,9 @@ start server --name=server2 --locators=127.0.0.1[10334]\
 # To execute any online commands, we need to connect to the locator
 # To create a region, we can connect as any user with CLUSTER:MANAGE
 
-connect --user=superUser --password=123
+connect --user=superUser --password=123 --use-ssl=true \
+  --key-store=keystore.jks --key-store-password=password \
+  --trust-store=truststore.jks --trust-store-password=password
+
 create region --name=region1 --type=REPLICATE
 create region --name=region2 --type=PARTITION
