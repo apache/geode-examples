@@ -70,7 +70,7 @@ tutorial.
 
 *  [Serialization](serialization/README.md)
 *  Lucene Indexing
-*  OQL Indexing
+*  [OQL Indexing](indexes/README.md)
 *  [Cache Loader](loader/README.md)
 *  [Cache Writer](writer/README.md)
 *  [Cache Listeners](listener/README.md)
