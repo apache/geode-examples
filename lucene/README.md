@@ -51,7 +51,7 @@ will also be retrieved from the region and printed to the console.
 
         $ gfsh
         ...
-        gfsh>connect --locators=127.0.0.1[10334]
+        gfsh>connect --locators=localhost[10334]
         gfsh>query --query="select * from /example-region"
         ...
 
@@ -59,7 +59,7 @@ will also be retrieved from the region and printed to the console.
 
         gfsh> list lucene indexes
 
-    Note that each server that holds partitioned data for this region has both the ```simpleIndex``` and the ```analyzerIndex```. Each Lucene index is stored as a co-located region with the partitioned data region.
+    Note that each server that holds partitioned data for this region has both the ```simpleIndex``` , ```analyzerIndex``` and the ```nestedObjectIndex```. Each Lucene index is stored as a co-located region with the partitioned data region.
 
      // Search for an exact name match
         gfsh>search lucene --name=simpleIndex --region=example-region --queryStrings="Jive" --defaultField=lastName
@@ -72,6 +72,16 @@ will also be retrieved from the region and printed to the console.
 
      // Do a compound search on last name and email using analyzerIndex
         gfsh>search lucene --name=analyzerIndex --region=example-region --queryStrings="lastName:hall~ AND email:Kris.Call@example.com" --defaultField=lastName
+
+     // Do a compound search on nested object with both 5035330001 AND 5036430001 in contacts
+     // Note: 5035330001 is the phone number of one of the contacts, 5036430001 is phone number of another contact. Since they are both contacts of this employee, it will lead to this employee. 
+        gfsh>search lucene --name=nestedObjectIndex --region=/example-region --queryString="5035330001 AND 5036430001" --defaultField=contacts.phoneNumbers
+
+     // If query on 5035330001 AND 5036430002, it will not find the person, because the 2 phone numbers belong to different people's contacts. 
+        gfsh>search lucene --name=nestedObjectIndex --region=/example-region --queryString="5035330001 AND 5036430002" --defaultField=contacts.phoneNumbers
+
+     // If query on 5035330001 OR 5036430002, it will find 2 people's entries
+        gfsh>search lucene --name=nestedObjectIndex --region=/example-region --queryString="5035330001 OR 5036430002" --defaultField=contacts.phoneNumbers
 
 3. Examine the Lucene index statistics
 

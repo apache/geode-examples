@@ -17,7 +17,7 @@ limitations under the License.
 
 [<img src="https://geode.apache.org/img/apache_geode_logo.png" align="center"/>](http://geode.apache.org)
 
-[![Build Status](https://travis-ci.org/apache/geode-examples.svg?branch=develop)](https://travis-ci.org/apache/geode-examples) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Build Status](https://travis-ci.org.apache.geode_examples.svg?branch=develop)](https://travis-ci.org.apache.geode_examples) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 # Apache Geode examples
 
@@ -50,7 +50,7 @@ usage:
 The following sections call out ready-made examples or new examples that could
 be built.  You may want to start your journey with the [Apache Geode in 15
 minutes or
-Less](http://geode.apache.org/docs/guide/getting_started/15_minute_quickstart_gfsh.html)
+Less](http://geode.apache.org/docs/guide/13/getting_started/15_minute_quickstart_gfsh.html)
 tutorial.
 
 ### Basics
@@ -58,7 +58,8 @@ tutorial.
 *  [Replicated Region](replicated/README.md)
 *  [Partitioned Region](partitioned/README.md)
 *  [Put Multiple Values at Once](putall/README.md)
-*  Persistence
+*  [Functions](functions/README.md)
+*  [Persistence](persistence/README.md)
 *  OQL (Querying)
 
 ### Intermediate
@@ -67,9 +68,10 @@ tutorial.
 *  Lucene Indexing
 *  OQL Indexing
 *  Functions
-*  CacheLoader & CacheWriter
-*  Listeners
-*  Async Event Queues
+*  [Cache Loader](loader/README.md)
+*  [Cache Writer](writer/README.md)
+*  [Cache Listeners](listener/README.md)
+*  [Async Event Queues & Async Event Listeners](async/README.md)
 *  Continuous Querying
 *  Transactions
 *  Eviction
@@ -106,7 +108,7 @@ Follow this approach to add a new example:
 
 * Create a subdirectory with a descriptive name like `cache-writer`
 * Create a `README.md` file in the example subproject to walk the user through the tutorial
-* Create a Java class with a main method in the `org.apache.geode.examples.$name.Example` class
+* Create a Java class with a main method in the `org.apache.geode_examples.$name.Example` class
 * Create a cluster initialization script in `scripts/start.gfsh`
 * Create a cluster shutdown script in `scripts/stop.gfsh`
 
