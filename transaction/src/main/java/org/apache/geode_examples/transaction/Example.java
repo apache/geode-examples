@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Example {
-  public static final int INCREMENTS = 100;
+  public static final int INCREMENTS = 1000;
 
   public static final String REGION_NAME = "example-region";
 

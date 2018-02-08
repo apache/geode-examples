@@ -62,18 +62,7 @@ public class Incrementer {
           cacheTransactionManager.commit();
           incremented = true;
         } catch (CommitConflictException cce) {
-          try {
-            cacheTransactionManager.rollback();
-          } catch (IllegalStateException ise) {
-            // Do nothing.
-          }
-        } catch (Exception e) {
-          try {
-            cacheTransactionManager.rollback();
-          } catch (Throwable t) {
-            // Do nothing.
-          }
-          break;
+          // Do nothing.
         }
       }
     }
