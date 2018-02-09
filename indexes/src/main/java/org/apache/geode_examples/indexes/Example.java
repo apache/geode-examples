@@ -26,31 +26,13 @@ import org.apache.geode.cache.query.QueryService;
 import org.apache.geode.cache.query.SelectResults;
 import org.apache.geode.cache.query.TypeMismatchException;
 
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.PrimitiveIterator;
-import java.util.Random;
-
 public class Example {
-  static final String[] airlines = "FFT,NKS,ASQ,AAL,UAL,SKW,SWA,HAL,JBU,VRD,DAL,ASA,EIA".split(",");
-  static final String[] cities =
-      "Arendelle City,Szohôd,Portland,Elbonia City,Florin City,Edelweiss,Doomstadt,Markovburg,Parador City,Rio Lindo"
-          .split(",");
-  static final String[] firstNames =
-      "Ava,Brooklyn,Charlotte,Delilah,Emma,Faith,Grace,Harper,Isabella,Julia,Kaylee,Lillian,Mia,Natalie,Olivia,Peyton,Quinn,Riley,Sophia,Taylor,Unique,Victoria,Willow,Ximena,Yaretzi,Zoey"
-          .split(",");
-  static final String[] lastNames =
-      "Smith,Johnson,Williams,Brown,Jones,Miller,Davis,Garcia,Rodriguez,Wilson,Martinez,Anderson,Taylor,Thomas,Hernandez,Moore,Martin,Jackson,Thompson,White,Lopez,Lee,Gonzalez,Harris,Clark,Lewis"
-          .split(",");
   static String REGIONNAME = "example-region";
   static String NON_INDEXED_QUERY = "SELECT DISTINCT * FROM /" + REGIONNAME;
-  static String COMPACT_RANGE_INDEXED_QUERY =
-      // "SELECT DISTINCT * FROM /" + REGIONNAME + " p WHERE p.lastName=$1";
+  static String TOP_LEVEL_INDEX_QUERY =
       "SELECT DISTINCT * FROM /" + REGIONNAME + " p WHERE p.name LIKE $1";
-  static String NON_COMPACT_RANGE_INDEXED_QUERY =
+  static String NESTED_INDEX_QUERY =
       "SELECT DISTINCT * FROM /" + REGIONNAME + " p WHERE p.flight.airlineCode=$1";
-  Random random = new Random();
-  LinkedList<FlightCode> flights = new LinkedList<>();
 
   public static void main(String[] args) {
     // connect to the locator using default port 10334
@@ -65,54 +47,21 @@ public class Example {
     Region<String, Passenger> region = clientRegionFactory.create("example-region");
     QueryService queryService = cache.getQueryService();
 
-    example.populateFlights(50);
-    example.insertPassengers(250, region);
+    RegionPopulator populator = new RegionPopulator();
+    populator.populateRegion(region);
+
     System.out.println("Total number of passengers: "
         + example.countResults(queryService, NON_INDEXED_QUERY, new Object[] {}));
-    for (String lastName : lastNames) {
+    for (String lastName : populator.lastNames) {
       System.out.println("Flights for " + lastName + ": " + example.countResults(queryService,
-          COMPACT_RANGE_INDEXED_QUERY, new Object[] {"%" + lastName}));
+          TOP_LEVEL_INDEX_QUERY, new Object[] {"%" + lastName}));
     }
-    for (String airline : airlines) {
-      System.out.println("Flights for " + airline + ": " + example.countResults(queryService,
-          NON_COMPACT_RANGE_INDEXED_QUERY, new Object[] {airline}));
+    for (String airline : populator.airlines) {
+      System.out.println("Flights for " + airline + ": "
+          + example.countResults(queryService, NESTED_INDEX_QUERY, new Object[] {airline}));
     }
 
     cache.close();
-  }
-
-  void populateFlights(int numberOfFlights) {
-    PrimitiveIterator.OfInt flightNumbers = random.ints(1, 1000).iterator();
-    PrimitiveIterator.OfInt airlineIndexes = random.ints(0, airlines.length).iterator();
-    PrimitiveIterator.OfInt cityIndexes = random.ints(0, cities.length).iterator();
-    while (flights.size() < numberOfFlights) {
-      String departure = cities[cityIndexes.next()];
-      String arrival = cities[cityIndexes.next()];
-      while (departure.equals(arrival)) {
-        arrival = cities[cityIndexes.next()];
-      }
-      FlightCode flight =
-          new FlightCode(airlines[airlineIndexes.next()], flightNumbers.next(), departure, arrival);
-      flights.add(flight);
-    }
-  }
-
-  void insertPassengers(int numberOfPassengers, Region<String, Passenger> region) {
-    PrimitiveIterator.OfInt firstNameIndexes = random.ints(0, firstNames.length).iterator();
-    PrimitiveIterator.OfInt lastNameIndexes = random.ints(0, lastNames.length).iterator();
-    PrimitiveIterator.OfInt ages = random.ints(20, 100).iterator();
-    PrimitiveIterator.OfInt flightIndexes = random.ints(0, flights.size()).iterator();
-    PrimitiveIterator.OfInt milliSeconds = random.ints(0, 7 * 24 * 60 * 60 * 1000).iterator();
-    while (region.sizeOnServer() < numberOfPassengers) {
-      String name = firstNames[firstNameIndexes.next()] + " " + lastNames[lastNameIndexes.next()];
-      if (!region.containsKey(name)) {
-        final long departure = System.currentTimeMillis() + milliSeconds.next();
-        final long arrival = departure + milliSeconds.next();
-        Passenger passenger = new Passenger(name, ages.next(), flights.get(flightIndexes.next()),
-            new Date(departure), new Date(arrival));
-        region.put(passenger.getName(), passenger);
-      }
-    }
   }
 
   int countResults(QueryService queryService, String queryString, Object[] params) {

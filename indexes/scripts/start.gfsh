@@ -21,6 +21,6 @@ start server --name=server2 --locators=127.0.0.1[10334] --server-port=0 --classp
 list members
 
 create region --name=example-region --type=REPLICATE --skip-if-exists=true
-create index --name=compactRangeIndex --expression=lastName --region=/example-region
-create index --name=nonCompactRangeIndex --expression=flight.airlineCode --region=/example-region
+create index --name=topLevelIndex --expression=name --region=/example-region
+create index --name=nestedIndex --expression=flight.airlineCode --region=/example-region
 describe region --name=example-region

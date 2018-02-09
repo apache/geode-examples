@@ -17,14 +17,23 @@ limitations under the License.
 
 # Geode OQL Indexing Example
 
-This example demonstrates a compact range index for OQL queries on a region.
+This example demonstrates a compact range index for OQL
+[queries](https://geode.apache.org/docs/guide/11/developing/query_index/query_index.html)
+on a region.
 
-<!-- TODO SARGE
-In this example, two servers host a single partitioned region with entries
-that represent employee information.
-The example does queries through the API and presents example queries
-to be invoked through the `gfsh` command-line interface.
--->
+A region can contain objects of arbitrary complexity, including objects that contain other objects.
+The values of a region can be queried using
+[OQL](https://geode.apache.org/docs/guide/11/developing/querying_basics/chapter_overview.html) and
+OQL queries can reference fields in the objects in the region. Indexes can be created to improve
+the performance of queries. Certain optimizations occur for top-level fields but indexes can also be
+created for nested fields, i.e., fields of objects that are contained with the objects in the
+region.
+
+This example uses a mock database of passengers and flights stored in a single region. Since the
+region contains passenger objects, the index on passenger name uses a top-level field.
+Since flight code objects are contained within a passenger object, the index on airline code uses a
+nested field. After randomly populating the mock database, this example shows the results of queries
+that use no index, a top-level index, and a nested index.
 
 This example assumes that Java and Geode are installed.
 
