@@ -34,27 +34,6 @@ public class PC {
     return new PC(names[nameIndexes.next()], hps.next());
   }
 
-  public static String[] toArray(Collection<PC> pcs) {
-    String[] args = new String[2 * pcs.size()];
-    int index = 0;
-    for (PC pc : pcs) {
-      args[index++] = pc.name;
-      args[index++] = Integer.toString(pc.hp);
-    }
-    return args;
-  }
-
-  public static List<PC> toList(String[] args) {
-    List<PC> pcs = new ArrayList<>();
-    int index = 0;
-    while (index + 1 < args.length) {
-      final String name = args[index++];
-      final int hp = Integer.parseInt(args[index++]);
-      pcs.add(new PC(name, hp));
-    }
-    return pcs;
-  }
-
   public PC() {
     // Do nothing.
   }
