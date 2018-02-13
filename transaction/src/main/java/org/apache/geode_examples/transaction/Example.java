@@ -74,7 +74,7 @@ public class Example {
     String[] command = new String[5];
     command[0] = constructJVMPath();
     command[1] = "-classpath";
-    command[2] = System.getProperty("java.class.path");
+    command[2] = System.getProperty("java.class.path") + ":build/libs/transaction.jar";
     command[3] = "org.apache.geode_examples.transaction.Incrementer";
     command[4] = Integer.toString(id);
     try {
