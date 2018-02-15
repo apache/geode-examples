@@ -17,7 +17,7 @@ limitations under the License.
 
 # Geode OQL Indexing Example
 
-This example demonstrates a compact range index for OQL
+This example demonstrates an index for OQL
 [queries](https://geode.apache.org/docs/guide/11/developing/query_index/query_index.html)
 on a region.
 
