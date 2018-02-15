@@ -24,11 +24,12 @@ import org.apache.geode.cache.client.ClientRegionShortcut;
 
 public class Incrementer {
   final int id;
-
+  final ClientCache cache;
   final Region<String, Integer> region;
 
-  Incrementer(int id, Region<String, Integer> region) {
+  Incrementer(int id, ClientCache cache, Region<String, Integer> region) {
     this.id = id;
+    this.cache = cache;
     this.region = region;
   }
 
@@ -42,14 +43,13 @@ public class Incrementer {
         cache.createClientRegionFactory(ClientRegionShortcut.PROXY);
     Region<String, Integer> region = clientRegionFactory.create(Example.REGION_NAME);
 
-    Incrementer incrementer = new Incrementer(Integer.parseInt(args[0]), region);
+    Incrementer incrementer = new Incrementer(Integer.parseInt(args[0]), cache, region);
     incrementer.incrementEntry();
 
     cache.close();
   }
 
   void incrementEntry() {
-    ClientCache cache = (ClientCache) region.getRegionService();
     CacheTransactionManager cacheTransactionManager = cache.getCacheTransactionManager();
     for (int i = 0; i < Example.INCREMENTS; ++i) {
       boolean incremented = false;
