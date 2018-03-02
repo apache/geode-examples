@@ -105,10 +105,10 @@ subprojects {
     environment 'PATH', geodePath
     ignoreExitValue true
     commandLine 'sh', '-c', "" +
-            "TIMEOUT=10 ;" +
+            "TIMEOUT=20 ;" +
             "echo \"Waiting at most \$TIMEOUT seconds for all members to shut down...\" ;" +
             "while pgrep -f \"(Server|Locator)Launcher\" > /dev/null ; do" +
-            "  echo \"Waiting at most \${TIMEOUT} seconds...\" ; " +
+            "  printf \".\" ; " +
             "  sleep 1 ;" +
             "  TIMEOUT=\$((\$TIMEOUT - 1)) ;" +
             "  if [ \$TIMEOUT -eq 0 ] ; then" +
