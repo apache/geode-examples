@@ -107,7 +107,8 @@ subprojects {
     commandLine 'sh', '-c', "" +
             "TIMEOUT=10 ;" +
             "echo \"Waiting at most \$TIMEOUT seconds for all members to shut down...\" ;" +
-            "while pgrep -f \"(Server|Locator)Launcher\" > /dev/null ; do  printf \".\" ; " +
+            "while pgrep -f \"(Server|Locator)Launcher\" > /dev/null ; do" +
+            "  echo \"Waiting at most \${TIMEOUT} seconds...\" ; " +
             "  sleep 1 ;" +
             "  TIMEOUT=\$((\$TIMEOUT - 1)) ;" +
             "  if [ \$TIMEOUT -eq 0 ] ; then" +
