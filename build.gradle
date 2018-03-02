@@ -110,7 +110,7 @@ subprojects {
             "while pgrep -f \"(Server|Locator)Launcher\" > /dev/null ; do  printf \".\" ; " +
             "  sleep 1 ;" +
             "  TIMEOUT=\$((\$TIMEOUT - 1)) ;" +
-            "  if [[ \$TIMEOUT -eq 0 ]] ; then" +
+            "  if [ \$TIMEOUT -eq 0 ] ; then" +
             "    echo \"\" ;" +
             "    exit 10 ;" +
             "  fi ;" +
