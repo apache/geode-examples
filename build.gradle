@@ -132,7 +132,8 @@ subprojects {
     environment 'GEODE_HOME', installDir
     environment 'PATH', geodePath
     ignoreExitValue true
-    commandLine 'sh', '-c', "pgrep -f \"(Server|Locator)Launcher\" > /dev/null ; "
+    commandLine 'sh', '-c', "echo \"Looking for existing member processes...\" ; " +
+            "pgrep -f \"(Server|Locator)Launcher\" ; "
     doLast {
       if (execResult.exitValue == 0) {
         throw new GradleException("Existing members detected.  Examples expect a clean environment in which to run.")
