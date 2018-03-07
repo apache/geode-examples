@@ -104,7 +104,7 @@ subprojects {
     environment 'GEODE_HOME', installDir
     environment 'PATH', geodePath
     ignoreExitValue true
-    commandLine 'sh', '-c', "" +
+    commandLine 'bash', '-c', "" +
             "TIMEOUT=10 ;" +
             "echo \"Waiting at most \$TIMEOUT seconds for all members to shut down...\" ;" +
             "while pgrep -f \"(Server|Locator)Launcher\" > /dev/null ; do  printf \".\" ; " +
