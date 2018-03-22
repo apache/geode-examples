@@ -75,7 +75,7 @@ tutorial.
 *  [Cache Writer](writer/README.md)
 *  [Cache Listeners](listener/README.md)
 *  [Async Event Queues & Async Event Listeners](async/README.md)
-*  Continuous Querying
+*  [Continuous Querying](cq/README.md)
 *  [Transaction](transaction/README.md)
 *  [Eviction](eviction/README.md)
 *  [Expiration](expiration/README.md)
