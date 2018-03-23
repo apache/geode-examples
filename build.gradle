@@ -109,7 +109,8 @@ subprojects {
             "TIMEOUT=\\\$((\\$INTERVAL * 25)) ;" +
             "echo \"Waiting at most \$TIMEOUT seconds for all members to shut down...\" ;" +
             "while pgrep -f \"(Server|Locator)Launcher\" > /dev/null ; do" +
-            "  printf \".\" ; " +
+            "  date ;" +
+            "  pgrep -f \"(Server|Locator)Launcher\" ;" +
             "  sleep $INTERVAL ;" +
             "  TIMEOUT=\$((\$TIMEOUT - \$INTERVAL)) ;" +
             "  if [ \$TIMEOUT -eq 0 ] ; then" +
