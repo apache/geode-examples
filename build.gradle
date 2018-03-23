@@ -106,7 +106,7 @@ subprojects {
     ignoreExitValue true
     commandLine 'sh', '-c', "" +
             "INTERVAL=5 ;" +
-            "TIMEOUT=\\\$((\\$INTERVAL * 25)) ;" +
+            "TIMEOUT=\$((\$INTERVAL * 25)) ;" +
             "echo \"Waiting at most \$TIMEOUT seconds for all members to shut down...\" ;" +
             "while pgrep -f \"(Server|Locator)Launcher\" > /dev/null ; do" +
             "  date ;" +
