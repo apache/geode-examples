@@ -14,18 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-version = 1.5.0
-geodeVersion = 1.5.0
 
-# release properties, set these on the command line to validate against
-# a release candidate
-geodeRepositoryUrl =
-geodeReleaseUrl =
+start locator --name=locator --bind-address=127.0.0.1
+start server --name=server1 --locators=127.0.0.1[10334] --server-port=0 --classpath=../build/classes/main
+start server --name=server2 --locators=127.0.0.1[10334] --server-port=0 --classpath=../build/classes/main
+list members
 
-# dependency versions
-assertjVersion = 3.6.2
-awaitilityVersion = 1.7.0
-junitVersion = 4.12
-mockitocoreVersion = 1.10.19
-log4jVersion = 2.7
-systemrulesVersion = 1.16.1
+create region --name=example-region --type=REPLICATE --skip-if-exists=true \
+    --eviction-entry-count=10 --eviction-action=local-destroy
+describe region --name=example-region
