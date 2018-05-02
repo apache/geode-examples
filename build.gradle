@@ -105,12 +105,13 @@ subprojects {
     environment 'PATH', geodePath
     ignoreExitValue true
     commandLine 'sh', '-c', "" +
-            "TIMEOUT=10 ;" +
+            "TIMEOUT=120 ;" +
             "echo \"Waiting at most \$TIMEOUT seconds for all members to shut down...\" ;" +
-            "while pgrep -f \"(Server|Locator)Launcher\" > /dev/null ; do  printf \".\" ; " +
+            "while pgrep -f \"(Server|Locator)Launcher\" > /dev/null ; do" +
+            "  printf \".\" ; " +
             "  sleep 1 ;" +
             "  TIMEOUT=\$((\$TIMEOUT - 1)) ;" +
-            "  if [[ \$TIMEOUT -eq 0 ]] ; then" +
+            "  if [ \$TIMEOUT -eq 0 ] ; then" +
             "    echo \"\" ;" +
             "    exit 10 ;" +
             "  fi ;" +
@@ -131,7 +132,8 @@ subprojects {
     environment 'GEODE_HOME', installDir
     environment 'PATH', geodePath
     ignoreExitValue true
-    commandLine 'sh', '-c', "pgrep -f \"(Server|Locator)Launcher\" > /dev/null ; "
+    commandLine 'sh', '-c', "echo \"Looking for existing member processes...\" ; " +
+            "pgrep -f \"(Server|Locator)Launcher\" ; "
     doLast {
       if (execResult.exitValue == 0) {
         throw new GradleException("Existing members detected.  Examples expect a clean environment in which to run.")
