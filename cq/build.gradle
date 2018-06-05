@@ -14,24 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-rootProject.name = 'geode-examples'
-
-include 'replicated'
-include 'partitioned'
-include 'queries'
-include 'lucene'
-include 'loader'
-include 'putall'
-include 'clientSecurity'
-include 'functions'
-include 'persistence'
-include 'writer'
-include 'listener'
-include 'async'
-include 'luceneSpatial'
-include 'eviction'
-include 'serialization'
-include 'expiration'
-include 'indexes'
-include 'transaction'
-include 'cq'
+dependencies {
+    compile "org.apache.geode:geode-cq:$geodeVersion"
+}

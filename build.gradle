@@ -68,7 +68,7 @@ subprojects {
   jar {
     archiveName "${baseName}.${extension}"
   }
-  
+
   task cleanServer {
     doLast {
       delete 'locator'
@@ -105,12 +105,13 @@ subprojects {
     environment 'PATH', geodePath
     ignoreExitValue true
     commandLine 'sh', '-c', "" +
-            "TIMEOUT=120 ;" +
+            "TIMEOUT=125 ;" +
             "echo \"Waiting at most \$TIMEOUT seconds for all members to shut down...\" ;" +
             "while pgrep -f \"(Server|Locator)Launcher\" > /dev/null ; do" +
-            "  printf \".\" ; " +
-            "  sleep 1 ;" +
-            "  TIMEOUT=\$((\$TIMEOUT - 1)) ;" +
+            "  date ;" +
+            "  pgrep -f \"(Server|Locator)Launcher\" ;" +
+            "  sleep 5;" +
+            "  TIMEOUT=\$((\$TIMEOUT - 5)) ;" +
             "  if [ \$TIMEOUT -eq 0 ] ; then" +
             "    echo \"\" ;" +
             "    exit 10 ;" +
