@@ -14,7 +14,7 @@
  */
 package org.apache.geode_examples.functions;
 
-import static org.junit.Assert.assertEquals;
+import static org.jgroups.util.Util.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -22,11 +22,11 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+import org.junit.Test;
+
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.execute.Execution;
 import org.apache.geode.cache.execute.ResultCollector;
-
-import org.junit.Test;
 
 public class ExampleTest {
   @Test

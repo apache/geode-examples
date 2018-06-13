@@ -51,7 +51,7 @@ will also be retrieved from the region and printed to the console.
 
         $ gfsh
         ...
-        gfsh>connect --locators=localhost[10334]
+        gfsh>connect --locator=localhost[10334]
         gfsh>query --query="select * from /example-region"
         ...
 
