@@ -43,6 +43,7 @@ configurations {
 
 dependencies {
     geodeDistribution "org.apache.geode:apache-geode:$geodeVersion"
+
 }
 
 task installGeode(type: Copy) {

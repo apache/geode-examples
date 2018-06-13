@@ -21,15 +21,17 @@ import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.client.ClientRegionShortcut;
 import org.apache.geode.cache.query.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
+
 import com.google.common.base.Stopwatch;
 
 
 
 public class Example {
 
-  ClientCache cache;
-  Region<Integer, Integer> region;
-  CqQuery randomTracker;
+  private ClientCache cache;
+  private Region<Integer, Integer> region;
+  private CqQuery randomTracker;
 
   private void init() throws CqException, RegionNotFoundException, CqExistsException {
     // init cache, region, and CQ
@@ -69,24 +71,21 @@ public class Example {
 
     mExample.close();
 
+    System.out.println("\n---- So that is CQ's----\n");
+
   }
 
   private CqQuery startCQ(ClientCache cache, Region region)
       throws CqException, RegionNotFoundException, CqExistsException {
     // Get cache and queryService - refs to local cache and QueryService
 
-    // Create CqAttribute using CqAttributeFactory
     CqAttributesFactory cqf = new CqAttributesFactory();
     cqf.addCqListener(new RandomEventListener());
     CqAttributes cqa = cqf.create();
 
     String cqName = "randomTracker";
 
-    // the CQListener, RandomTracker, will print to standard out if either a value is put or updated
-    // that is
-    // greater than 70
     String queryStr = "SELECT * FROM /example-region i where i > 70";
-
 
     QueryService queryService = region.getRegionService().getQueryService();
     CqQuery randomTracker = queryService.newCq(cqName, queryStr, cqa);
@@ -100,19 +99,24 @@ public class Example {
 
   private void startPuttingData(Region region) throws InterruptedException {
 
-    // TODO add in a timing so this doesn't go forever
-    while (true) {
+    // Example will run for 20 second
 
-      // 1 second delay to make this easier to follow along
-       Thread.sleep(1000);
+    Stopwatch stopWatch = Stopwatch.createStarted();
+
+    while (stopWatch.elapsed(TimeUnit.SECONDS) < 20) {
+
+      // 500ms delay to make this easier to follow
+      Thread.sleep(500);
       int randomKey = ThreadLocalRandom.current().nextInt(0, 99 + 1);
       int randomValue = ThreadLocalRandom.current().nextInt(0, 100 + 1);
       region.put(randomKey, randomValue);
       System.out.println("Key: " + randomKey + "     Value: " + randomValue);
+
     }
 
-  }
+    stopWatch.stop();
 
+  }
 
 
   private ClientCache connectToLocallyRunningGeodge() {
