@@ -16,136 +16,138 @@
  */
 
 plugins {
-  id "org.nosphere.apache.rat" version "0.3.0"
-  id "com.diffplug.gradle.spotless" version "3.0.0"
-  id "de.undercouch.download" version "3.1.2"
+    id "org.nosphere.apache.rat" version "0.3.0"
+    id "com.diffplug.gradle.spotless" version "3.0.0"
+    id "de.undercouch.download" version "3.1.2"
 }
 
 allprojects {
-  repositories {
-    if (geodeRepositoryUrl != "") {
-      maven {
-        url geodeRepositoryUrl
-      }
+    repositories {
+        if (geodeRepositoryUrl != "") {
+            maven {
+                url geodeRepositoryUrl
+            }
+        }
+        mavenCentral()
+        maven {
+            url 'http://repository.apache.org/snapshots'
+        }
     }
-    mavenCentral()
-    maven {
-      url 'http://repository.apache.org/snapshots'
-    }
-  }
 }
 
 def installDir = "$buildDir/apache-geode-${geodeVersion}"
 
 configurations {
-  geodeDistribution
+    geodeDistribution
 }
 
 dependencies {
-  geodeDistribution "org.apache.geode:apache-geode:$geodeVersion"
+    geodeDistribution "org.apache.geode:apache-geode:$geodeVersion"
 }
 
 task installGeode(type: Copy) {
-  from zipTree(configurations.geodeDistribution.singleFile)
-  into buildDir
+    from zipTree(configurations.geodeDistribution.singleFile)
+    into buildDir
 }
 
 subprojects {
-  apply plugin:'java'
+    apply plugin: 'java'
 
-  dependencies {
-    compile "org.apache.geode:geode-core:$geodeVersion"
+    dependencies {
+        compile "org.apache.geode:geode-core:$geodeVersion"
+        compile "org.apache.geode:geode-cq:$geodeVersion"
+        compile 'com.google.guava:guava:25.1-jre'
 
-    testCompile "com.jayway.awaitility:awaitility:$awaitilityVersion"
-    testCompile "junit:junit:$junitVersion"
-    testCompile "org.mockito:mockito-core:$mockitocoreVersion"
-    testCompile "com.github.stefanbirkner:system-rules:$systemrulesVersion"
-    testCompile "org.assertj:assertj-core:$assertjVersion"
-    compile "org.apache.logging.log4j:log4j-core:$log4jVersion"
-    runtime "org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion"
-  }
-
-  jar {
-    archiveName "${baseName}.${extension}"
-  }
-  
-  task cleanServer {
-    doLast {
-      delete 'locator'
-      delete 'server1'
-      delete 'server2'
+        testCompile "com.jayway.awaitility:awaitility:$awaitilityVersion"
+        testCompile "junit:junit:$junitVersion"
+        testCompile "org.mockito:mockito-core:$mockitocoreVersion"
+        testCompile "com.github.stefanbirkner:system-rules:$systemrulesVersion"
+        testCompile "org.assertj:assertj-core:$assertjVersion"
+        compile "org.apache.logging.log4j:log4j-core:$log4jVersion"
+        runtime "org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion"
     }
-  }
-  clean.finalizedBy cleanServer
 
-  def geodePath = "${System.env.PATH}${System.getProperty('path.separator')}${installDir}/bin"
-  task start(type: Exec, dependsOn: [installGeode, build, cleanServer]) {
-    workingDir projectDir
-    environment 'GEODE_HOME', installDir
-    environment 'PATH', geodePath
-    commandLine 'sh', '-c', "gfsh run --file=${projectDir}/scripts/start.gfsh"
-  }
-
-  task stop(type: Exec, dependsOn: installGeode) {
-    workingDir projectDir
-    environment 'GEODE_HOME', installDir
-    environment 'PATH', geodePath
-    commandLine 'sh', '-c', "gfsh run --file=${projectDir}/scripts/stop.gfsh"
-  }
-
-  task run(type: JavaExec, dependsOn: build) {
-    description = 'Run example'
-    classpath = sourceSets.main.runtimeClasspath
-    main = "org.apache.geode_examples.${project.name}.Example"
-  }
-
-  task waitForExitingMembers(type: Exec) {
-    workingDir projectDir
-    environment 'GEODE_HOME', installDir
-    environment 'PATH', geodePath
-    ignoreExitValue true
-    commandLine 'sh', '-c', "" +
-            "TIMEOUT=120 ;" +
-            "echo \"Waiting at most \$TIMEOUT seconds for all members to shut down...\" ;" +
-            "while pgrep -f \"(Server|Locator)Launcher\" > /dev/null ; do" +
-            "  printf \".\" ; " +
-            "  sleep 1 ;" +
-            "  TIMEOUT=\$((\$TIMEOUT - 1)) ;" +
-            "  if [ \$TIMEOUT -eq 0 ] ; then" +
-            "    echo \"\" ;" +
-            "    exit 10 ;" +
-            "  fi ;" +
-            "done ;" +
-            "echo \"\""
-    doLast {
-      // We use exit code 10 to avoid conflict with pgrep exit codes.
-      if (execResult.exitValue == 10) {
-        throw new GradleException("A member process persisted beyond permitted timeout.  Aborting.")
-      } else if (execResult.exitValue != 0) {
-        throw new GradleException("waitForExistingMembers failed with exit code: " + execResult.exitValue)
-      }
+    jar {
+        archiveName "${baseName}.${extension}"
     }
-  }
 
-  task verifyNoMembersRunning(type: Exec) {
-    workingDir projectDir
-    environment 'GEODE_HOME', installDir
-    environment 'PATH', geodePath
-    ignoreExitValue true
-    commandLine 'sh', '-c', "echo \"Looking for existing member processes...\" ; " +
-            "pgrep -f \"(Server|Locator)Launcher\" ; "
-    doLast {
-      if (execResult.exitValue == 0) {
-        throw new GradleException("Existing members detected.  Examples expect a clean environment in which to run.")
-      }
+    task cleanServer {
+        doLast {
+            delete 'locator'
+            delete 'server1'
+            delete 'server2'
+        }
     }
-  }
+    clean.finalizedBy cleanServer
 
-  task runAll(dependsOn: [verifyNoMembersRunning, start, run, stop, waitForExitingMembers])
-  start.mustRunAfter verifyNoMembersRunning
-  run.mustRunAfter start
-  stop.mustRunAfter run
-  waitForExitingMembers.mustRunAfter stop
+    def geodePath = "${System.env.PATH}${System.getProperty('path.separator')}${installDir}/bin"
+    task start(type: Exec, dependsOn: [installGeode, build, cleanServer]) {
+        workingDir projectDir
+        environment 'GEODE_HOME', installDir
+        environment 'PATH', geodePath
+        commandLine 'sh', '-c', "gfsh run --file=${projectDir}/scripts/start.gfsh"
+    }
+
+    task stop(type: Exec, dependsOn: installGeode) {
+        workingDir projectDir
+        environment 'GEODE_HOME', installDir
+        environment 'PATH', geodePath
+        commandLine 'sh', '-c', "gfsh run --file=${projectDir}/scripts/stop.gfsh"
+    }
+
+    task run(type: JavaExec, dependsOn: build) {
+        description = 'Run example'
+        classpath = sourceSets.main.runtimeClasspath
+        main = "org.apache.geode_examples.${project.name}.Example"
+    }
+
+    task waitForExitingMembers(type: Exec) {
+        workingDir projectDir
+        environment 'GEODE_HOME', installDir
+        environment 'PATH', geodePath
+        ignoreExitValue true
+        commandLine 'sh', '-c', "" +
+                "TIMEOUT=120 ;" +
+                "echo \"Waiting at most \$TIMEOUT seconds for all members to shut down...\" ;" +
+                "while pgrep -f \"(Server|Locator)Launcher\" > /dev/null ; do" +
+                "  printf \".\" ; " +
+                "  sleep 1 ;" +
+                "  TIMEOUT=\$((\$TIMEOUT - 1)) ;" +
+                "  if [ \$TIMEOUT -eq 0 ] ; then" +
+                "    echo \"\" ;" +
+                "    exit 10 ;" +
+                "  fi ;" +
+                "done ;" +
+                "echo \"\""
+        doLast {
+            // We use exit code 10 to avoid conflict with pgrep exit codes.
+            if (execResult.exitValue == 10) {
+                throw new GradleException("A member process persisted beyond permitted timeout.  Aborting.")
+            } else if (execResult.exitValue != 0) {
+                throw new GradleException("waitForExistingMembers failed with exit code: " + execResult.exitValue)
+            }
+        }
+    }
+
+    task verifyNoMembersRunning(type: Exec) {
+        workingDir projectDir
+        environment 'GEODE_HOME', installDir
+        environment 'PATH', geodePath
+        ignoreExitValue true
+        commandLine 'sh', '-c', "echo \"Looking for existing member processes...\" ; " +
+                "pgrep -f \"(Server|Locator)Launcher\" ; "
+        doLast {
+            if (execResult.exitValue == 0) {
+                throw new GradleException("Existing members detected.  Examples expect a clean environment in which to run.")
+            }
+        }
+    }
+
+    task runAll(dependsOn: [verifyNoMembersRunning, start, run, stop, waitForExitingMembers])
+    start.mustRunAfter verifyNoMembersRunning
+    run.mustRunAfter start
+    stop.mustRunAfter run
+    waitForExitingMembers.mustRunAfter stop
 }
 
 apply from: "gradle/spotless.gradle"
