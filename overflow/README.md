@@ -19,8 +19,8 @@ limitations under the License.
 
 This examples demonstrates how to use Geode's Overflow to disk.
 
-In this example a server hosts a partitioned region that stores strings. 
-The example shows data being overflowed to disk and removed from memory.
+In this example, a server hosts a partitioned region that stores strings. 
+The example shows entry values being overflowed to disk and removed from memory.
 
 This example assumes that Geode is installed.
 
@@ -30,19 +30,27 @@ current working directory.
 Each step in this example specifies paths relative to that directory.
 
 2. Run a script that starts a locator and two servers. The script
-then creates the ```example-region``` region and puts 4 values.
+then creates the ```example-region``` region and puts 4 entries.
 
         $ gfsh run --file=scripts/start.gfsh
+        
+Note that both the region size and `totalEntriesOnlyOnDisk` are 0 before we put any entries.
 
 3. Shut down the cluster
 
         $ gfsh run --file=scripts/stop.gfsh
         
-4. Notice the line 
-`diskstore | totalEntriesOnlyOnDisk       | 2` from `show metrics --region=example-region`.
+4. In the output of the second `show metrics --region=example-region` command, notice the line
+ 
+`diskstore | totalEntriesOnlyOnDisk       | 2`
+
 This shows that 2 values have been overflowed to disk and are no longer in memory.
-Notice that the size from `describe region --name=example-region` 
-is still 4 `Region   | size                   | 2`. 
+Notice that the size from the second `describe region --name=example-region`
+is still 4 
+
+`Region   | size                   | 4`
+
+Because all the keys remain in memory.
 The entries are still accessible.
 
 
