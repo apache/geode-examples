@@ -75,8 +75,14 @@ subprojects {
     task cleanServer {
         doLast {
             delete 'locator'
+            delete 'locator-ln'
+            delete 'locator-ny'
             delete 'server1'
             delete 'server2'
+            delete 'server-ln-1'
+            delete 'server-ln-2'
+            delete 'server-ny-1'
+            delete 'server-ny-2'
         }
     }
     clean.finalizedBy cleanServer
