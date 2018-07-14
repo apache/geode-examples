@@ -18,6 +18,7 @@ locator
 server
 server1
 server2
+server3
 
 *.iml
 *.ipr
