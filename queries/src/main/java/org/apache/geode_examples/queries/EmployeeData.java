@@ -14,9 +14,8 @@
  */
 package org.apache.geode_examples.queries;
 
-import java.io.Serializable;
 
-public class EmployeeData implements Serializable {
+public class EmployeeData {
   private static final long serialVersionUID = 1L;
 
   private String firstName;
@@ -25,6 +24,8 @@ public class EmployeeData implements Serializable {
   private String email;
   private int salary;
   private int hoursPerWeek;
+
+  public EmployeeData() {}
 
   public EmployeeData(String firstName, String lastName, int emplNumber, String email, int salary,
       int hoursPerWeek) {

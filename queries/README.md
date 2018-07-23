@@ -22,7 +22,9 @@ This example demonstrates simple queries on a region.
 In this example, two servers host a single partitioned region with entries
 that represent employee information.
 The example does queries through the API and presents example queries
-to be invoked through the `gfsh` command-line interface.
+to be invoked through the `gfsh` command-line interface.  The example uses the `ReflectionBasedAutoSerializer` and writes PDX to the cluster.
+
+A video of this example in action can be found here: https://www.youtube.com/watch?v=Fh1y6YIYszk&t=5s
 
 This example assumes that Java and Geode are installed.
 
@@ -75,18 +77,10 @@ the appropriate `<version>`.
 
     Here are some `gfsh` queries to try on the `example-region` region.
 
-    Query for all entries in the region:
-
-        gfsh>query --query="select * from /example-region"
 
     Query for the `email` field of all entries in the region:
 
         gfsh>query --query="SELECT x.email FROM /example-region x"
-
-    Query for all entries that have a `lastName` field that starts
-    with the letter 'C':
-
-        gfsh>query --query="SELECT DISTINCT * FROM /example-region x WHERE x.lastName.startsWith('C')"
 
     Exit gfsh:
 

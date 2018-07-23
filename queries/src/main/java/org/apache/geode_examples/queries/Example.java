@@ -27,6 +27,7 @@ import org.apache.geode.cache.query.QueryInvocationTargetException;
 import org.apache.geode.cache.query.QueryService;
 import org.apache.geode.cache.query.SelectResults;
 import org.apache.geode.cache.query.TypeMismatchException;
+import org.apache.geode.pdx.ReflectionBasedAutoSerializer;
 
 
 public class Example {
@@ -38,7 +39,9 @@ public class Example {
   public static void main(String[] args) throws NameResolutionException, TypeMismatchException,
       QueryInvocationTargetException, FunctionDomainException {
     // connect to the locator using default port 10334
+
     ClientCache cache = new ClientCacheFactory().addPoolLocator("127.0.0.1", 10334)
+        .setPdxSerializer(new ReflectionBasedAutoSerializer("org.apache.geode_examples.*"))
         .set("log-level", "WARN").create();
 
     // create a region on the server
@@ -93,6 +96,7 @@ public class Example {
   // Demonstrate querying using the API by doing 3 queries.
   public static void doQueries(ClientCache cache) throws NameResolutionException,
       TypeMismatchException, QueryInvocationTargetException, FunctionDomainException {
+
     QueryService queryService = cache.getQueryService();
 
     // Query for every entry in the region, and print query results.
