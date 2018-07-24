@@ -27,7 +27,7 @@ gateway senders in remote Geode clusters. The gateway senders and
 receivers can be configured in several different topologies based on 
 specific business needs. For more information on example topologies 
 and associated use cases see Geode documentation on 
-[multi-site WAN configuration](http://geode.apache.org/docs/guide/16/topologies_and_comm/multi_site_configuration/chapter_overview.html)
+[Multi-site WAN Configuration](http://geode.apache.org/docs/guide/topologies_and_comm/multi_site_configuration/chapter_overview.html)
 
 In this example, two clusters are created on your local machine, each
 with a unique distributed system id and the WAN gateway configured
