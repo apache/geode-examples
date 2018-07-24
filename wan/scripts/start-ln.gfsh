@@ -21,8 +21,6 @@ start locator --name=locator-ln --port=10332 --locators=localhost[10332] --mcast
 	--J=-Dgemfire.jmx-manager-start=true --J=-Dgemfire.jmx-manager-http-port=8082 \
 	--J=-Dgemfire.jmx-manager-port=1092
 
-configure pdx --read-serialized=true
-
 start server --name=server-ln-1 --locators=localhost[10332] --mcast-port=0 --log-level=config \
 	--enable-time-statistics=true --statistic-archive-file=cacheserver.gfs --server-port=0 \
 	--classpath=../build/classes/main --J=-Dgemfire.statistic-sampling-enabled=true \

@@ -21,8 +21,6 @@ start locator --name=locator-ny --port=10331 --locators=localhost[10331] --mcast
 	--J=-Dgemfire.jmx-manager-start=true --J=-Dgemfire.jmx-manager-http-port=8081 \
 	--J=-Dgemfire.jmx-manager-port=1091
 
-configure pdx --read-serialized=true
-
 start server --name=server-ny-1 --locators=localhost[10331] --mcast-port=0 --log-level=config \
 	--enable-time-statistics=true --statistic-archive-file=cacheserver.gfs --server-port=0 \
 	--classpath=../build/classes/main --J=-Dgemfire.statistic-sampling-enabled=true \

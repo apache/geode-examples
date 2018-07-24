@@ -19,18 +19,15 @@ limitations under the License.
 
 This example demonstrates Geode support for asynchronous WAN 
 replication between clusters.  WAN replication allows remote Geode 
-clusters to automatically keep their region data consistent. 
-The WAN gateway senders and receivers can be configured in several 
-different topologies based on specific business needs. Servers 
-in each cluster are configured to be gateway senders and/or gateway 
-receivers and can connect to any number of remote clusters. See Geode 
-documentation for example topologies and associated use cases. 
-
-** Special Note **
-The gfsh scripts and gradle tasks for this example do not follow the standard
-used by other geode-examples in order to create 2 separate clusters. Due to
-this, you must follow the steps outlined below, as this example will not
-run using the runAll gradle task.
+clusters to automatically keep their region data consistent through
+the use of gateway senders and receivers. A gateway sender distributes 
+region events to another, remote Geode cluster. A gateway receiver 
+configures a physical connection for receiving region events from 
+gateway senders in remote Geode clusters. The gateway senders and 
+receivers can be configured in several different topologies based on 
+specific business needs. For more information on example topologies 
+and associated use cases see Geode documentation on 
+[multi-site WAN configuration](http://geode.apache.org/docs/guide/16/topologies_and_comm/multi_site_configuration/chapter_overview.html)
 
 In this example, two clusters are created on your local machine, each
 with a unique distributed system id and the WAN gateway configured
@@ -41,11 +38,18 @@ which means each server in the cluster will send data updates for
 the primary region buckets they hold.  Alternately, you can configure 
 serial gateway senders, where only one server in each cluster sends all data 
 updates across the WAN. Serial gateway senders are typically used for 
-replicated regions.
+replicated regions or when the order of events between different keys in
+a partitioned region needs to be preserved.
 
 This example runs a single client that connects to the London cluster and 
 puts 10 entries into the example-region and prints them.  After the client
 app has run, both clusters will contain the data.
+
+**Special Note**
+The gfsh scripts and gradle tasks for this example do not follow the standard
+used by other geode-examples in order to create 2 separate clusters. Due to
+this, you must follow the steps outlined below, as this example will not
+run using the runAll gradle task.
 
 This example assumes that Java and Geode are installed.
 
@@ -81,8 +85,8 @@ as well as printed to the console.
 
         $ gfsh
         ...
-        gfsh>connect --locator=localhost[10331]
-        gfsh>query --query="select e.key from /example-region.entries e"
+        Cluster-1 gfsh>connect --locator=localhost[10331]
+        Cluster-1 gfsh>query --query="select e.key from /example-region.entries e"
         ...
 
 7. In another terminal, run a `gfsh` command, connect to the London cluster, and verify
@@ -90,33 +94,29 @@ as well as printed to the console.
 
         $ gfsh
         ...
-        gfsh>connect --locator=localhost[10332]
-        gfsh>query --query="select e.key from /example-region.entries e"
+        Cluster-2 gfsh>connect --locator=localhost[10332]
+        Cluster-2 gfsh>query --query="select e.key from /example-region.entries e"
         ...
 
 8. Use other gfsh commands to learn statistics about the regions, gateway senders,
    and gateway receivers for each cluster.
 
-        gfsh>describe region --name=example-region
-        gfsh>list gateways
+        Cluster-1 gfsh>describe region --name=example-region
+        Cluster-1 gfsh>list gateways
 
 9. In the terminal connected to the New York cluster, put another entry in the region 
    and verify it is in the region on this cluster.
 
-   Cluster-ny  gfsh>put --key=20 --value="value20" --region=example-region
-   Cluster-ny  gfsh>query --query="select e.key from /example-region.entries e"
+   	Cluster-1 gfsh>put --key=20 --value="value20" --region=example-region
+   	Cluster-1 gfsh>query --query="select e.key from /example-region.entries e"
 
 10. In the terminal connected to the London cluster, verify the new entry has also 
     been added to the region on this cluster.
 
-   Cluster-ln  gfsh>query --query="select e.key from /example-region.entries e"
+   	Cluster-2 gfsh>query --query="select e.key from /example-region.entries e"
 
-11. Shut down the cluster
-
-    Exit gfsh in each terminal:
-   	Cluster-ln  gfsh>exit
-   	Cluster-ny  gfsh>exit
-    Shutdown both clusters using the stop.gfsh script
+11. Exit gfsh in each terminal and shutdown the cluster using the stop.gfsh script
+ 
         $ gfsh run --file=scripts/stop.gfsh
 
 12. Clean up any generated directories and files.
