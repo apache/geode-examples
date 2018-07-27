@@ -17,13 +17,12 @@
 
 # Start the London (ln) cluster
 run --file=./scripts/start-ln.gfsh
-list members
 disconnect
 
 # Start the New York (ny) cluster
 run --file=./scripts/start-ny.gfsh
-list members
 disconnect
+sh sleep 5
 
 # Create the region on each cluster and bind the gateway senders/receivers to region
 run --file=./scripts/start-wan.gfsh
