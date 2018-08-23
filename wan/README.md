@@ -107,13 +107,13 @@ as well as printed to the console.
 9. In the terminal connected to the New York cluster, put another entry in the region 
    and verify it is in the region on this cluster.
 
-   	Cluster-1 gfsh>put --key=20 --value="value20" --region=example-region
-   	Cluster-1 gfsh>query --query="select e.key from /example-region.entries e"
+        Cluster-1 gfsh>put --key=20 --value="value20" --region=example-region
+        Cluster-1 gfsh>query --query="select e.key from /example-region.entries e"
 
 10. In the terminal connected to the London cluster, verify the new entry has also 
     been added to the region on this cluster.
 
-   	Cluster-2 gfsh>query --query="select e.key from /example-region.entries e"
+        Cluster-2 gfsh>query --query="select e.key from /example-region.entries e"
 
 11. Exit gfsh in each terminal and shutdown the cluster using the stop.gfsh script
  
