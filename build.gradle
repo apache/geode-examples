@@ -30,7 +30,7 @@ allprojects {
         }
         mavenCentral()
         maven {
-            url 'http://repository.apache.org/snapshots'
+            url 'http://maven.apachegeode-ci.info/snapshots'
         }
     }
 }
@@ -42,7 +42,7 @@ configurations {
 }
 
 dependencies {
-    geodeDistribution "org.apache.geode:apache-geode:$geodeVersion"
+    geodeDistribution "org.apache.geode:apache-geode:$geodeVersion@tgz"
 
 }
 
