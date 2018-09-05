@@ -16,8 +16,8 @@
 #
 start locator --name=locator --bind-address=localhost
 
-start server --name=server1 --locators=localhost[10334] --server-port=0 --classpath=../build/classes/main --enable-time-statistics --statistic-archive-file=lucene1.gfs
-start server --name=server2 --locators=localhost[10334] --server-port=0 --classpath=../build/classes/main --enable-time-statistics --statistic-archive-file=lucene2.gfs
+start server --name=server1 --locators=localhost[10334] --server-port=0 --classpath=../build/classes/java/main --enable-time-statistics --statistic-archive-file=lucene1.gfs
+start server --name=server2 --locators=localhost[10334] --server-port=0 --classpath=../build/classes/java/main --enable-time-statistics --statistic-archive-file=lucene2.gfs
 
 ## simpleIndex uses default Lucene StandardAnalyzer
 create lucene index --name=simpleIndex --region=example-region --field=firstName,lastName
