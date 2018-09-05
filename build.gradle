@@ -47,7 +47,7 @@ dependencies {
 }
 
 task installGeode(type: Copy) {
-    from zipTree(configurations.geodeDistribution.singleFile)
+    from tarTree(configurations.geodeDistribution.singleFile)
     into buildDir
 }
 
