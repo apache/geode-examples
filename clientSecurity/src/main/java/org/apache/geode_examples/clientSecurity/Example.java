@@ -16,7 +16,7 @@ package org.apache.geode_examples.clientSecurity;
 
 import java.util.Properties;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.Logger;
 
 import org.apache.geode.cache.Region;
