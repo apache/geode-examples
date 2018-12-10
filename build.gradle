@@ -19,6 +19,7 @@ plugins {
     id "org.nosphere.apache.rat" version "0.3.0"
     id "com.diffplug.gradle.spotless" version "3.0.0"
     id "de.undercouch.download" version "3.1.2"
+    id 'application'
 }
 
 allprojects {
@@ -53,6 +54,7 @@ task installGeode(type: Copy) {
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'application'
 
     dependencies {
         compile "org.apache.geode:geode-core:$geodeVersion"
@@ -102,11 +104,7 @@ subprojects {
         commandLine 'sh', '-c', "gfsh run --file=${projectDir}/scripts/stop.gfsh"
     }
 
-    task run(type: JavaExec, dependsOn: build) {
-        description = 'Run example'
-        classpath = sourceSets.main.runtimeClasspath
-        main = "org.apache.geode_examples.${project.name}.Example"
-    }
+    mainClassName = "org.apache.geode_examples.${project.name}.Example"
 
     task waitForExitingMembers(type: Exec) {
         workingDir projectDir

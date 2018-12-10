@@ -15,29 +15,35 @@
  * limitations under the License.
  */
 
-rootProject.name = 'geode-examples'
-
-include 'replicated'
-include 'partitioned'
-include 'queries'
-include 'lucene'
-include 'loader'
-include 'putall'
-include 'cq'
-include 'clientSecurity'
-include 'functions'
-include 'persistence'
-include 'writer'
-include 'listener'
-include 'async'
-include 'luceneSpatial'
-include 'eviction'
-include 'serialization'
-include 'expiration'
-include 'indexes'
-include 'transaction'
-include 'wan'
-
-if (JavaVersion.current().java9Compatible) {
-  include 'jigsaw:cq'
+plugins {
+  id 'java'
+  id 'org.gradle.java.experimental-jigsaw' version '0.1.1'
+  id "io.spring.dependency-management" version "1.0.6.RELEASE"
 }
+
+group 'com.example'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 9
+targetCompatibility = 9
+
+repositories {
+  mavenLocal()
+  mavenCentral()
+  maven {
+    url 'http://maven.apachegeode-ci.info/snapshots'
+  }
+}
+
+dependencyManagement {
+  imports {
+    mavenBom "org.apache.geode:geode-client-bom:${geodeVersion}"
+  }
+}
+
+dependencies {
+  implementation 'org.apache.geode:geode-core'
+  implementation 'org.apache.geode:geode-cq'
+}
+
+javaModule.name = 'org.apache.geode_examples.cq'

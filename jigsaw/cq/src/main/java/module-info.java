@@ -15,29 +15,12 @@
  * limitations under the License.
  */
 
-rootProject.name = 'geode-examples'
+module org.apache.geode_examples.cq {
+  requires org.apache.geode.core;
 
-include 'replicated'
-include 'partitioned'
-include 'queries'
-include 'lucene'
-include 'loader'
-include 'putall'
-include 'cq'
-include 'clientSecurity'
-include 'functions'
-include 'persistence'
-include 'writer'
-include 'listener'
-include 'async'
-include 'luceneSpatial'
-include 'eviction'
-include 'serialization'
-include 'expiration'
-include 'indexes'
-include 'transaction'
-include 'wan'
+  requires com.google.common;
 
-if (JavaVersion.current().java9Compatible) {
-  include 'jigsaw:cq'
+  // These aren't necessary if we add module-info.java to geode modules.
+  requires org.apache.logging.log4j;
+  requires java.sql;
 }
