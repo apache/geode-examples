@@ -23,13 +23,13 @@ start locator --name=locator-ny --port=10331 --locators=localhost[10331] --mcast
 
 start server --name=server-ny-1 --locators=localhost[10331] --mcast-port=0 --log-level=config \
 	--enable-time-statistics=true --statistic-archive-file=cacheserver.gfs --server-port=0 \
-	--classpath=../build/classes/main --J=-Dgemfire.statistic-sampling-enabled=true \
+	--classpath=../build/classes/java/main --J=-Dgemfire.statistic-sampling-enabled=true \
 	--J=-Dgemfire.distributed-system-id=1 --J=-Dgemfire.conserve-sockets=false \
 	--J=-Dgemfire.log-file=cacheserver.log
 
 start server --name=server-ny-2 --locators=localhost[10331] --mcast-port=0 --log-level=config \
 	--enable-time-statistics=true --statistic-archive-file=cacheserver.gfs --server-port=0 \
-	--classpath=../build/classes/main --J=-Dgemfire.statistic-sampling-enabled=true \
+	--classpath=../build/classes/java/main --J=-Dgemfire.statistic-sampling-enabled=true \
 	--J=-Dgemfire.distributed-system-id=1 --J=-Dgemfire.conserve-sockets=false \
 	--J=-Dgemfire.log-file=cacheserver.log
 
