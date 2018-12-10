@@ -29,12 +29,12 @@ start locator --name=locator --bind-address=127.0.0.1 --connect=false\
 # Note that we can start a server with any user with CLUSTER:MANAGE permissions
 
 start server --name=server1 --locators=127.0.0.1[10334]\
- --classpath=../build/resources/main/:../build/classes/main/\
+ --classpath=../build/resources/main/:../build/classes/java/main/\
  --security-properties-file=./example_security.properties --server-port=0\
  --user=superUser --password=123
 
 start server --name=server2 --locators=127.0.0.1[10334]\
- --classpath=../build/resources/main/:../build/classes/main/\
+ --classpath=../build/resources/main/:../build/classes/java/main/\
  --security-properties-file=./example_security.properties --server-port=0\
  --user=superUser --password=123
 

@@ -41,7 +41,7 @@ public class ExampleTest {
     Map<String, String> region = Mockito.spy(new HashMap<>());
 
     when(region.get(any())).then(inv -> {
-      String key = inv.getArgumentAt(0, String.class);
+      String key = inv.getArgument(0);
       LoaderHelper<String, String> helper = mock(LoaderHelper.class);
       when(helper.getKey()).thenReturn(key);
 
