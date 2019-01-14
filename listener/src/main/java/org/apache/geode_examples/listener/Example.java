@@ -44,6 +44,7 @@ public class Example {
     // create a local region that matches the server region
     ClientRegionFactory<Integer, String> clientRegionFactory =
         cache.createClientRegionFactory(ClientRegionShortcut.PROXY);
+    clientRegionFactory.addCacheListener(new ExampleCacheListener());
     Region<Integer, String> region = clientRegionFactory.create("example-region");
 
     example.putEntries(region);
