@@ -63,6 +63,7 @@ rat {
 
     // working directories
     '**/locator/**',
+    '**/server/**',
     '**/server1/**',
     '**/server2/**',
     '**/locator-ln/**',

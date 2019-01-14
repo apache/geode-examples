@@ -86,8 +86,8 @@ tutorial.
 ### Advanced
 
 *  [Lucene Spatial Indexing](luceneSpatial/README.md)
-*  WAN Gateway
-*  Durable subscriptions
+*  [WAN Gateway](wan/README.md)
+*  [Durable Messaging for Subscriptions](durableMessaging/README.md)
 *  Delta propagation
 *  Network partition detection
 *  D-lock
