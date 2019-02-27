@@ -30,7 +30,7 @@ allprojects {
         }
         mavenCentral()
         maven {
-            url 'http://maven.apachegeode-ci.info/snapshots'
+            url 'https://storage.googleapis.com/maven.apachegeode-ci.info/snapshots'
         }
     }
 }
