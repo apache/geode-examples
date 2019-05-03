@@ -1,0 +1,34 @@
+#
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+start locator --name=locator --bind-address=127.0.0.1 --include-system-classpath
+
+configure pdx --auto-serializable-classes=org.apache.geode_examples.jdbc.Parent
+
+start server --name=server1 --locators=127.0.0.1[10334] --server-port=0 --include-system-classpath
+
+start server --name=server2 --locators=127.0.0.1[10334] --server-port=0 --include-system-classpath
+
+create region --name=Parent --type=REPLICATE
+
+#create data-source --name=mysql_data_source --url="jdbc:mysql://localhost/geode_db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC" --username=root --password="changeme"
+
+#create jdbc-mapping --data-source=mysql_data_source --region=Parent --table=parent --pdx-name=org.apache.geode_examples.jdbc.Parent --catalog=geode_db --id=id
+
+list members
+
+describe region --name=Parent
