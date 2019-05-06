@@ -19,6 +19,8 @@ limitations under the License.
 
 The JDBC Connector allows Apache Geode to connect to external data sources with JDBC.
 
+![Apache Geode JDBC Connector](connector.svg)
+
 ## Steps:
 
 1. Install MySQL: https://dev.mysql.com/downloads/
