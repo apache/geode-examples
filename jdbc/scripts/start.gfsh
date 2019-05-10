@@ -25,10 +25,6 @@ start server --name=server2 --locators=127.0.0.1[10334] --server-port=0 --includ
 
 create region --name=Parent --type=REPLICATE
 
-#create data-source --name=mysql_data_source --url="jdbc:mysql://localhost/geode_db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC" --username=root --password="changeme"
-
-#create jdbc-mapping --data-source=mysql_data_source --region=Parent --table=parent --pdx-name=org.apache.geode_examples.jdbc.Parent --catalog=geode_db --id=id
-
 list members
 
 describe region --name=Parent

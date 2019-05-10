@@ -46,16 +46,20 @@ public class Example {
     Example example = new Example(region);
 
     // Put entry in Parent region to verify it propagates to the external RDBMS table
-    System.out.println("Adding an entry into Parent region");
     Long key = Long.valueOf(1);
-    region.put(key, new Parent(key, "Parent_1", Double.valueOf(123456789.0)));
-
+    Parent value = new Parent(key, "Parent_1", Double.valueOf(123456789.0));
+    region.put(key, value);
+    System.out.println("Region.put() added an entry into Parent region. The key is " + key
+        + ", and the value is " + value + ".");
+    System.out.println(
+        "If JDBC Connector is configured, the value will be persisted to external data source.");
     // Get an entry from Parent region that will trigger the cache loader to
     // retrieve the entry from the external table
     System.out.println(
-        "Getting key=2, if JDBC Connector is configured, it will retrieve data from external data source");
+        "Calling Region.get(). If JDBC Connector is configured, it will retrieve data from external data source and return a non-null value.");
     key = Long.valueOf(2);
-    region.get(key);
+    Parent parent = (Parent) region.get(key);
+    System.out.println("The returned value of Region.get(" + key + ") is " + parent + ".");
 
     // Print the current entries in the region
     System.out.println("All entries currently in Parent region");

@@ -52,13 +52,22 @@ e.g.
 export CLASSPATH=/path/to/mysql-connector-java-8.0.15.jar:/path/to/geode-examples/jdbc/build/libs/jdbc.jar
 ```
 
-5. Prepare the script `start.gfsh` for creating data source and mapping the Apache Geode region and MySQL table.
-
-This can be done by uncommenting the `create data-source` and `create jdbc-mapping` commands in `start.gfsh` in `scripts` directory.
-
-6. Start the Geode cluster with `gfsh run --file=scripts/start.gfsh`.
+5. Start the Geode cluster with `gfsh run --file=scripts/start.gfsh`.
 
 This will start the locator and two servers. And create `Parent` region, data source and JDBC mapping.
+
+6. Create data source and map the Apache Geode region and MySQL table.
+
+```
+gfsh
+
+connect
+
+create data-source --name=mysql_data_source --url="jdbc:mysql://localhost/geode_db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC" --username=root --password="changeme"
+
+create jdbc-mapping --data-source=mysql_data_source --region=Parent --table=parent --pdx-name=org.apache.geode_examples.jdbc.Parent --catalog=geode_db --id=id
+
+```
 
 7. Run the example with `../gradlew run`.
 
