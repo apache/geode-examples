@@ -61,6 +61,9 @@ rat {
     '**/*.orig',
     '**/*.json',
 
+    // image files
+    '**/*.svg',
+
     // working directories
     '**/locator/**',
     '**/server/**',
