@@ -117,7 +117,7 @@ as well as printed to the console.
 
 11. Exit gfsh in each terminal and shutdown the cluster using the stop.gfsh script
  
-        $ gfsh run --file=scripts/stop.gfsh
+        $ ../gradlew stop
 
 12. Clean up any generated directories and files.
 
