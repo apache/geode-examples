@@ -32,13 +32,13 @@ Each step in this example specifies paths relative to that directory.
 2. Run a script that starts a locator and two servers. The script
 then creates the ```example-region``` region and puts 4 entries.
 
-        $ gfsh run --file=scripts/start.gfsh
+        $ ../gradlew start
         
 Note that both the region size and `totalEntriesOnlyOnDisk` are 0 before we put any entries.
 
 3. Shut down the cluster
 
-        $ gfsh run --file=scripts/stop.gfsh
+        $ ../gradlew stop
         
 4. In the output of the second `show metrics --region=example-region` command, notice the line
  

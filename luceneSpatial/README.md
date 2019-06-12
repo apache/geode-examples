@@ -39,7 +39,7 @@ Each step in this example specifies paths relative to that directory.
 called ```simpleIndex``` with a custom LuceneSerializer that indexes spatial data. The script
 then creates the ```example-region``` region.
 
-        $ gfsh run --file=scripts/start.gfsh
+        $ ../gradlew start
 
 4. Run the example. This program adds data to the example-region, and then looks
 for train stations with a 1 mile of a specific GPS coordinate. Look at Example.java to see
@@ -51,7 +51,7 @@ what this program does.
 
 5. Shut down the cluster
 
-        $ gfsh run --file=scripts/stop.gfsh
+        $ ../gradlew stop
 
 6. Clean up any generated directories and files so this example can be rerun.
     

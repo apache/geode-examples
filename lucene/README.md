@@ -39,7 +39,7 @@ Each step in this example specifies paths relative to that directory.
 called ```simpleIndex```, and then creates the ```example-region``` region.
 A Lucene index must be created before creating the region.
 
-        $ gfsh run --file=scripts/start.gfsh
+        $ ../gradlew start
 
 4. Run the example to populate both the Lucene index and `example-region`. The data
 will also be retrieved from the region and printed to the console.
@@ -92,7 +92,7 @@ will also be retrieved from the region and printed to the console.
 4. Exit gfsh and shut down the cluster
 
         gfsh>exit
-        $ gfsh run --file=scripts/stop.gfsh
+        $ ../gradlew stop
 
 5. Clean up any generated directories and files so this example can be rerun.
     
