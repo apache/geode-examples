@@ -50,7 +50,7 @@ This example assumes you have installed Java and Geode.
 
 2. Next start the locator and two servers
 
-        $ gfsh run --file=scripts/start.gfsh
+        $ ../gradlew start
 
 3. Run the example to create entries in the region
 
@@ -58,4 +58,4 @@ This example assumes you have installed Java and Geode.
 
 4. Shut down the system:
 
-        $ gfsh run --file=scripts/stop.gfsh
+        $ ../gradlew stop

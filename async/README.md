@@ -34,7 +34,7 @@ This example assumes you have installed Java and Geode.
 
 2. Next start a locator, start two servers, create two regions, and deploy the asynchronous event listener.
 
-        $ gfsh run --file=scripts/start.gfsh
+        $ ../gradlew start
 
 3. Run the example to put entries into the incoming region and get entries from the outgoing region.
 
@@ -49,4 +49,4 @@ This example assumes you have installed Java and Geode.
 
 5. Shut down the system.
 
-        $ gfsh run --file=scripts/stop.gfsh
+        $ ../gradlew stop

@@ -46,7 +46,7 @@ This example assumes that Java and Geode are installed.
 
 2. Next start the locator and two servers.
 
-        $ gfsh run --file=scripts/start.gfsh
+        $ ../gradlew start
 
 3. Run the example to create indexes in the region.
 
@@ -54,4 +54,4 @@ This example assumes that Java and Geode are installed.
 
 4. Shut down the system.
 
-        $ gfsh run --file=scripts/stop.gfsh
+        $ ../gradlew stop

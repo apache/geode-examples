@@ -45,7 +45,7 @@ Each step in this example specifies paths relative to that directory.
 hosts the partitioned region.  The example classes will be placed onto the
 classpath when the script starts the servers.
 
-        $ gfsh run --file=scripts/start.gfsh
+        $ ../gradlew start
 
 3. Run the example to put 10 entries into the `example-region`. The data
 will also be retrieved from the region and printed to the console.
@@ -102,7 +102,7 @@ will also be retrieved from the region and printed to the console.
 
 7. Shut down the cluster
 
-        $ gfsh run --file=scripts/stop.gfsh
+        $ ../gradlew stop
 
 ## Things to Get Right for Partitioned Regions
 

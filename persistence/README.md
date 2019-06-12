@@ -32,7 +32,7 @@ This example assumes you have installed Java and Geode.
 
 2. Next start a locator, start a server, create a disk store, and create a persistent region.
 
-        $ gfsh run --file=scripts/start.gfsh
+        $ ../gradlew start
 
 3. Run the example to increment an entry the region.
 
@@ -58,4 +58,4 @@ This example assumes you have installed Java and Geode.
 
 8. Shut down the system.
 
-        $ gfsh run --file=scripts/stop.gfsh
+        $ ../gradlew stop

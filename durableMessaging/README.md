@@ -40,7 +40,7 @@ This example assumes you have installed Java and Geode.
 
 2. Next start a locator, start a server, and create a region.
 
-        $ gfsh run --file=scripts/start.gfsh
+        $ ../gradlew start
 
 3. Run the example to demonstrate durable messaging.
 
@@ -48,4 +48,4 @@ This example assumes you have installed Java and Geode.
 
 4. Shut down the server.
 
-        $ gfsh run --file=scripts/stop.gfsh
+        $ ../gradlew stop
