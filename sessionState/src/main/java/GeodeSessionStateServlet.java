@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.util.Enumeration;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,17 +33,6 @@ public class GeodeSessionStateServlet extends HttpServlet {
       }
     }
 
-//    Enumeration names = session.getAttributeNames();
-//    StringBuilder sb = new StringBuilder();
-//    sb.append("<table border=\"1\"><th>Key</th><th>Value</th>");
-//    while (names.hasMoreElements()) {
-//      String name = (String) names.nextElement();
-//      sb.append("<tr><td>").append(name).append("</td><td>").append(session.getAttribute(name)).append("</td></tr>");
-//    }
-//    sb.append("</table>");
-//    String res = sb.toString();
-
-    //request.setAttribute("res", res);
     request.getRequestDispatcher("/index.jsp").forward(request, response);
   }
 }
