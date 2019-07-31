@@ -29,9 +29,9 @@ rat {
 
     // gradle
     '**/.gradle/**',
-    'gradlew',
-    'gradlew.bat',
-    'gradle/wrapper/gradle-wrapper.properties',
+    '**/gradlew',
+    '**/gradlew.bat',
+    '**/gradle/wrapper/gradle-wrapper.properties',
     'caches/**',
     'daemon/**',
     'native/**',
@@ -50,7 +50,7 @@ rat {
     '**/*.iml',
     '**/*.ipr',
     '**/*.iws',
-    '.idea/**',
+    '**/.idea/**',
     '**/tags',
 
     // text files
