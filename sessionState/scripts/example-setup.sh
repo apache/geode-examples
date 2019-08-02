@@ -39,9 +39,6 @@ cp $CATALINA_HOME/bin/tomcat-juli.jar $CATALINA_HOME/lib/
 #Unzip Tomcat Module conf/lib files into tomcats conf/lib directories
 unzip -o $1/tools/Modules/Apache_Geode_Modules-1.9.0-Tomcat.zip -d $CATALINA_HOME/
 
-GEODE_LOCATION=${1%/}
-CATALINA_LOCATION=${CATALINA_HOME%/}
-
 export CLASSPATH=$CATALINA_HOME/lib/*
 
 sh $GEODE_LOCATION/bin/gfsh "start locator --name=l1"

@@ -16,12 +16,6 @@
 %>
 <% session=request.getSession();%>
 <html>
-
-<head>
-  <title>
-  </title>
-</head>
-
 <body>
 <div align="center">
   <table border="1">
@@ -105,7 +99,7 @@
   </form>
   <p>
     result:
-    <%out.println(request.getAttribute("getKey"));%>
+      <%if(request.getAttribute("getKey") != null) {out.println(request.getAttribute("getKey"));}%>
   </p>
 </div>
 </body>
