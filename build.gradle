@@ -42,8 +42,11 @@ configurations {
 }
 
 dependencies {
-    geodeDistribution "org.apache.geode:apache-geode:$geodeVersion@tgz"
-
+    geodeDistribution("org.apache.geode:apache-geode:$geodeVersion@tgz") {
+      if (gradle.usingGeodeCompositeBuild) {
+        targetConfiguration = 'compositeTarget'
+      }
+    }
 }
 
 task installGeode(type: Copy) {
