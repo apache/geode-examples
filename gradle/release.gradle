@@ -63,6 +63,7 @@ distributions {
         exclude 'KEYS'
         exclude '**/.gradle'
         exclude '**/build/**'
+        exclude '**/out/**'
         exclude '**/.project'
         exclude '**/.classpath'
         exclude '**/.settings/**'
