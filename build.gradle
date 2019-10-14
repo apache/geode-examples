@@ -57,6 +57,7 @@ subprojects {
     dependencies {
         compile "org.apache.geode:geode-core:$geodeVersion"
         compile "org.apache.geode:geode-cq:$geodeVersion"
+        compile "org.apache.geode:geode-logging:$geodeVersion"
         compile 'com.google.guava:guava:25.1-jre'
 
         testCompile "com.jayway.awaitility:awaitility:$awaitilityVersion"
