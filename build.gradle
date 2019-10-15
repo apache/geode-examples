@@ -23,14 +23,14 @@ plugins {
 
 allprojects {
     repositories {
+        mavenCentral()
+        maven {
+            url 'https://storage.googleapis.com/maven.apachegeode-ci.info/snapshots'
+        }
         if (geodeRepositoryUrl != "") {
             maven {
                 url geodeRepositoryUrl
             }
-        }
-        mavenCentral()
-        maven {
-            url 'https://storage.googleapis.com/maven.apachegeode-ci.info/snapshots'
         }
     }
 }
