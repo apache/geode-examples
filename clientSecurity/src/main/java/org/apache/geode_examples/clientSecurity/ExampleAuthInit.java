@@ -16,17 +16,17 @@ package org.apache.geode_examples.clientSecurity;
 
 import java.util.Properties;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import org.apache.geode.LogWriter;
 import org.apache.geode.distributed.DistributedMember;
-import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.security.AuthInitialize;
 import org.apache.geode.security.AuthenticationFailedException;
 
 public class ExampleAuthInit implements AuthInitialize {
 
-  private static final Logger logger = LogService.getLogger();
+  private static final Logger logger = LogManager.getLogger();
 
   private static final String USER_NAME = "security-username";
   private static final String PASSWORD = "security-password";
