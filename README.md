@@ -80,7 +80,8 @@ tutorial.
 *  [Eviction](eviction/README.md)
 *  [Expiration](expiration/README.md)
 *  [Overflow](overflow/README.md)
-*  Security
+*  [Security & SSL](clientSecurity/README.md)
+*  [Colocation](colocation/README.md)
 *  Off-heap
 
 ### Advanced
