@@ -17,16 +17,16 @@ package org.apache.geode_examples.clientSecurity;
 import java.util.Properties;
 
 import org.apache.commons.lang3.Validate;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.client.ClientRegionShortcut;
-import org.apache.geode.internal.logging.LogService;
 
 public class Example implements AutoCloseable {
-  private static final Logger logger = LogService.getLogger();
+  private static final Logger logger = LogManager.getLogger();
 
   private static final String REGION1 = "region1";
   private static final String REGION2 = "region2";
