@@ -40,3 +40,24 @@ include 'wan'
 include 'jdbc'
 include 'sessionState'
 include 'colocation'
+
+// Logic for defining a custom Geode clone for integration with this project
+// Define `-PgeodeCompositeDirectory` to your geode root, default `../geode`
+// Define `-Dcomposite` to enable Gradle includeBuild feature
+def geodeCompositePropertyName = 'geodeCompositeDirectory'
+def geodePath = hasProperty(geodeCompositePropertyName) ? geodeCompositeDirectory : '../geode'
+def geodeDirectory = file(geodePath).absolutePath
+def geodeDirectoryExists = file(geodeDirectory).exists()
+def compositeBuildEnabled = System.getProperty("composite") != null
+gradle.ext.usingGeodeCompositeBuild = compositeBuildEnabled && geodeDirectoryExists
+
+if (gradle.ext.usingGeodeCompositeBuild) {
+  includeBuild(geodeDirectory) {
+    it.dependencySubstitution {
+      // Any submodule used by examples must should be listed here
+      it.substitute it.module("org.apache.geode:geode-cq") with it.project(':geode-cq')
+      it.substitute it.module("org.apache.geode:geode-core") with it.project(':geode-core')
+      it.substitute it.module("org.apache.geode:apache-geode") with it.project(':geode-assembly')
+    }
+  }
+}
