@@ -40,7 +40,6 @@ public class SimpleMetricsPublishingService implements MetricsPublishingService 
   private static Logger LOG = getLogger(SimpleMetricsPublishingService.class);
 
   private final int port;
-  private MetricsSession session;
   private PrometheusMeterRegistry registry;
   private HttpServer server;
 
@@ -54,23 +53,23 @@ public class SimpleMetricsPublishingService implements MetricsPublishingService 
 
   @Override
   public void start(MetricsSession session) {
-    this.session = session;
     registry = new PrometheusMeterRegistry(DEFAULT);
-    this.session.addSubregistry(registry);
+    session.addSubregistry(registry);
 
     InetSocketAddress address = new InetSocketAddress(HOSTNAME, port);
     server = null;
     try {
       server = HttpServer.create(address, 0);
+
+      HttpContext context = server.createContext("/");
+      context.setHandler(this::requestHandler);
+      server.start();
+
+      int boundPort = server.getAddress().getPort();
+      LOG.info("Started {} http://{}:{}/", getClass().getSimpleName(), HOSTNAME, boundPort);
     } catch (IOException thrown) {
       LOG.error("Exception while starting " + getClass().getSimpleName(), thrown);
     }
-    HttpContext context = server.createContext("/");
-    context.setHandler(this::requestHandler);
-    server.start();
-
-    int boundPort = server.getAddress().getPort();
-    LOG.info("Started {} http://{}:{}/", getClass().getSimpleName(), HOSTNAME, boundPort);
   }
 
   private void requestHandler(HttpExchange httpExchange) throws IOException {
