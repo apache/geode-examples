@@ -14,19 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-version = 1.11.0-SNAPSHOT
-geodeVersion = 1.11.0-SNAPSHOT
 
-# release properties, set these on the command line to validate against
-# a release candidate
-geodeRepositoryUrl =
-geodeReleaseUrl =
+# ports 9914 and 9915 chosen at random
 
-# dependency versions
-assertjVersion = 3.6.2
-awaitilityVersion = 1.7.0
-junitVersion = 4.12
-mockitocoreVersion = 2.19.1
-log4jVersion = 2.11.0
-systemrulesVersion = 1.16.1
-micrometerVersion = 1.2.0
+start locator --name=locator --bind-address=127.0.0.1 --classpath=../build/libs/micrometerMetrics.jar --J=-Dprometheus.metrics.port=9914
+
+start server --name=server --locators=127.0.0.1[10334] --server-port=0 --classpath=../build/libs/micrometerMetrics.jar --J=-Dprometheus.metrics.port=9915
+
+create region --name=example-region --type=REPLICATE

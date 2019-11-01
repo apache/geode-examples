@@ -40,6 +40,7 @@ include 'wan'
 include 'jdbc'
 include 'sessionState'
 include 'colocation'
+include 'micrometerMetrics'
 
 // Logic for defining a custom Geode clone for integration with this project
 // Define `-PgeodeCompositeDirectory` to your geode root, default `../geode`
