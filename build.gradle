@@ -58,21 +58,25 @@ task installGeode(type: Copy) {
 }
 
 subprojects {
-    apply plugin: 'java'
+    apply plugin: 'java-library'
 
     dependencies {
-        compile "org.apache.geode:geode-core:$geodeVersion"
-        compile "org.apache.geode:geode-cq:$geodeVersion"
-        compile "org.apache.geode:geode-logging:$geodeVersion"
-        compile 'com.google.guava:guava:25.1-jre'
+        api(platform("org.apache.geode:geode-all-bom:$geodeVersion"))
+        implementation("org.apache.geode:geode-core")
+        implementation("org.apache.geode:geode-cq")
+        implementation("org.apache.geode:geode-logging")
+        implementation('com.google.guava:guava')
+        implementation('org.apache.commons:commons-lang3')
+        implementation("org.apache.logging.log4j:log4j-core")
 
-        testCompile "com.jayway.awaitility:awaitility:$awaitilityVersion"
-        testCompile "junit:junit:$junitVersion"
-        testCompile "org.mockito:mockito-core:$mockitocoreVersion"
-        testCompile "com.github.stefanbirkner:system-rules:$systemrulesVersion"
-        testCompile "org.assertj:assertj-core:$assertjVersion"
-        compile "org.apache.logging.log4j:log4j-core:$log4jVersion"
-        runtime "org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion"
+        testImplementation("org.awaitility:awaitility")
+        testImplementation("junit:junit")
+        testImplementation("org.mockito:mockito-core")
+        testImplementation("com.github.stefanbirkner:system-rules")
+        testImplementation("org.assertj:assertj-core")
+        testImplementation('org.apache.httpcomponents:httpcore')
+        testImplementation('org.apache.httpcomponents:httpclient')
+        runtimeOnly "org.apache.logging.log4j:log4j-slf4j-impl"
     }
 
     jar {
