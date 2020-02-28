@@ -35,7 +35,7 @@ allprojects {
     }
 }
 
-def installDir = "$buildDir/apache-geode-${geodeVersion}"
+def installDir = "$buildDir/apache-geode"
 
 configurations {
     geodeDistribution
@@ -53,14 +53,22 @@ task installGeode(type: Copy) {
     if (gradle.usingGeodeCompositeBuild) {
         dependsOn(gradle.includedBuild('geode').task(':geode-assembly:distTar'))
     }
-    from tarTree(configurations.geodeDistribution.singleFile)
+    from {
+        tarTree(configurations.geodeDistribution.singleFile)
+    }
+    eachFile { fcp ->
+        fcp.path = fcp.path.replaceFirst("^apache-geode-[a-zA-Z0-9\\.\\-]+\\/", "apache-geode/")
+    }
     into buildDir
+    includeEmptyDirs false
 }
 
 subprojects {
     apply plugin: 'java-library'
 
     dependencies {
+        // All callouts to org.apache.geode here, need to be specified in settings.gradle
+        // for composite build to work
         api(platform("org.apache.geode:geode-all-bom:$geodeVersion"))
         implementation("org.apache.geode:geode-core")
         implementation("org.apache.geode:geode-cq")

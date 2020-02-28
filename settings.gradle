@@ -56,8 +56,10 @@ if (gradle.ext.usingGeodeCompositeBuild) {
   includeBuild(geodeDirectory) {
     it.dependencySubstitution {
       // Any submodule used by examples must should be listed here
+      it.substitute it.module("org.apache.geode:geode-all-bom") with it.project(':boms:geode-all-bom')
       it.substitute it.module("org.apache.geode:geode-cq") with it.project(':geode-cq')
       it.substitute it.module("org.apache.geode:geode-core") with it.project(':geode-core')
+      it.substitute it.module("org.apache.geode:geode-logging") with it.project(':geode-logging')
       it.substitute it.module("org.apache.geode:apache-geode") with it.project(':geode-assembly')
     }
   }
