@@ -60,6 +60,7 @@ if (gradle.ext.usingGeodeCompositeBuild) {
       it.substitute it.module("org.apache.geode:geode-cq") with it.project(':geode-cq')
       it.substitute it.module("org.apache.geode:geode-core") with it.project(':geode-core')
       it.substitute it.module("org.apache.geode:geode-logging") with it.project(':geode-logging')
+      it.substitute it.module("org.apache.geode:geode-lucene") with it.project(':geode-lucene')
       it.substitute it.module("org.apache.geode:apache-geode") with it.project(':geode-assembly')
     }
   }
