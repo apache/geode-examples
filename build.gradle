@@ -35,7 +35,7 @@ allprojects {
     }
 }
 
-def installDir = "$buildDir/apache-geode-${geodeVersion}"
+def installDir = "$buildDir/apache-geode"
 
 configurations {
     geodeDistribution
