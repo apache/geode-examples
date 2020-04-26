@@ -21,7 +21,7 @@ apply plugin: 'signing'
 gradle.taskGraph.whenReady( { graph ->
   tasks.withType(Tar).each { tar ->
     tar.compression = Compression.GZIP
-    tar.extension = 'tar.gz'
+    tar.extension = 'tgz'
   }
 })
 
