@@ -62,8 +62,9 @@ gradle.taskGraph.whenReady { taskGraph ->
 }
 
 distributions {
-  main {
-    baseName = 'apache-' + baseName
+  src {
+    baseName = 'apache-geode-examples'
+    version = version + '-src'
     contents {
       from (rootDir) {
         exclude 'KEYS'
