@@ -23,14 +23,19 @@ plugins {
 
 allprojects {
     repositories {
-        if (geodeRepositoryUrl != "") {
-            maven {
-                url geodeRepositoryUrl
-            }
+        mavenCentral() {
+          content {
+            excludeGroup 'org.apache.geode'
+          }
         }
-        mavenCentral()
-        maven {
-            url 'https://storage.googleapis.com/maven.apachegeode-ci.info/snapshots'
+
+        if (!gradle.usingGeodeCompositeBuild) {
+          maven {
+            url project.findProperty('geodeRepositoryUrl') ?: 'https://maven.apachegeode-ci.info/snapshots'
+            content {
+              includeGroup 'org.apache.geode'
+            }
+          }
         }
     }
 }
