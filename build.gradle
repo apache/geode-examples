@@ -23,12 +23,6 @@ plugins {
 
 allprojects {
     repositories {
-        mavenCentral() {
-          content {
-            excludeGroup 'org.apache.geode'
-          }
-        }
-
         if (!gradle.usingGeodeCompositeBuild) {
           maven {
             url project.findProperty('geodeRepositoryUrl') ?: 'https://maven.apachegeode-ci.info/snapshots'
@@ -37,6 +31,7 @@ allprojects {
             }
           }
         }
+        mavenCentral()
     }
 }
 
