@@ -28,7 +28,11 @@ or submit a [pull request](https://github.com/apache/geode/pull/new/develop).
 
 # Apache Geode Version
 
-Check out the master branch to run examples against the latest geode release.
+Geode client code must link against the _same or older_ version of Geode as the Geode server it will connect to.
+
+Add `-PgeodeRepositoryUrl= -PgeodeVersion=1.12.0` to your `./gradlew` command to specify which Geode client libraries to link, otherwise the default may be too new.
+
+If the latest examples don't compile with your preferred version of Geode, use `git tag` to list the available versions, then check out a suitable tag e.g. `git checkout rel/v1.12.0`.
 
 ## Running an example
 
@@ -48,6 +52,7 @@ usage:
     $ ./gradlew :replicated:run
     $ ./gradlew :replicated:stop
     $ ./gradlew runAll
+    $ ./gradlew runAll -PgeodeRepositoryUrl= -PgeodeVersion=1.12.0
 
 ## Catalog of examples
 
