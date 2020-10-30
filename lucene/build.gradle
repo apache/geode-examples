@@ -15,5 +15,5 @@
  * limitations under the License.
  */
 dependencies {
-    compile "org.apache.geode:geode-lucene:$geodeVersion"
+    compile "org.apache.geode:geode-lucene:1.13.0"
 }
