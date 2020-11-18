@@ -88,6 +88,7 @@ tutorial.
 *  [Security & SSL](clientSecurity/README.md)
 *  [Colocation](colocation/README.md)
 *  Off-heap
+*  [Rest](rest/README.md)
 
 ### Advanced
 
