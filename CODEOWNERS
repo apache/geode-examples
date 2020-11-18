@@ -1,8 +1,8 @@
-* @upthewaterspout
 
-/wan @rhoughton-pivot @upthewaterspout @onichols-pivotal
+
+/wan @rhoughton-pivot
 *gradle* @rhoughton-pivot
 
 /README.md @onichols-pivotal
-
+/queries @upthewaterspout
 # *.jar @apache/geode-committers
