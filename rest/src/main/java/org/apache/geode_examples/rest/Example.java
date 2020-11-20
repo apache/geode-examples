@@ -65,13 +65,11 @@ public class Example {
       conn.setRequestMethod("GET");
       conn.setRequestProperty("Accept", "application/json");
       BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-      String output;
-      while ((output = br.readLine()) != null) {
-        System.out.println(output);
+      String response;
+      while ((response = br.readLine()) != null) {
+        System.out.println(response);
       }
       conn.disconnect();
-    } catch (MalformedURLException e) {
-      e.printStackTrace();
     } catch (IOException e) {
       e.printStackTrace();
     }
