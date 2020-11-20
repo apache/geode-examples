@@ -14,20 +14,17 @@
  */
 package org.apache.geode_examples.rest;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.IntStream;
-
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.client.ClientRegionShortcut;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.stream.IntStream;
 
 public class Example {
   private final Region<Integer, String> region;
@@ -59,22 +56,32 @@ public class Example {
   }
 
   void printValues() {
-    try {
-      URL url = new URL("http://localhost:8080/gemfire-api/v1/example-region?limit=ALL");
-      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-      conn.setRequestMethod("GET");
-      conn.setRequestProperty("Accept", "application/json");
-      BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+    // create http connection
+    HttpURLConnection conn = getHttpURLConnection();
+    try (BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())))) {
       String response;
       while ((response = br.readLine()) != null) {
         System.out.println(response);
       }
-      conn.disconnect();
     } catch (IOException e) {
       e.printStackTrace();
+    } finally {
+      conn.disconnect();
     }
   }
 
-
+  private HttpURLConnection getHttpURLConnection() {
+    URL url;
+    HttpURLConnection conn = null;
+    try {
+      url = new URL("http://localhost:8080/gemfire-api/v1/example-region?limit=ALL");
+      conn = (HttpURLConnection) url.openConnection();
+      conn.setRequestMethod("GET");
+      conn.setRequestProperty("Accept", "application/json");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return conn;
+  }
 }
 
