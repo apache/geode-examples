@@ -28,6 +28,8 @@ import java.util.stream.IntStream;
 
 public class Example {
   private final Region<Integer, String> region;
+  private static final String GEODE_REST_END_POINT = "http://localhost:8080/gemfire-api/v1/";
+  private static final String QUERY_PARAMETER = "?limit=ALL";
 
   public Example(Region<Integer, String> region) {
     this.region = region;
@@ -74,7 +76,7 @@ public class Example {
     URL url;
     HttpURLConnection conn = null;
     try {
-      url = new URL("http://localhost:8080/gemfire-api/v1/example-region?limit=ALL");
+      url = new URL(GEODE_REST_END_POINT + "example-region" + QUERY_PARAMETER);
       conn = (HttpURLConnection) url.openConnection();
       conn.setRequestMethod("GET");
       conn.setRequestProperty("Accept", "application/json");
