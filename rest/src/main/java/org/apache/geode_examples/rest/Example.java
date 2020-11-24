@@ -14,76 +14,53 @@
  */
 package org.apache.geode_examples.rest;
 
-import org.apache.geode.cache.Region;
-import org.apache.geode.cache.client.ClientCache;
-import org.apache.geode.cache.client.ClientCacheFactory;
-import org.apache.geode.cache.client.ClientRegionShortcut;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.stream.IntStream;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 public class Example {
-  private final Region<Integer, String> region;
   private static final String GEODE_REST_END_POINT = "http://localhost:8080/gemfire-api/v1/";
   private static final String QUERY_PARAMETER = "?limit=ALL";
+  private static final String data = "{\"name\": \"Dan Smith\", \"technology\": \"Java\"}";
 
-  public Example(Region<Integer, String> region) {
-    this.region = region;
+  public static void main(String[] args) throws IOException, InterruptedException {
+    var httpClient = createHttpClient();
+    HttpRequest postRequest = createHttpPostRequest();
+    sendHttpPostRequest(httpClient, postRequest);
+    HttpRequest getRequest = createHttpGetRequest();
+    sendHttpGetRequest(httpClient, getRequest);
   }
 
-  public static void main(String[] args) {
-    // connect to the locator using default port 10334
-    ClientCache cache = new ClientCacheFactory().addPoolLocator("127.0.0.1", 10334)
-        .set("log-level", "WARN").create();
-
-    // create a local region that matches the server region
-    Region<Integer, String> region =
-        cache.<Integer, String>createClientRegionFactory(ClientRegionShortcut.PROXY)
-            .create("example-region");
-
-    Example example = new Example(region);
-    example.insertValues(10);
-    example.printValues();
-
-    cache.close();
+  private static HttpRequest createHttpPostRequest() {
+    return HttpRequest.newBuilder().uri(URI.create(GEODE_REST_END_POINT + "example-region"))
+        .header("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.ofString(data))
+        .build();
   }
 
-
-  void insertValues(int upperLimit) {
-    IntStream.rangeClosed(1, upperLimit).forEach(i -> region.put(i, "value" + i));
+  private static HttpRequest createHttpGetRequest() {
+    return HttpRequest.newBuilder()
+        .uri(URI.create(GEODE_REST_END_POINT + "example-region" + QUERY_PARAMETER)).GET().build();
   }
 
-  void printValues() {
-    // create http connection
-    HttpURLConnection conn = getHttpURLConnection();
-    try (BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())))) {
-      String response;
-      while ((response = br.readLine()) != null) {
-        System.out.println(response);
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    } finally {
-      conn.disconnect();
-    }
+  static void sendHttpPostRequest(HttpClient httpClient, HttpRequest httpRequest)
+      throws IOException, InterruptedException {
+    HttpResponse<String> httpResponse =
+        httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+    System.out.println("Response status code " + httpResponse.statusCode());
   }
 
-  private HttpURLConnection getHttpURLConnection() {
-    URL url;
-    HttpURLConnection conn = null;
-    try {
-      url = new URL(GEODE_REST_END_POINT + "example-region" + QUERY_PARAMETER);
-      conn = (HttpURLConnection) url.openConnection();
-      conn.setRequestMethod("GET");
-      conn.setRequestProperty("Accept", "application/json");
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return conn;
+  static void sendHttpGetRequest(HttpClient httpClient, HttpRequest httpRequest)
+      throws IOException, InterruptedException {
+    HttpResponse<String> httpResponse =
+        httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+    System.out.println("Response status code " + httpResponse.statusCode());
+    System.out.println("Response body " + httpResponse.body());
+  }
+
+  private static HttpClient createHttpClient() {
+    return HttpClient.newBuilder().build();
   }
 }
 

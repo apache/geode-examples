@@ -33,7 +33,7 @@ This example assumes you have installed Java and Geode.
 
         $ gfsh run --file=scripts/start.gfsh
 
-3. Run the example to create entries and then get using RESTful Java Client from the region
+3. Run the example to create and get entries using HTTP Java Client from the region
 
         $ ../gradlew run
         
