@@ -98,7 +98,7 @@ tutorial.
 *  Delta propagation
 *  Network partition detection
 *  D-lock
-*  Compression
+*  [Compression](compression/README.md)
 *  Resource manager
 *  PDX Advanced
 
