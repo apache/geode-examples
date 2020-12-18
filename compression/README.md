@@ -18,7 +18,7 @@ limitations under the License.
 # Geode Compression example
 
 This is a simple example that demonstrates enabling Compression in a
-replicated region. Default compression algorithm included with Geode is Snappy. Additionally, you can specify your own compressor algorithm as well by implementing `org.apache.geode.compression.Compression` Interface. For enabling the Compression you can follow the official [document](https://geode.apache.org/docs/guide/113/managing/region_compression.html#topic_inm_whc_gl).
+replicated region. The Default compression algorithm included with Geode is Snappy. Additionally, you can specify your own compressor algorithm as well by implementing `org.apache.geode.compression.Compression` Interface. For enabling compression on a Geode region you can follow the official [document](https://geode.apache.org/docs/guide/113/managing/region_compression.html#topic_inm_whc_gl).
 
 This example assumes you have installed Java and Geode.
 
