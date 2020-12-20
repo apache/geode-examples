@@ -29,9 +29,9 @@ public class Example {
   private static final String DATA = "{\"name\": \"Dan Smith\", \"technology\": \"Java\"}";
 
   public static void main(String[] args) throws IOException {
-    var httpPostRequestConnection = createHttpPostRequest();
+    HttpURLConnection httpPostRequestConnection = createHttpPostRequest();
     writeData(httpPostRequestConnection);
-    var httpGetRequestConnection = createHttpGetRequest();
+    HttpURLConnection httpGetRequestConnection = createHttpGetRequest();
     printValues(httpGetRequestConnection);
   }
 
