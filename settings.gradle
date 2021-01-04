@@ -41,6 +41,7 @@ include 'jdbc'
 include 'sessionState'
 include 'colocation'
 include 'micrometerMetrics'
+include 'compression'
 include 'rest'
 
 // Logic for defining a custom Geode clone for integration with this project
