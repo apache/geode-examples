@@ -19,7 +19,6 @@ GEODE_LOCATION=${1%/}
 CATALINA_LOCATION=${CATALINA_HOME%/}
 
 #Copy all nessessary lib files into tomcats lib directory
-cp $GEODE_LOCATION/lib/antlr-*.jar $CATALINA_LOCATION/lib/
 cp $GEODE_LOCATION/lib/commons-io-*.jar $CATALINA_LOCATION/lib/
 cp $GEODE_LOCATION/lib/commons-lang3-*.jar $CATALINA_LOCATION/lib/
 cp $GEODE_LOCATION/lib/commons-validator-*.jar $CATALINA_LOCATION/lib/
