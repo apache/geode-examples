@@ -16,7 +16,7 @@
  */
 dependencies {
     compile "org.apache.geode:geode-lucene:$geodeVersion"
-    compile "org.apache.lucene:lucene-spatial-extras:6.4.1"
+    compile "org.apache.lucene:lucene-spatial-extras:7.1.0"
 }
 
 task copyDependencies(type:Copy) {
