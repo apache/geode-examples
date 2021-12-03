@@ -110,7 +110,7 @@ an integration with other projects.
 
 *  SpringBoot Application
 *  HTTP Session replication
-*  Redis
+*  [Redis](geodeForRedis/README.md)
 *  Memcached
 *  Spark Connector
 
@@ -118,7 +118,7 @@ an integration with other projects.
 
 Follow this approach to add a new example:
 
-* Create a subdirectory with a descriptive name like `cache-writer`
+* Create a subdirectory with a descriptive name like `cacheWriter`
 * Create a `README.md` file in the example subproject to walk the user through the tutorial
 * Create a Java class with a main method in the `org.apache.geode_examples.$name.Example` class
 * Create a cluster initialization script in `scripts/start.gfsh`
