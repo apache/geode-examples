@@ -24,8 +24,7 @@ In this example, two servers are started with geode-for-redis enabled, some data
 This example assumes that Java and Geode are installed.
 
 ## Set up the cluster 
-1. Set directory ```geode-examples/geodeForRedis``` to be the
-current working directory.
+1. Set directory ```geode-examples/geodeForRedis``` to be the current working directory.
 Each step in this example specifies paths relative to that directory.
 
 2. Build the example

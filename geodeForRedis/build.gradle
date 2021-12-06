@@ -16,5 +16,5 @@
  */
 
 dependencies {
-    compile "redis.clients:jedis"
+    implementation("redis.clients:jedis")
 }

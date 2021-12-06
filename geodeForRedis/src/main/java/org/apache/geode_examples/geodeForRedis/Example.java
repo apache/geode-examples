@@ -14,7 +14,6 @@
  */
 package org.apache.geode_examples.geodeForRedis;
 
-import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -30,22 +29,17 @@ public class Example {
 
     populateSortedSet(jedis);
 
-    System.out.println("Initial leaderboard with key '" + SORTED_SET_KEY + "': "
-        + jedis.zrangeWithScores(SORTED_SET_KEY, 0, Integer.MAX_VALUE));
-    System.out.println("Updating scores...");
+    printSortedSetContents("Initial leaderboard with key '" + SORTED_SET_KEY + "': ", jedis);
 
+    System.out.println("Updating scores...");
     modifyScores(jedis);
 
-    System.out.println("Updated leaderboard with key '" + SORTED_SET_KEY + "': "
-        + jedis.zrevrangeWithScores(SORTED_SET_KEY, 0, Integer.MAX_VALUE));
+    printSortedSetContents("Updated leaderboard with key '" + SORTED_SET_KEY + "': ", jedis);
 
     System.out.println("Removing lowest scoring member...");
-
     jedis.zpopmin(SORTED_SET_KEY);
 
-    System.out.println("Updated leaderboard with key '" + SORTED_SET_KEY + "': "
-        + jedis.zrevrangeWithScores(SORTED_SET_KEY, 0, Integer.MAX_VALUE));
-
+    printSortedSetContents("Updated leaderboard with key '" + SORTED_SET_KEY + "': ", jedis);
   }
 
   private static void populateSortedSet(JedisCluster jedis) {
@@ -57,6 +51,11 @@ public class Example {
     memberScoreMap.put("Ahmed", 0.0);
 
     jedis.zadd(SORTED_SET_KEY, memberScoreMap);
+  }
+
+  private static void printSortedSetContents(String baseMessage, JedisCluster jedis) {
+    System.out
+        .println(baseMessage + jedis.zrevrangeWithScores(SORTED_SET_KEY, 0, Integer.MAX_VALUE));
   }
 
   private static void modifyScores(JedisCluster jedis) {
