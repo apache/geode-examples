@@ -19,7 +19,8 @@ limitations under the License.
 
 This example demonstrates simple operations on a Geode for Redis cluster using the Jedis Client.
 
-In this example, two servers are started with geode-for-redis enabled, some data is added to the cluster.
+In this example, two servers are started with geode-for-redis enabled, some data is added to the 
+cluster using the Jedis client.
 
 This example assumes that Java and Geode are installed.
 
