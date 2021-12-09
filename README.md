@@ -110,7 +110,7 @@ an integration with other projects.
 
 *  SpringBoot Application
 *  HTTP Session replication
-*  [Redis](geodeForRedis/README.md)
+*  [Geode for Redis](geodeForRedis/README.md)
 *  Memcached
 *  Spark Connector
 

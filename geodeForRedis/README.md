@@ -18,6 +18,8 @@ limitations under the License.
 # Geode for Redis Example using Jedis Client
 
 This example demonstrates simple operations on a Geode for Redis cluster using the Jedis Client.
+For more information on starting and configuring a Geode for Redis cluster, please refer to the 
+Geode documentation for [Geode for Redis](http://geode.apache.org/docs/guide/tools_modules/geode_for_redis.html).
 
 In this example, two servers are started with geode-for-redis enabled, some data is added to the 
 cluster using the Jedis client.

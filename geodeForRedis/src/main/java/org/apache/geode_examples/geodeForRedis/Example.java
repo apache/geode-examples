@@ -22,7 +22,7 @@ import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
 
 public class Example {
-  public static final String SORTED_SET_KEY = "leaderboard";
+  public static final String SORTED_SET_KEY = "{tag}leaderboard";
 
   public static void main(String[] args) {
     JedisCluster jedis = new JedisCluster(new HostAndPort("127.0.0.1", 6379));
