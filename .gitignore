@@ -18,8 +18,8 @@ locator
 locator1
 l1
 server
-server1
-server2
+*server1
+*server2
 
 *.iml
 *.ipr

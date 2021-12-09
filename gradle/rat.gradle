@@ -75,6 +75,8 @@ rat {
     '**/locator-ny/**',
     '**/server-ny-1/**',
     '**/server-ny-2/**',
+    '**/redisServer1/**',
+    '**/redisServer2/**',
 
     '**/META-INF/**'
   ]
