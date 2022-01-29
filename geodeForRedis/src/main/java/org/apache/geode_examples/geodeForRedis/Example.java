@@ -14,6 +14,7 @@
  */
 package org.apache.geode_examples.geodeForRedis;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -25,7 +26,8 @@ public class Example {
   public static final String SORTED_SET_KEY = "{tag}leaderboard";
 
   public static void main(String[] args) {
-    JedisCluster jedis = new JedisCluster(new HostAndPort("127.0.0.1", 6379));
+    JedisCluster jedis = new JedisCluster(new HostAndPort("127.0.0.1", 6379),
+        (int) Duration.ofMinutes(2).toMillis());
 
     populateSortedSet(jedis);
 
