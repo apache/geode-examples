@@ -18,3 +18,19 @@
 dependencies {
     implementation("redis.clients:jedis")
 }
+
+
+task installRedis(type: Copy) {
+    from {
+        zipTree(tarTree(rootProject.configurations.geodeDistribution.singleFile)
+                .matching { include("**/geode-for-redis-*.zip")}.singleFile )
+    }
+    eachFile { fcp ->
+        fcp.path = fcp.path.replaceFirst("^geode-for-redis-[a-zA-Z0-9\\.\\-]+\\/", "geode-for-redis/")
+    }
+
+    into buildDir
+    includeEmptyDirs false
+}
+
+run.dependsOn(installRedis)

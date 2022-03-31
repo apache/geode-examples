@@ -15,14 +15,17 @@
 
 start locator --name=locator --bind-address=localhost
 
+set variable --name=STAR --value=*
 start server --name=redisServer1 --locators=localhost[10334] --server-port=0 \
     --J=-Dgemfire.geode-for-redis-enabled=true \
     --J=-Dgemfire.geode-for-redis-port=6379 \
     --J=-Dgemfire.geode-for-redis-bind-address=127.0.0.1 \
-    --J=-Dgemfire.geode-for-redis-redundant-copies=1
+    --J=-Dgemfire.geode-for-redis-redundant-copies=1 \
+    --classpath=../build/geode-for-redis/lib/${STAR}
 
 start server --name=redisServer2 --locators=localhost[10334] --server-port=0 \
     --J=-Dgemfire.geode-for-redis-enabled=true \
     --J=-Dgemfire.geode-for-redis-port=6380 \
     --J=-Dgemfire.geode-for-redis-bind-address=127.0.0.1 \
-    --J=-Dgemfire.geode-for-redis-redundant-copies=1
+    --J=-Dgemfire.geode-for-redis-redundant-copies=1 \
+    --classpath=../build/geode-for-redis/lib/${STAR}
