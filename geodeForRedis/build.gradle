@@ -33,4 +33,4 @@ task installRedis(type: Copy) {
     includeEmptyDirs false
 }
 
-run.dependsOn(installRedis)
+start.dependsOn(installRedis)
