@@ -102,8 +102,6 @@ subprojects {
             delete 'server-ln-2'
             delete 'server-ny-1'
             delete 'server-ny-2'
-            delete 'redisServer1'
-            delete 'redisServer2'
         }
     }
     clean.finalizedBy cleanServer
