@@ -15,15 +15,33 @@
 # limitations under the License.
 #
 
-# Develop to use latest 1.15.1 artifacts until CI is rebuilt
-# GEODE-10436
-version = 1.15.1-build.0
-geodeVersion = 1.15.+
+name: develop
 
-# release properties, set these on the command line to validate against
-# a release candidate
-geodeRepositoryUrl =
-geodeReleaseUrl =
+on:
+  push:
+    branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop" ]
 
-# dependency versions not found in geode-all-bom
-micrometerVersion = 1.2.1
+permissions:
+  contents: read
+
+jobs:
+  runAll:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        distribution: ['liberica']
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: ${{ matrix.distribution }}
+        java-version: '8'
+    - name: Run All
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: runAll --console=plain --no-daemon
