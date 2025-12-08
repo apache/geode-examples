@@ -44,4 +44,4 @@ jobs:
     - name: Run All
       uses: gradle/gradle-build-action@v2
       with:
-        arguments: runAll --console=plain --no-daemon
+        arguments: runAll -PgeodeRepositoryUrl=https://repository.apache.org/content/repositories/orgapachegeode-1146 --console=plain --no-daemon
