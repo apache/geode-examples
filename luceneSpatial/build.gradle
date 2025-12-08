@@ -16,7 +16,8 @@
  */
 dependencies {
     implementation "org.apache.geode:geode-lucene:$geodeVersion"
-    implementation "org.apache.lucene:lucene-spatial-extras:6.4.1"
+    implementation "org.apache.lucene:lucene-spatial-extras:9.12.3"
+    implementation "org.locationtech.spatial4j:spatial4j:0.8"
 }
 
 task copyDependencies(type:Copy) {
