@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 dependencies {
-    compile "org.apache.geode:geode-lucene:$geodeVersion"
-    compile "org.apache.lucene:lucene-spatial-extras:6.4.1"
+    implementation "org.apache.geode:geode-lucene:$geodeVersion"
+    implementation "org.apache.lucene:lucene-spatial-extras:6.4.1"
 }
 
 task copyDependencies(type:Copy) {
     into "$buildDir/libs"
-    from configurations['runtime']
+    from configurations.runtimeClasspath
 }
 
 build.dependsOn(copyDependencies)
