@@ -93,7 +93,7 @@ subprojects {
     }
 
     jar {
-        archiveFileName = "${archiveBaseName}.${archiveExtension}"
+        archiveFileName = "${archiveBaseName.get()}.${archiveExtension.get()}"
     }
 
     task cleanServer {
