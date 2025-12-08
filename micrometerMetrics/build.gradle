@@ -21,7 +21,7 @@ configurations {
 
 dependencies {
     dependenciesToIncludeInEndpointJar "io.micrometer:micrometer-registry-prometheus:$micrometerVersion"
-    configurations.compile.extendsFrom(configurations.dependenciesToIncludeInEndpointJar)
+    implementation configurations.dependenciesToIncludeInEndpointJar
 }
 
 jar {
