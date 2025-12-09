@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 subprojects {
-  apply plugin: "com.diffplug.gradle.spotless"
+  apply plugin: "com.diffplug.spotless"
   spotless {
     lineEndings = 'unix';
     java {
       target project.fileTree(project.projectDir) { include '**/*.java' }
-      eclipseFormatFile "${rootProject.projectDir}/etc/eclipse-java-google-style.xml"
+      eclipse().configFile "${rootProject.projectDir}/etc/eclipse-java-google-style.xml"
     }
   }
 }

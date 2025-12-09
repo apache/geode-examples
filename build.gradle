@@ -16,9 +16,9 @@
  */
 
 plugins {
-    id "org.nosphere.apache.rat" version "0.6.0"
-    id "com.diffplug.gradle.spotless" version "3.0.0"
-    id "de.undercouch.download" version "3.1.2"
+    id "org.nosphere.apache.rat" version "0.8.0"
+    id "com.diffplug.spotless" version "6.11.0"
+    id "de.undercouch.download" version "5.0.1"
 }
 
 allprojects {
@@ -66,6 +66,11 @@ task installGeode(type: Copy) {
 subprojects {
     apply plugin: 'java-library'
 
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
     dependencies {
         // All callouts to org.apache.geode here, need to be specified in settings.gradle
         // for composite build to work
@@ -88,7 +93,7 @@ subprojects {
     }
 
     jar {
-        archiveName "${baseName}.${extension}"
+        archiveFileName = "${archiveBaseName.get()}.${archiveExtension.get()}"
     }
 
     task cleanServer {
