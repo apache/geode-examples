@@ -8,7 +8,21 @@
 # limitations under the License.
 
 notifications:
-    commits: commits@geode.apache.org
-    issues: issues@geode.apache.org
-    pullrequests: notifications@geode.apache.org
-    jira_options: link label comment
+  commits: commits@geode.apache.org
+  issues: issues@geode.apache.org
+  pullrequests: notifications@geode.apache.org
+  jira_options: link label comment
+github:
+  rulesets:
+    - name: "Default Branch Protection"
+      type: branch
+      branches:
+        includes:
+          - "~DEFAULT_BRANCH"
+          - "release/*"
+          - "rel/*"
+        excludes: []
+      bypass_teams:
+        - root
+      restrict_deletion: true
+      restrict_force_push: true
